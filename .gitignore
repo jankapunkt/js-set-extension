@@ -65,3 +65,4 @@ typings/
 
 # Distribution build
 build/
+dist/

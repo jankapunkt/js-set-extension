@@ -9,7 +9,8 @@
     "lint-test": "npm run lint && npm test",
     "prepublishOnly": "npm run lintAndTest && npm run copyFiles && npm run build",
     "test": "mocha --compilers js:@babel/register --recursive \"lib/**/*.tests.js\"",
-    "test-watch": "npm test -- --watch"
+    "test-watch": "npm test -- --watch",
+    "docs": "esdoc"
   },
   "devDependencies": {
     "@babel/cli": "^7.0.0",
@@ -17,6 +18,8 @@
     "@babel/preset-env": "^7.0.0",
     "@babel/register": "^7.0.0",
     "chai": "^4.1.2",
+    "esdoc": "^1.1.0",
+    "esdoc-standard-plugin": "^1.0.0",
     "mocha": "^5.2.0",
     "standard": "*"
   },

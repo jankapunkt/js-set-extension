@@ -2,6 +2,7 @@
 Extending the Set class in order to support mathematical set properties and operations.
 
 [![JavaScript Style Guide](https://img.shields.io/badge/code_style-standard-brightgreen.svg)](https://standardjs.com)
+[![Build Status](https://travis-ci.org/jankapunkt/js-set-extension.svg?branch=master)](https://travis-ci.org/jankapunkt/js-set-extension)
 
 
 ### Completeness vs. Performance

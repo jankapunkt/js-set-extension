@@ -2,20 +2,21 @@
   "name": "js-set-extension",
   "version": "1.0.0",
   "description": "Extending the Set class in order to support mathematical set properties and operations.",
-  "main": "./dist/index.js",
+  "main": "../dist/index.js",
   "scripts": {
     "lint": "cd ./lib && standard",
     "lint-fix": "cd ./lib && standard --fix",
     "lint-test": "npm run lint && npm test",
-    "test": "mocha --compilers js:@babel/register --recursive \"lib/**/*.tests.js\"",
-    "test-coverage": "NODE_ENV=test  nyc --reporter=html --reporter=text mocha --compilers js:@babel/register --recursive \"lib/**/*.tests.js\"",
+    "test": "mocha --require @babel/register \"lib/**/*.tests.js\"",
+    "test-coverage": "nyc --reporter=html --reporter=text mocha --require @babel/register \"lib/**/*.tests.js\"",
     "test-watch": "npm test -- --watch",
     "docs": "jsdoc ./lib/*.js -d ../doc",
     "build": "rm -rf ../dist/** && babel lib --out-dir ../dist --ignore **/*.tests.js --source-maps",
     "build-min": "minify ../dist/index.js --out-file ../dist/index.min.js --mangle.keepFnName --mangle.keepClassName --",
     "build-full": "npm run docs && npm run build && npm run build-min",
     "copy": "cp ../README.md ./README.md && cp ../LICENSE ./LICENSE",
-    "prepublish": "npm run lint && npm run test && npm run copy && npm run build-full"
+    "prepublish": "npm run lint && npm run test && npm run copy && npm run build-full",
+    "report": "nyc report --reporter=text-lcov | coveralls"
   },
   "devDependencies": {
     "@babel/cli": "^7.0.0",
@@ -32,35 +33,31 @@
   },
   "babel": {
     "presets": [
-      "@babel/preset-env"
+      "@babel/env"
     ],
     "env": {
       "test": {
-        "plugins": [ "istanbul" ]
+        "plugins": [
+          [
+            "babel-plugin-istanbul"
+          ]
+        ]
       }
     }
   },
   "nyc": {
-    "sourceMap": false,
-    "instrument": false,
-    "cache": true,
-    "all":true,
+    "include": [
+      "**/index.js"
+    ],
     "exclude": [
       "lib/**/*.tests.js"
     ],
-    "include": [
-      "lib/**/*.js"
-    ],
-    "reporter": [
-      "json",
-      "text",
-      "text-summary"
-    ],
     "require": [
-      "@babel/register",
-      "@babel/core",
-      "@babel/preset-env"
-    ]
+      "@babel/register"
+    ],
+    "sourceMap": false,
+    "instrument": false,
+    "all": true
   },
   "targets": "> 0.25%, not dead",
   "repository": {

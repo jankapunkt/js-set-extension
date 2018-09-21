@@ -57,9 +57,10 @@ function checkSet (set) {
 const _originalAdd = global.Set.prototype.add
 
 /**
- * Overrides {Set.add} to respect the internal rules function.
+ * Overrides Set.prototype.add to respect the internal rules function.
+ * @name Set.prototype.add
  * @throws Error if rules function exists and {value} failed the rules check.
- * @param value (any)
+ * @param {*} value - any arbitrary value.
  * @returns {*}
  */
 function add (value) {
@@ -319,11 +320,15 @@ global.Set.prototype.equal = equal
 const _originalSet = global.Set
 
 /**
- * Extended version of the Set constructor. Use the default Set constructor to create new sets.
+ * Use <code>new Set(elements, rulesFct)</code> to create new sets. Alternatively you can use <code>Set.from</code>
+ * @name Set
  * @class
+ * @classdesc Extended version of <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Set">Set (MDN link)</a>
  * @param elements {array} - an Array of element.
  * @param rulesFct {function} - a function which every element added to the set needs to pass.
- * @returns {ExtendedSet|*} The extended Set.
+ * @see Set.from
+ * @see https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Set
+ * @returns {Set} An instance of the extended version of <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Set">Set (MDN link)</a>
  */
 function ExtendedSet (elements, rulesFct) {
   const original = new _originalSet()
@@ -345,11 +350,14 @@ global.Set.prototype = _originalSet.prototype
 
 /**
  * Creates a new Set from arbitrary arguments wihtout the need of "new" and the array notation.
- *
- * For example:
- *
+ * @name Set.from
+ * @example Set.from(1,2,3,4,5) // returns Set { 1, 2, 3, 4, 5 }
+ * @example
+ * const ints = Set.from(1,2,3)
+ * const flts = Set.from(4.5, 5.6, 6.7)
+ * Set.from(ints, flts) // returns Set { Set {1, 2, 3}, Set { 4.5, 5.6, 6.7 } }
  * @param args Any types / length (using comma notation or spread operator)
- * @returns {Set<*>} A set containing the given argument values.
+ * @returns {Set} A set containing the given argument values.
  */
 function from (...args) {
   return new Set([...args])
@@ -368,6 +376,14 @@ function toSet (value) {
 
 global.Set.toSet = toSet
 
+/**
+ * Copies all elements of a given Set instance into a new Set and returns it.
+ * <strong>It does not deep-clone the elements of the set.</strong>
+ * @name Set.copy
+ * @throws Throws an error if the argument is not a Set instance.
+ * @param set {Set} a set instance from which to copy from
+ * @returns {Set} a new Set instance containing all elements of the source.
+ */
 function copy (set) {
   checkSet(set)
   const c = new Set()
@@ -379,8 +395,13 @@ global.Set.copy = copy
 
 /**
  * Creates a unified set of an arbitrary number of sets.
- * @param args
- * @returns {Set<any>}
+ * A union of A and B is a set containing all elements of A and B.
+ * <br>Expression: <code>C = A ∪ B</code>
+ * <br>Example: <code>{1,2} ∪ {2,3,4} = {1,2,3,4}</code>
+ * @name Set.union
+ * @param {...Set} args - an arbitrary list of Set instances
+ * @throws Throws an error if any of the argument is not a Set instance.
+ * @returns {Set} a Set instance with the unified elements of the given args.
  */
 function union (...args) {
   const set3 = new Set()
@@ -391,9 +412,14 @@ function union (...args) {
 global.Set.union = union
 
 /**
- *
- * @param args
- * @returns {Set<*>}
+ * Creates an intersection set of an arbitrary number of sets.
+ * An intersection is a set of A and B, which contains all elements that appear in A, as well as in B: <code>C = A ∩ B</code>
+ * Example: <code>{1, 2, 3} ∩ {2, 3, 4} = {2, 3}.</code>
+ * @name Set.intersect
+ * @param {...Set} args - an arbitrary list of Set instances
+ * @throws Throws an error if any of the argument is not a Set instance.
+ * @returns {Set} a Set instance with the unified elements of the given args.
+ * @see https://en.wikipedia.org/wiki/Intersection_(set_theory)
  */
 function intersect (...args) {
   args.forEach(arg => checkSet(arg))
@@ -411,9 +437,10 @@ function intersect (...args) {
 global.Set.intersect = intersect
 
 /**
- * Creates a complement of two sets (subtracts B from A).
- * C = A \ B
+ * Creates a complement of two sets (subtracts B from A): <code>C = A \ B</code>
  *
+ * @name Set.complement
+ * @throws Throws an error if any of the argument is not a Set instance.
  * @param set1 - A the set to be subtracted from
  * @param set2 - B the set which elements will be subtracted from A
  * @returns {ExtendedSet|*} A new Set with all elements of A minus the elements of B

@@ -1,0 +1,10 @@
+# package only-README / LICENSE
+# because these files are already
+# present in the parent repository
+# and will only be copied due publish
+./README.md
+./LICENSE
+
+# istanbul code coverage
+coverage
+.nyv_output

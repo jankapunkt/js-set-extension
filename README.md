@@ -51,3 +51,5 @@ Set.name // "ExtendedSet", formerly "Set"
 
 ## API Documentation
 
+There is a [markdown version](./api.md) and a [html version](./docs.index.html) of the API documentation.
+If you think this documentation can be improved, please leave a pull request or open an issue.

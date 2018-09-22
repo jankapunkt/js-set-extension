@@ -217,7 +217,7 @@ global.Set.prototype.has = function has (value) {
  * @function
  * @name Set.prototype.rules
  * @param value {Function} (Optional) a Function that obtains a single argument and returns either a truthy or falsey value.
- * @returns {Function|undefined} Returns the current rules Function if called without args, else nothing.
+ * @returns {Function|undefined} Returns the current rules Function or undefined if there is on rules function assigned.
  */
 function rules (value) {
   if (value) {

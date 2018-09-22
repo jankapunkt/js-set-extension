@@ -169,7 +169,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="index.js.html">index.js</a>, <a href="index.js.html#line374">line 374</a>
+        <a href="index.js.html">index.js</a>, <a href="index.js.html#line401">line 401</a>
     </li></ul></dd>
     
 
@@ -260,6 +260,10 @@
     
 
 
+
+<div class="description">
+    Creates the cartesian product of two given sets
+</div>
 
 
 
@@ -364,7 +368,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="index.js.html">index.js</a>, <a href="index.js.html#line562">line 562</a>
+        <a href="index.js.html">index.js</a>, <a href="index.js.html#line604">line 604</a>
     </li></ul></dd>
     
 
@@ -512,7 +516,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="index.js.html">index.js</a>, <a href="index.js.html#line497">line 497</a>
+        <a href="index.js.html">index.js</a>, <a href="index.js.html#line524">line 524</a>
     </li></ul></dd>
     
 
@@ -685,7 +689,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="index.js.html">index.js</a>, <a href="index.js.html#line434">line 434</a>
+        <a href="index.js.html">index.js</a>, <a href="index.js.html#line461">line 461</a>
     </li></ul></dd>
     
 
@@ -802,13 +806,18 @@
 
             <td class="type">
             
+                
+<span class="param-type">*</span>
+
+
+            
             </td>
 
             
 
             
 
-            <td class="description last">Any types / length (using comma notation or spread operator)</td>
+            <td class="description last">values of any types / length (using comma notation or spread operator)</td>
         </tr>
 
     
@@ -849,7 +858,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="index.js.html">index.js</a>, <a href="index.js.html#line403">line 403</a>
+        <a href="index.js.html">index.js</a>, <a href="index.js.html#line430">line 430</a>
     </li></ul></dd>
     
 
@@ -1029,7 +1038,7 @@ Example: <code>{1, 2, 3} ∩ {2, 3, 4} = {2, 3}.</code>
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="index.js.html">index.js</a>, <a href="index.js.html#line471">line 471</a>
+        <a href="index.js.html">index.js</a>, <a href="index.js.html#line498">line 498</a>
     </li></ul></dd>
     
 
@@ -1087,6 +1096,329 @@ Example: <code>{1, 2, 3} ∩ {2, 3, 4} = {2, 3}.</code>
     <dd>
         
 <span class="param-type"><a href="Set.html">Set</a></span>
+
+
+    </dd>
+</dl>
+
+    
+
+
+
+
+
+        
+            
+
+    
+
+    
+    <h4 class="name" id=".mergeRules"><span class="type-signature">(static) </span>mergeRules<span class="signature">(rules)</span><span class="type-signature"> &rarr; {function}</span></h4>
+    
+
+    
+
+
+
+
+
+
+
+
+
+
+
+    <h5>Parameters:</h5>
+    
+
+<table class="params">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>rules</code></td>
+            
+
+            <td class="type">
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last"></td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="index.js.html">index.js</a>, <a href="index.js.html#line661">line 661</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+
+
+
+
+
+
+
+
+<h5>Returns:</h5>
+
+        
+
+
+<dl>
+    <dt>
+        Type
+    </dt>
+    <dd>
+        
+<span class="param-type">function</span>
+
+
+    </dd>
+</dl>
+
+    
+
+
+
+
+
+        
+            
+
+    
+
+    
+    <h4 class="name" id=".mergeRulesStrict"><span class="type-signature">(static) </span>mergeRulesStrict<span class="signature">(&hellip;rules)</span><span class="type-signature"> &rarr; {function}</span></h4>
+    
+
+    
+
+
+
+<div class="description">
+    Merges two rules functions with a strict pass concept.
+The resulting function requires the given element to pass all of the given functions (logical AND).
+Thus, if the element fails one, it fails all.
+<strong>Attention:</strong> If passed rules are mutually exclusive, none given element will pass the test in any circumstance.
+</div>
+
+
+
+
+
+
+
+
+
+    <h5>Parameters:</h5>
+    
+
+<table class="params">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+        <th>Attributes</th>
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>rules</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">function</span>
+
+
+            
+            </td>
+
+            
+                <td class="attributes">
+                
+
+                
+
+                
+                    &lt;repeatable><br>
+                
+                </td>
+            
+
+            
+
+            <td class="description last">An arbitrary amount of (rules-) functions. See Set.prototype.rules for requirements of a rules function.</td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="index.js.html">index.js</a>, <a href="index.js.html#line680">line 680</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+    <dt class="tag-see">See:</dt>
+    <dd class="tag-see">
+        <ul>
+            <li>Set.prototype.rules</li>
+        </ul>
+    </dd>
+    
+
+    
+</dl>
+
+
+
+
+
+
+
+
+
+
+
+
+
+<h5>Returns:</h5>
+
+        
+<div class="param-desc">
+    The resulting rules function that can be attached to a set instance.
+</div>
+
+
+
+<dl>
+    <dt>
+        Type
+    </dt>
+    <dd>
+        
+<span class="param-type">function</span>
 
 
     </dd>
@@ -1200,7 +1532,7 @@ Example: <code>{1, 2, 3} ∩ {2, 3, 4} = {2, 3}.</code>
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="index.js.html">index.js</a>, <a href="index.js.html#line601">line 601</a>
+        <a href="index.js.html">index.js</a>, <a href="index.js.html#line643">line 643</a>
     </li></ul></dd>
     
 
@@ -1243,6 +1575,207 @@ Example: <code>{1, 2, 3} ∩ {2, 3, 4} = {2, 3}.</code>
     
 
 
+
+
+
+        
+            
+
+    
+
+    
+    <h4 class="name" id=".symDiff"><span class="type-signature">(static) </span>symDiff<span class="signature">(&hellip;args)</span><span class="type-signature"> &rarr; {<a href="Set.html">Set</a>}</span></h4>
+    
+
+    
+
+
+
+<div class="description">
+    Creates the symmetric difference (disjunctive union) of an arbitrary number (2 .. n) of sets.
+The symmetric difference of two sets A and B is a set, that contains only those elements,
+which are in either of the sets and not in their intersection.
+The symmetric difference is commutative and associative, which is why arbitrary number of sets can be used as input
+for a sequencial-computed symmetric difference.
+<br>
+Expression: <code>C = A Δ B</code>
+</div>
+
+
+
+
+
+
+
+
+
+    <h5>Parameters:</h5>
+    
+
+<table class="params">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+        <th>Attributes</th>
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>args</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type"><a href="Set.html">Set</a></span>
+
+
+            
+            </td>
+
+            
+                <td class="attributes">
+                
+
+                
+
+                
+                    &lt;repeatable><br>
+                
+                </td>
+            
+
+            
+
+            <td class="description last">An arbitrary amount of Set instances</td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="index.js.html">index.js</a>, <a href="index.js.html#line568">line 568</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+    <dt class="tag-see">See:</dt>
+    <dd class="tag-see">
+        <ul>
+            <li><a href="https://en.wikipedia.org/wiki/Symmetric_difference">https://en.wikipedia.org/wiki/Symmetric_difference</a></li>
+        </ul>
+    </dd>
+    
+
+    
+</dl>
+
+
+
+
+
+
+
+
+
+
+
+<h5>Throws:</h5>
+
+        
+
+    <div class="param-desc">
+    
+        Throws an error if any of the given arguments is not a set instance.
+    
+    </div>
+
+
+    
+
+
+<h5>Returns:</h5>
+
+        
+<div class="param-desc">
+    Returns a new Set, that contains only elements.
+</div>
+
+
+
+<dl>
+    <dt>
+        Type
+    </dt>
+    <dd>
+        
+<span class="param-type"><a href="Set.html">Set</a></span>
+
+
+    </dd>
+</dl>
+
+    
+
+
+
+
+    <h5>Example</h5>
+    
+    <pre class="prettyprint"><code>const a = Set.from(1,2,3)
+const b = Set.from(3,4)
+Set.symDiff(a, b) // Set { 1, 2, 4 }</code></pre>
 
 
 
@@ -1353,7 +1886,7 @@ Example: <code>{1, 2, 3} ∩ {2, 3, 4} = {2, 3}.</code>
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="index.js.html">index.js</a>, <a href="index.js.html#line421">line 421</a>
+        <a href="index.js.html">index.js</a>, <a href="index.js.html#line448">line 448</a>
     </li></ul></dd>
     
 
@@ -1525,7 +2058,7 @@ A union of A and B is a set containing all elements of A and B.
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="index.js.html">index.js</a>, <a href="index.js.html#line452">line 452</a>
+        <a href="index.js.html">index.js</a>, <a href="index.js.html#line479">line 479</a>
     </li></ul></dd>
     
 
@@ -1905,6 +2438,9 @@ Basically the first element, retrieved by iterator.next().value will be used.
 
 <div class="description">
     Checks, whether two sets are equal in terms of their contained elements.
+Note: This implementation uses a deep object comparison in order to check for "sameness".
+This allows also to check equality for more complex / nested structures without the restriction of interpreting
+"sameness" as "being the exact same instance". If such an equality is desired, please use Set.prototype.equalSrict
 </div>
 
 
@@ -1997,7 +2533,7 @@ Basically the first element, retrieved by iterator.next().value will be used.
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="index.js.html">index.js</a>, <a href="index.js.html#line336">line 336</a>
+        <a href="index.js.html">index.js</a>, <a href="index.js.html#line359">line 359</a>
     </li></ul></dd>
     
 
@@ -2361,7 +2897,7 @@ If their sizes are not equal, then A is called a proper subset of B.
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="index.js.html">index.js</a>, <a href="index.js.html#line288">line 288</a>
+        <a href="index.js.html">index.js</a>, <a href="index.js.html#line298">line 298</a>
     </li></ul></dd>
     
 
@@ -2433,6 +2969,16 @@ If their sizes are not equal, then A is called a proper subset of B.
 
 
 
+    <h5>Example</h5>
+    
+    <pre class="prettyprint"><code>const a = Set.from(1,2,3,4)
+const b = Set.from(1,2,3)
+const c = Set.from(1,2,3,4,5)
+a.isSubsetOf(b) // false
+b.isSubsetOf(c) // true
+c.isSubsetOf(a) // false</code></pre>
+
+
 
         
             
@@ -2448,7 +2994,10 @@ If their sizes are not equal, then A is called a proper subset of B.
 
 
 <div class="description">
-    Checks, whether the current set (this) is a subset of the given set.
+    Checks, whether the current set (this) is a superset of the given set.
+A set A is superset of set B, if A contains all elements of B.
+<br>
+Expression: <code>A ⊇ B</code>
 </div>
 
 
@@ -2590,6 +3139,335 @@ If their sizes are not equal, then A is called a proper subset of B.
     true if this set is the superset of the given set, otherwise false.
 </div>
 
+
+
+<dl>
+    <dt>
+        Type
+    </dt>
+    <dd>
+        
+<span class="param-type">boolean</span>
+
+
+    </dd>
+</dl>
+
+    
+
+
+
+
+    <h5>Example</h5>
+    
+    <pre class="prettyprint"><code>const a = Set.from(1,2,3,4)
+const b = Set.from(1,2,3)
+const c = Set.from(1,2,3,4,5)
+a.isSupersetOf(b) // true
+a.isSupersetOf(c) // false
+c.isSupersetOf(b) // true</code></pre>
+
+
+
+        
+            
+
+    
+
+    
+    <h4 class="name" id="properSupersetOf"><span class="type-signature"></span>properSupersetOf<span class="signature">(set)</span><span class="type-signature"> &rarr; {boolean}</span></h4>
+    
+
+    
+
+
+
+
+
+
+
+
+
+
+
+    <h5>Parameters:</h5>
+    
+
+<table class="params">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>set</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type"><a href="Set.html">Set</a></span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">A set instance of which this set is checked to be the proper superset.</td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="index.js.html">index.js</a>, <a href="index.js.html#line328">line 328</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+    <dt class="tag-see">See:</dt>
+    <dd class="tag-see">
+        <ul>
+            <li><a href="https://en.wikipedia.org/wiki/Subset">https://en.wikipedia.org/wiki/Subset</a></li>
+        </ul>
+    </dd>
+    
+
+    
+</dl>
+
+
+
+
+
+
+
+
+
+
+
+
+
+<h5>Returns:</h5>
+
+        
+
+
+<dl>
+    <dt>
+        Type
+    </dt>
+    <dd>
+        
+<span class="param-type">boolean</span>
+
+
+    </dd>
+</dl>
+
+    
+
+
+
+
+
+        
+            
+
+    
+
+    
+    <h4 class="name" id="properSupersetOf"><span class="type-signature"></span>properSupersetOf<span class="signature">(set)</span><span class="type-signature"> &rarr; {boolean}</span></h4>
+    
+
+    
+
+
+
+<div class="description">
+    Checks, whether the current set (this) is a proper subset of the given set.
+A set A is a proper subset of set B, if B contains all elements of A and their sizes are not equal.
+<br>
+Expression: <code>A ⊂ B</code>
+</div>
+
+
+
+
+
+
+
+
+
+    <h5>Parameters:</h5>
+    
+
+<table class="params">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>set</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type"><a href="Set.html">Set</a></span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">A set instance of which this set is checked to be the proper subset.</td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="index.js.html">index.js</a>, <a href="index.js.html#line342">line 342</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+    <dt class="tag-see">See:</dt>
+    <dd class="tag-see">
+        <ul>
+            <li><a href="https://en.wikipedia.org/wiki/Subset">https://en.wikipedia.org/wiki/Subset</a></li>
+        </ul>
+    </dd>
+    
+
+    
+</dl>
+
+
+
+
+
+
+
+
+
+
+
+
+
+<h5>Returns:</h5>
+
+        
 
 
 <dl>
@@ -2785,7 +3663,7 @@ Use without args to get the current rules function.
 
 
 <div class="description">
-    Creates an unsorted array from all elements of this set.
+    Creates an (unsorted) array from all elements of this set.
 </div>
 
 
@@ -2900,13 +3778,13 @@ Use without args to get the current rules function.
 </div>
 
 <nav>
-    <h2><a href="index.html">Home</a></h2><h3>Classes</h3><ul><li><a href="Set.html">Set</a></li></ul><h3>Global</h3><ul><li><a href="global.html#isProperSubsetOf">isProperSubsetOf</a></li><li><a href="global.html#isProperSupersetOf">isProperSupersetOf</a></li><li><a href="global.html#mergeRules">mergeRules</a></li><li><a href="global.html#mergeRulesStrict">mergeRulesStrict</a></li><li><a href="global.html#symmetricDifference">symmetricDifference</a></li></ul>
+    <h2><a href="index.html">Home</a></h2><h3>Classes</h3><ul><li><a href="Set.html">Set</a></li></ul>
 </nav>
 
 <br class="clear">
 
 <footer>
-    Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.5.5</a> on Sat Sep 22 2018 14:21:09 GMT+0200 (CEST)
+    Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.5.5</a> on Sat Sep 22 2018 22:29:20 GMT+0200 (CEST)
 </footer>
 
 <script> prettyPrint(); </script>

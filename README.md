@@ -1,5 +1,5 @@
-# js-set-extension
-Extending the [Set](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Set) class in order to support properties and operations from basic set theory.
+# set-extensions
+Extending the Javascript [Set](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Set) class in order to support properties and operations from basic set theory.
 
 [![JavaScript Style Guide](https://img.shields.io/badge/code_style-standard-brightgreen.svg)](https://standardjs.com)
 [![Build Status](https://travis-ci.org/jankapunkt/js-set-extension.svg?branch=master)](https://travis-ci.org/jankapunkt/js-set-extension)
@@ -53,3 +53,4 @@ Set.name // "ExtendedSet", formerly "Set"
 
 There is a [markdown version](./api.md) and a [html version](https://jankapunkt.github.io/js-set-extension/) of the API documentation.
 If you think this documentation can be improved, please leave a pull request or open an issue.
+

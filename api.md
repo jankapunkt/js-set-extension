@@ -1,27 +1,3 @@
-## Classes
-
-<dl>
-<dt><a href="#Set">Set</a></dt>
-<dd><p>Extended version of <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Set">Set (MDN link)</a></p>
-</dd>
-</dl>
-
-## Functions
-
-<dl>
-<dt><a href="#isProperSupersetOf">isProperSupersetOf(set)</a> ⇒ <code>boolean</code></dt>
-<dd></dd>
-<dt><a href="#isProperSubsetOf">isProperSubsetOf(set)</a> ⇒ <code>boolean</code></dt>
-<dd></dd>
-<dt><a href="#symmetricDifference">symmetricDifference(...args)</a> ⇒ <code>Set.&lt;any&gt;</code></dt>
-<dd><p>Creates the symmetric difference of an arbitrary number (2 .. n) of sets.</p>
-</dd>
-<dt><a href="#mergeRules">mergeRules(...rules)</a> ⇒ <code>function</code></dt>
-<dd></dd>
-<dt><a href="#mergeRulesStrict">mergeRulesStrict(...rules)</a> ⇒ <code>function</code></dt>
-<dd></dd>
-</dl>
-
 <a name="Set"></a>
 
 ## Set
@@ -44,6 +20,8 @@ Extended version of <a href="https://developer.mozilla.org/en-US/docs/Web/JavaSc
         * [.any()](#Set+any) ⇒ <code>T</code>
         * [.isSupersetOf(set)](#Set+isSupersetOf) ⇒ <code>boolean</code>
         * [.isSubsetOf(set)](#Set+isSubsetOf) ⇒ <code>boolean</code>
+        * [.properSupersetOf(set)](#Set+properSupersetOf) ⇒ <code>boolean</code>
+        * [.properSupersetOf(set)](#Set+properSupersetOf) ⇒ <code>boolean</code>
         * [.equal(set)](#Set+equal) ⇒ <code>boolean</code>
     * _static_
         * [.from(args)](#Set.from) ⇒ [<code>Set</code>](#Set)
@@ -52,8 +30,11 @@ Extended version of <a href="https://developer.mozilla.org/en-US/docs/Web/JavaSc
         * [.union(...args)](#Set.union) ⇒ [<code>Set</code>](#Set)
         * [.intersect(...args)](#Set.intersect) ⇒ [<code>Set</code>](#Set)
         * [.complement(set1, set2)](#Set.complement) ⇒ <code>ExtendedSet</code> \| <code>\*</code>
+        * [.symDiff(...args)](#Set.symDiff) ⇒ [<code>Set</code>](#Set)
         * [.cartesian(set1, set2)](#Set.cartesian)
         * [.power(S)](#Set.power) ⇒ <code>\*</code>
+        * [.mergeRules(rules)](#Set.mergeRules) ⇒ <code>function</code>
+        * [.mergeRulesStrict(...rules)](#Set.mergeRulesStrict) ⇒ <code>function</code>
 
 <a name="new_Set_new"></a>
 
@@ -127,7 +108,7 @@ Use without args to get the current rules function.
 <a name="Set+toArray"></a>
 
 ### set.toArray() ⇒ <code>Array</code>
-Creates an unsorted array from all elements of this set.
+Creates an (unsorted) array from all elements of this set.
 
 **Kind**: instance method of [<code>Set</code>](#Set)  
 **Returns**: <code>Array</code> - Array containing all elements of this set in unsorted order.  
@@ -146,7 +127,10 @@ Basically the first element, retrieved by iterator.next().value will be used.
 <a name="Set+isSupersetOf"></a>
 
 ### set.isSupersetOf(set) ⇒ <code>boolean</code>
-Checks, whether the current set (this) is a subset of the given set.
+Checks, whether the current set (this) is a superset of the given set.
+A set A is superset of set B, if A contains all elements of B.
+<br>
+Expression: <code>A ⊇ B</code>
 
 **Kind**: instance method of [<code>Set</code>](#Set)  
 **Returns**: <code>boolean</code> - true if this set is the superset of the given set, otherwise false.  
@@ -160,6 +144,15 @@ Checks, whether the current set (this) is a subset of the given set.
 | --- | --- | --- |
 | set | [<code>Set</code>](#Set) | A set instance of which this set is checked to be the superset. |
 
+**Example**  
+```js
+const a = Set.from(1,2,3,4)
+const b = Set.from(1,2,3)
+const c = Set.from(1,2,3,4,5)
+a.isSupersetOf(b) // true
+a.isSupersetOf(c) // false
+c.isSupersetOf(b) // true
+```
 <a name="Set+isSubsetOf"></a>
 
 ### set.isSubsetOf(set) ⇒ <code>boolean</code>
@@ -188,10 +181,47 @@ If their sizes are not equal, then A is called a proper subset of B.
 | --- | --- | --- |
 | set | [<code>Set</code>](#Set) | A set instance of which this set is checked to be the subset. |
 
+**Example**  
+```js
+const a = Set.from(1,2,3,4)
+const b = Set.from(1,2,3)
+const c = Set.from(1,2,3,4,5)
+a.isSubsetOf(b) // false
+b.isSubsetOf(c) // true
+c.isSubsetOf(a) // false
+```
+<a name="Set+properSupersetOf"></a>
+
+### set.properSupersetOf(set) ⇒ <code>boolean</code>
+**Kind**: instance method of [<code>Set</code>](#Set)  
+**See**: https://en.wikipedia.org/wiki/Subset  
+
+| Param | Type | Description |
+| --- | --- | --- |
+| set | [<code>Set</code>](#Set) | A set instance of which this set is checked to be the proper superset. |
+
+<a name="Set+properSupersetOf"></a>
+
+### set.properSupersetOf(set) ⇒ <code>boolean</code>
+Checks, whether the current set (this) is a proper subset of the given set.
+A set A is a proper subset of set B, if B contains all elements of A and their sizes are not equal.
+<br>
+Expression: <code>A ⊂ B</code>
+
+**Kind**: instance method of [<code>Set</code>](#Set)  
+**See**: https://en.wikipedia.org/wiki/Subset  
+
+| Param | Type | Description |
+| --- | --- | --- |
+| set | [<code>Set</code>](#Set) | A set instance of which this set is checked to be the proper subset. |
+
 <a name="Set+equal"></a>
 
 ### set.equal(set) ⇒ <code>boolean</code>
 Checks, whether two sets are equal in terms of their contained elements.
+Note: This implementation uses a deep object comparison in order to check for "sameness".
+This allows also to check equality for more complex / nested structures without the restriction of interpreting
+"sameness" as "being the exact same instance". If such an equality is desired, please use Set.prototype.equalSrict
 
 **Kind**: instance method of [<code>Set</code>](#Set)  
 **Returns**: <code>boolean</code> - true, if all elements of this set equal to the elements of the given set.  
@@ -225,9 +255,9 @@ Creates a new Set from arbitrary arguments wihtout the need of "new" and the arr
 **Kind**: static method of [<code>Set</code>](#Set)  
 **Returns**: [<code>Set</code>](#Set) - A set containing the given argument values.  
 
-| Param | Description |
-| --- | --- |
-| args | Any types / length (using comma notation or spread operator) |
+| Param | Type | Description |
+| --- | --- | --- |
+| args | <code>\*</code> | values of any types / length (using comma notation or spread operator) |
 
 **Example**  
 ```js
@@ -323,9 +353,40 @@ Creates a complement of two sets (subtracts B from A): <code>C = A \ B</code>
 | set1 | A the set to be subtracted from |
 | set2 | B the set which elements will be subtracted from A |
 
+<a name="Set.symDiff"></a>
+
+### Set.symDiff(...args) ⇒ [<code>Set</code>](#Set)
+Creates the symmetric difference (disjunctive union) of an arbitrary number (2 .. n) of sets.
+The symmetric difference of two sets A and B is a set, that contains only those elements,
+which are in either of the sets and not in their intersection.
+The symmetric difference is commutative and associative, which is why arbitrary number of sets can be used as input
+for a sequencial-computed symmetric difference.
+<br>
+Expression: <code>C = A Δ B</code>
+
+**Kind**: static method of [<code>Set</code>](#Set)  
+**Returns**: [<code>Set</code>](#Set) - Returns a new Set, that contains only elements.  
+**Throws**:
+
+- Throws an error if any of the given arguments is not a set instance.
+
+**See**: https://en.wikipedia.org/wiki/Symmetric_difference  
+
+| Param | Type | Description |
+| --- | --- | --- |
+| ...args | [<code>Set</code>](#Set) | An arbitrary amount of Set instances |
+
+**Example**  
+```js
+const a = Set.from(1,2,3)
+const b = Set.from(3,4)
+Set.symDiff(a, b) // Set { 1, 2, 4 }
+```
 <a name="Set.cartesian"></a>
 
 ### Set.cartesian(set1, set2)
+Creates the cartesian product of two given sets
+
 **Kind**: static method of [<code>Set</code>](#Set)  
 
 | Param |
@@ -344,52 +405,28 @@ Creates the powerset of a set.
 | --- |
 | S | 
 
-<a name="isProperSupersetOf"></a>
+<a name="Set.mergeRules"></a>
 
-## isProperSupersetOf(set) ⇒ <code>boolean</code>
-**Kind**: global function  
-**See**: https://en.wikipedia.org/wiki/Subset  
+### Set.mergeRules(rules) ⇒ <code>function</code>
+**Kind**: static method of [<code>Set</code>](#Set)  
 
 | Param |
 | --- |
-| set | 
+| rules | 
 
-<a name="isProperSubsetOf"></a>
+<a name="Set.mergeRulesStrict"></a>
 
-## isProperSubsetOf(set) ⇒ <code>boolean</code>
-**Kind**: global function  
-**See**: https://en.wikipedia.org/wiki/Subset  
+### Set.mergeRulesStrict(...rules) ⇒ <code>function</code>
+Merges two rules functions with a strict pass concept.
+The resulting function requires the given element to pass all of the given functions (logical AND).
+Thus, if the element fails one, it fails all.
+<strong>Attention:</strong> If passed rules are mutually exclusive, none given element will pass the test in any circumstance.
+
+**Kind**: static method of [<code>Set</code>](#Set)  
+**Returns**: <code>function</code> - The resulting rules function that can be attached to a set instance.  
+**See**: Set.prototype.rules  
 
 | Param | Type | Description |
 | --- | --- | --- |
-| set | [<code>Set</code>](#Set) | A set instance of which this set is checked to be the proper subset. |
-
-<a name="symmetricDifference"></a>
-
-## symmetricDifference(...args) ⇒ <code>Set.&lt;any&gt;</code>
-Creates the symmetric difference of an arbitrary number (2 .. n) of sets.
-
-**Kind**: global function  
-
-| Param |
-| --- |
-| ...args | 
-
-<a name="mergeRules"></a>
-
-## mergeRules(...rules) ⇒ <code>function</code>
-**Kind**: global function  
-
-| Param |
-| --- |
-| ...rules | 
-
-<a name="mergeRulesStrict"></a>
-
-## mergeRulesStrict(...rules) ⇒ <code>function</code>
-**Kind**: global function  
-
-| Param |
-| --- |
-| ...rules | 
+| ...rules | <code>function</code> | An arbitrary amount of (rules-) functions. See [Set.prototype.rules](Set.prototype.rules) for requirements of a rules function. |
 

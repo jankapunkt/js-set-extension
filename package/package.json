@@ -15,7 +15,7 @@
     "build-min": "minify ./dist/index.js --out-file ./dist/index.min.js --mangle.keepFnName --mangle.keepClassName --",
     "build-full": "npm run docs && npm run build && npm run build-min",
     "copy": "cp ../README.md ./README.md && cp ../LICENSE ./LICENSE",
-    "prepublish": "npm run lint && npm run test && npm run copy && npm run build-full",
+    "build-ci": "npm run lint && npm run test && npm run copy && npm run build-full",
     "report": "nyc report --reporter=text-lcov | coveralls"
   },
   "devDependencies": {

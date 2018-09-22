@@ -12,6 +12,6 @@ before_script:
   - cd package && npm install
 
 script:
-  - npm run prepublish
+  - npm run build-ci
 
 # after_success: npm run report

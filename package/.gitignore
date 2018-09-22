@@ -7,4 +7,4 @@
 
 # istanbul code coverage
 coverage
-.nyv_output
+.nyc_output

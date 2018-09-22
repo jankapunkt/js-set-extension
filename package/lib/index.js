@@ -223,9 +223,8 @@ function rules (value) {
   if (value) {
     checkRules([value])
     this.rulesFct = value
-  } else {
-    return this.rulesFct
   }
+  return this.rulesFct
 }
 
 global.Set.prototype.rules = rules

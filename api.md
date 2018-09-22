@@ -17,23 +17,23 @@ Extended version of <a href="https://developer.mozilla.org/en-US/docs/Web/JavaSc
         * [.has(value)](#Set+has) ⇒ <code>boolean</code>
         * [.rules(value)](#Set+rules) ⇒ <code>function</code> \| <code>undefined</code>
         * [.toArray()](#Set+toArray) ⇒ <code>Array</code>
-        * [.any()](#Set+any) ⇒ <code>T</code>
+        * [.any()](#Set+any) ⇒ <code>\*</code>
         * [.isSupersetOf(set)](#Set+isSupersetOf) ⇒ <code>boolean</code>
         * [.isSubsetOf(set)](#Set+isSubsetOf) ⇒ <code>boolean</code>
         * [.properSupersetOf(set)](#Set+properSupersetOf) ⇒ <code>boolean</code>
         * [.properSupersetOf(set)](#Set+properSupersetOf) ⇒ <code>boolean</code>
         * [.equal(set)](#Set+equal) ⇒ <code>boolean</code>
     * _static_
-        * [.from(args)](#Set.from) ⇒ [<code>Set</code>](#Set)
+        * [.from(...args)](#Set.from) ⇒ [<code>Set</code>](#Set)
         * [.toSet(value)](#Set.toSet) ⇒ [<code>Set</code>](#Set)
         * [.copy(set)](#Set.copy) ⇒ [<code>Set</code>](#Set)
         * [.union(...args)](#Set.union) ⇒ [<code>Set</code>](#Set)
         * [.intersect(...args)](#Set.intersect) ⇒ [<code>Set</code>](#Set)
         * [.complement(set1, set2)](#Set.complement) ⇒ <code>ExtendedSet</code> \| <code>\*</code>
         * [.symDiff(...args)](#Set.symDiff) ⇒ [<code>Set</code>](#Set)
-        * [.cartesian(set1, set2)](#Set.cartesian)
-        * [.power(S)](#Set.power) ⇒ <code>\*</code>
-        * [.mergeRules(rules)](#Set.mergeRules) ⇒ <code>function</code>
+        * [.cartesian(set1, set2)](#Set.cartesian) ⇒ [<code>Set</code>](#Set)
+        * [.power(set)](#Set.power) ⇒ [<code>Set</code>](#Set)
+        * [.mergeRules(...rules)](#Set.mergeRules) ⇒ <code>function</code>
         * [.mergeRulesStrict(...rules)](#Set.mergeRulesStrict) ⇒ <code>function</code>
 
 <a name="new_Set_new"></a>
@@ -92,19 +92,45 @@ if for example a comment is added to the compare function that not exists in the
 | --- | --- | --- |
 | value | <code>\*</code> | The value to be checked. |
 
+**Example**  
+```js
+const a = Set.from({ a:true, b:false })
+a.has({ b:false, a:true })  // true
+a.has({ b:false, a:false }) // false
+```
 <a name="Set+rules"></a>
 
 ### set.rules(value) ⇒ <code>function</code> \| <code>undefined</code>
 Pass a function that dictates the rules for elements to be part of this set.
 Use without args to get the current rules function.
+<br>
+A rules function needs to fulfill the following requirements:
+<ul>
+  <li>Obtain a single element as argument</li>
+  <li>Check, if that element passes certain conditions</li>
+  <li>Return false if the element fails any condition</li>
+  <li>Otherwise return true</li>
+</ul>
+<br>
+If a set contains a rules function (or a merge of many rules functions), the element will only be added to the set,
+if it passes the rules check.
 
 **Kind**: instance method of [<code>Set</code>](#Set)  
-**Returns**: <code>function</code> \| <code>undefined</code> - Returns the current rules Function if called without args, else nothing.  
+**Returns**: <code>function</code> \| <code>undefined</code> - Returns the current rules Function or undefined if there is on rules function assigned.  
 
 | Param | Type | Description |
 | --- | --- | --- |
 | value | <code>function</code> | (Optional) a Function that obtains a single argument and returns either a truthy or falsey value. |
 
+**Example**  
+```js
+const isInt = n => Number.isInteger(n)
+const integers = Set.from()
+integers.rules(isInt)
+integers.add(1)   // OK, no error
+integers.add(1.5) // throws error!
+integers.add(1.0) // OK, because 1.0 === 1 in JS Number
+```
 <a name="Set+toArray"></a>
 
 ### set.toArray() ⇒ <code>Array</code>
@@ -118,12 +144,12 @@ new Set([1, 2, 3, 4]).toArray() // [ 1, 2, 3, 4 ]
 ```
 <a name="Set+any"></a>
 
-### set.any() ⇒ <code>T</code>
+### set.any() ⇒ <code>\*</code>
 Returns an arbitrary element of this collection.
 Basically the first element, retrieved by iterator.next().value will be used.
 
 **Kind**: instance method of [<code>Set</code>](#Set)  
-**Returns**: <code>T</code> - An arbitrary element of the current set.  
+**Returns**: <code>\*</code> - An arbitrary element of the current set that could by of any type, depending on the elements of the set.  
 <a name="Set+isSupersetOf"></a>
 
 ### set.isSupersetOf(set) ⇒ <code>boolean</code>
@@ -193,6 +219,11 @@ c.isSubsetOf(a) // false
 <a name="Set+properSupersetOf"></a>
 
 ### set.properSupersetOf(set) ⇒ <code>boolean</code>
+Checks, whether the current set (this) is a proper superset of the given set.
+A set A is a proper subset of set B, if A contains all elements of B and their sizes are not equal.
+<br>
+Expression: <code>A ⊃ B</code>
+
 **Kind**: instance method of [<code>Set</code>](#Set)  
 **See**: https://en.wikipedia.org/wiki/Subset  
 
@@ -229,6 +260,11 @@ This allows also to check equality for more complex / nested structures without 
 
 - Throws an error if the given paramter is not a Set instance.
 
+**See**
+
+- https://developer.mozilla.org/en-US/docs/Web/JavaScript/Equality_comparisons_and_sameness
+- Set.prototype.isSubsetOf
+
 
 | Param | Type | Description |
 | --- | --- | --- |
@@ -249,7 +285,7 @@ a.equal(b) // true
 ```
 <a name="Set.from"></a>
 
-### Set.from(args) ⇒ [<code>Set</code>](#Set)
+### Set.from(...args) ⇒ [<code>Set</code>](#Set)
 Creates a new Set from arbitrary arguments wihtout the need of "new" and the array notation.
 
 **Kind**: static method of [<code>Set</code>](#Set)  
@@ -257,7 +293,7 @@ Creates a new Set from arbitrary arguments wihtout the need of "new" and the arr
 
 | Param | Type | Description |
 | --- | --- | --- |
-| args | <code>\*</code> | values of any types / length (using comma notation or spread operator) |
+| ...args | <code>\*</code> | values of any types / length (using comma notation or spread operator) |
 
 **Example**  
 ```js
@@ -312,6 +348,7 @@ A union of A and B is a set containing all elements of A and B.
 
 - Throws an error if any of the argument is not a Set instance.
 
+**See**: https://en.wikipedia.org/wiki/Union_(set_theory)  
 
 | Param | Type | Description |
 | --- | --- | --- |
@@ -321,7 +358,10 @@ A union of A and B is a set containing all elements of A and B.
 
 ### Set.intersect(...args) ⇒ [<code>Set</code>](#Set)
 Creates an intersection set of an arbitrary number of sets.
-An intersection is a set of A and B, which contains all elements that appear in A, as well as in B: <code>C = A ∩ B</code>
+An intersection is a set of A and B, which contains all elements that appear in A, as well as in B.
+<br>
+Expression: <code>C = A ∩ B</code>
+<br>
 Example: <code>{1, 2, 3} ∩ {2, 3, 4} = {2, 3}.</code>
 
 **Kind**: static method of [<code>Set</code>](#Set)  
@@ -384,35 +424,71 @@ Set.symDiff(a, b) // Set { 1, 2, 4 }
 ```
 <a name="Set.cartesian"></a>
 
-### Set.cartesian(set1, set2)
-Creates the cartesian product of two given sets
+### Set.cartesian(set1, set2) ⇒ [<code>Set</code>](#Set)
+Creates the cartesian product of two given sets.
+The cartesian product of two sets A and B is the set of all ordered pairs (a, b) where a ∈ A and b ∈ B.
+<br>
+Expression: <code>C = A x B = { (a, b) | a ∈ A and b ∈ B}</code>
+<br>
+Note, that <code>A x B ≠ B x A</code> (not commutative)
 
 **Kind**: static method of [<code>Set</code>](#Set)  
+**Returns**: [<code>Set</code>](#Set) - a new set instance, that contains the ordered element pairs.  
+**Throws**:
 
-| Param |
-| --- |
-| set1 | 
-| set2 | 
+- Throws an error unless both arguments are set instances.
 
+**See**: https://en.wikipedia.org/wiki/Cartesian_product  
+
+| Param | Type | Description |
+| --- | --- | --- |
+| set1 | [<code>Set</code>](#Set) | A set instance |
+| set2 | [<code>Set</code>](#Set) | A set instance |
+
+**Example**  
+```js
+const a = Set.from(1,2)
+const b = Set.from(3,4)
+Set.cartesian(a, b) // Set { [1, 3], [1, 4], [2, 3], [2, 4] }
+Set.cartesian(b, a) // Set { [3, 1], [3, 2], [4, 1], [4, 2] }
+```
 <a name="Set.power"></a>
 
-### Set.power(S) ⇒ <code>\*</code>
-Creates the powerset of a set.
+### Set.power(set) ⇒ [<code>Set</code>](#Set)
+Creates the powerset of a given set instance by using a recursive algorithm (see <a href="https://en.wikipedia.org/wiki/Power_set">Wikipedia</a>, section Algorithms).
+The powerset of a set contains all possible subsets of the set, plus itself and the empty set.
+<br>
+<strong>Attention:</strong> This method grows exponentially with the size of the given set.
 
 **Kind**: static method of [<code>Set</code>](#Set)  
+**Returns**: [<code>Set</code>](#Set) - a new set instance with all subsets of the given set, plus the given set itself and the empty set.  
+**Throws**:
 
-| Param |
-| --- |
-| S | 
+- Throws an error if the given set is not a set instance.
+
+**See**: https://en.wikipedia.org/wiki/Power_set  
+
+| Param | Type | Description |
+| --- | --- | --- |
+| set | [<code>Set</code>](#Set) | A Set instance. |
 
 <a name="Set.mergeRules"></a>
 
-### Set.mergeRules(rules) ⇒ <code>function</code>
-**Kind**: static method of [<code>Set</code>](#Set)  
+### Set.mergeRules(...rules) ⇒ <code>function</code>
+Merges two rules functions with a strict pass concept.
+The resulting function requires the given element to pass at least one of the given functions (logical OR).
 
-| Param |
-| --- |
-| rules | 
+**Kind**: static method of [<code>Set</code>](#Set)  
+**Returns**: <code>function</code> - The resulting rules function that can be attached to a set instance.  
+**Throws**:
+
+- Throws an error if any of the given parameters is not a Function
+
+**See**: Set.prototype.rules  
+
+| Param | Type | Description |
+| --- | --- | --- |
+| ...rules | <code>function</code> | An arbitrary amount of (rules-) functions. See [Set.prototype.rules](Set.prototype.rules) for requirements of a rules function. |
 
 <a name="Set.mergeRulesStrict"></a>
 
@@ -424,6 +500,10 @@ Thus, if the element fails one, it fails all.
 
 **Kind**: static method of [<code>Set</code>](#Set)  
 **Returns**: <code>function</code> - The resulting rules function that can be attached to a set instance.  
+**Throws**:
+
+- Throws an error if any of the given parameters is not a Function
+
 **See**: Set.prototype.rules  
 
 | Param | Type | Description |

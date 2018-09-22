@@ -176,6 +176,10 @@ function resolve (obj, circ = new _originalSet([obj])) {
  *
  * @function
  * @name Set.prototype.has
+ * @example
+ * const a = Set.from({ a:true, b:false })
+ * a.has({ b:false, a:true })  // true
+ * a.has({ b:false, a:false }) // false
  * @param value {*} - The value to be checked.
  * @returns {boolean} - True, if the value is contained by the set. False, if otherwise.
  * @see https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Set/has
@@ -242,18 +246,35 @@ global.Set.prototype.has = function has (value) {
 /**
  * Pass a function that dictates the rules for elements to be part of this set.
  * Use without args to get the current rules function.
+ * &lt;br>
+ * A rules function needs to fulfill the following requirements:
+ * &lt;ul>
+ *   &lt;li>Obtain a single element as argument&lt;/li>
+ *   &lt;li>Check, if that element passes certain conditions&lt;/li>
+ *   &lt;li>Return false if the element fails any condition&lt;/li>
+ *   &lt;li>Otherwise return true&lt;/li>
+ * &lt;/ul>
+ * &lt;br>
+ * If a set contains a rules function (or a merge of many rules functions), the element will only be added to the set,
+ * if it passes the rules check.
  * @function
  * @name Set.prototype.rules
+ * @example
+ * const isInt = n => Number.isInteger(n)
+ * const integers = Set.from()
+ * integers.rules(isInt)
+ * integers.add(1)   // OK, no error
+ * integers.add(1.5) // throws error!
+ * integers.add(1.0) // OK, because 1.0 === 1 in JS Number
  * @param value {Function} (Optional) a Function that obtains a single argument and returns either a truthy or falsey value.
- * @returns {Function|undefined} Returns the current rules Function if called without args, else nothing.
+ * @returns {Function|undefined} Returns the current rules Function or undefined if there is on rules function assigned.
  */
 function rules (value) {
   if (value) {
     checkRules([value])
     this.rulesFct = value
-  } else {
-    return this.rulesFct
   }
+  return this.rulesFct
 }
 
 global.Set.prototype.rules = rules
@@ -283,7 +304,7 @@ global.Set.prototype.toArray = toArray
  * Basically the first element, retrieved by iterator.next().value will be used.
  * @function
  * @name Set.prototype.any
- * @returns {T} An arbitrary element of the current set.
+ * @returns {*} An arbitrary element of the current set that could by of any type, depending on the elements of the set.
  */
 function any () {
   const self = this
@@ -354,7 +375,10 @@ function isSubsetOf (set) {
 global.Set.prototype.isSubsetOf = isSubsetOf
 
 /**
- *
+ * Checks, whether the current set (this) is a proper superset of the given set.
+ * A set A is a proper subset of set B, if A contains all elements of B and their sizes are not equal.
+ * &lt;br>
+ * Expression: &lt;code>A ⊃ B&lt;/code>
  * @function
  * @name Set.prototype.properSupersetOf
  * @param set {Set} - A set instance of which this set is checked to be the proper superset.
@@ -403,6 +427,8 @@ global.Set.prototype.properSubsetOf = isProperSubsetOf
  * @param set {Set} - A set instance, which this set is to be compared with.
  * @throws Throws an error if the given paramter is not a Set instance.
  * @returns {boolean} true, if all elements of this set equal to the elements of the given set.
+ * @see https://developer.mozilla.org/en-US/docs/Web/JavaScript/Equality_comparisons_and_sameness
+ * @see Set.prototype.isSubsetOf
  */
 function equal (set) {
   checkSet(set)
@@ -464,7 +490,7 @@ global.Set.prototype = _originalSet.prototype
  * const ints = Set.from(1,2,3)
  * const flts = Set.from(4.5, 5.6, 6.7)
  * Set.from(ints, flts) // returns Set { Set {1, 2, 3}, Set { 4.5, 5.6, 6.7 } }
- * @param args {*} - values of any types / length (using comma notation or spread operator)
+ * @param args {...*} - values of any types / length (using comma notation or spread operator)
  * @returns {Set} A set containing the given argument values.
  */
 function from (...args) {
@@ -514,6 +540,7 @@ global.Set.copy = copy
  * @param args {...Set} - an arbitrary list of Set instances
  * @throws Throws an error if any of the argument is not a Set instance.
  * @returns {Set} a Set instance with the unified elements of the given args.
+ * @see https://en.wikipedia.org/wiki/Union_(set_theory)
  */
 function union (...args) {
   const set3 = new Set()
@@ -525,7 +552,10 @@ global.Set.union = union
 
 /**
  * Creates an intersection set of an arbitrary number of sets.
- * An intersection is a set of A and B, which contains all elements that appear in A, as well as in B: &lt;code>C = A ∩ B&lt;/code>
+ * An intersection is a set of A and B, which contains all elements that appear in A, as well as in B.
+ * &lt;br>
+ * Expression: &lt;code>C = A ∩ B&lt;/code>
+ * &lt;br>
  * Example: &lt;code>{1, 2, 3} ∩ {2, 3, 4} = {2, 3}.&lt;/code>
  * @name Set.intersect
  * @function
@@ -630,11 +660,24 @@ function symmetricDifference (...args) {
 global.Set.symDiff = symmetricDifference
 
 /**
- * Creates the cartesian product of two given sets
+ * Creates the cartesian product of two given sets.
+ * The cartesian product of two sets A and B is the set of all ordered pairs (a, b) where a ∈ A and b ∈ B.
+ * &lt;br>
+ * Expression: &lt;code>C = A x B = { (a, b) | a ∈ A and b ∈ B}&lt;/code>
+ * &lt;br>
+ * Note, that &lt;code>A x B ≠ B x A&lt;/code> (not commutative)
  * @function
  * @name Set.cartesian
- * @param set1
- * @param set2
+ * @param set1 {Set} - A set instance
+ * @param set2 {Set} - A set instance
+ * @example
+ * const a = Set.from(1,2)
+ * const b = Set.from(3,4)
+ * Set.cartesian(a, b) // Set { [1, 3], [1, 4], [2, 3], [2, 4] }
+ * Set.cartesian(b, a) // Set { [3, 1], [3, 2], [4, 1], [4, 2] }
+ * @throws Throws an error unless both arguments are set instances.
+ * @return {Set} a new set instance, that contains the ordered element pairs.
+ * @see https://en.wikipedia.org/wiki/Cartesian_product
  */
 global.Set.cartesian = function cartesianProduct (set1, set2) {
   checkSet(set1)
@@ -645,6 +688,7 @@ global.Set.cartesian = function cartesianProduct (set1, set2) {
 }
 
 /**
+ * https://en.wikipedia.org/wiki/Power_set
  * @private
  */
 function addToSubset (e, T) {
@@ -653,6 +697,7 @@ function addToSubset (e, T) {
 }
 
 /**
+ * https://en.wikipedia.org/wiki/Power_set
  * @private
  */
 function subsets (S) {
@@ -669,28 +714,39 @@ function subsets (S) {
 }
 
 /**
- * Creates the powerset of a set.
+ * Creates the powerset of a given set instance by using a recursive algorithm (see &lt;a href="https://en.wikipedia.org/wiki/Power_set">Wikipedia&lt;/a>, section Algorithms).
+ * The powerset of a set contains all possible subsets of the set, plus itself and the empty set.
+ * &lt;br>
+ * &lt;strong>Attention:&lt;/strong> This method grows exponentially with the size of the given set.
  * @name Set.power
  * @function
- * @param S
- * @returns {*}
+ * @param set {Set} - A Set instance.
+ * @throws
+ * Throws an error if the given set is not a set instance.
+ * @returns {Set} a new set instance with all subsets of the given set, plus the given set itself and the empty set.
+ * @see https://en.wikipedia.org/wiki/Power_set
  */
-function powerSet (S) {
-  checkSet(S)
+function powerSet (set) {
+  checkSet(set)
 
-  const subs = subsets(S)
+  const subs = subsets(set)
   subs.add(new Set())
-  S.forEach(value => subs.add(Set.from(value)))
+  set.forEach(value => subs.add(Set.from(value)))
   return subs
 }
 
 global.Set.power = powerSet
 
 /**
+ * Merges two rules functions with a strict pass concept.
+ * The resulting function requires the given element to pass at least one of the given functions (logical OR).
  * @function
  * @name Set.mergeRules
- * @param rules
- * @returns {function(*=): boolean}
+ * @throws Throws an error if any of the given parameters is not a Function
+ * @param rules {...Function} - An arbitrary amount of (rules-) functions. See {@link Set.prototype.rules} for requirements of a rules function.
+ * @returns {function(*=): boolean} The resulting rules function that can be attached to a set instance.
+ * @see Set.prototype.rules
+ *
  */
 function mergeRules (...rules) {
   checkRules(rules)
@@ -712,6 +768,7 @@ global.Set.mergeRules = mergeRules
  * &lt;strong>Attention:&lt;/strong> If passed rules are mutually exclusive, none given element will pass the test in any circumstance.
  * @function
  * @name Set.mergeRulesStrict
+ * @throws Throws an error if any of the given parameters is not a Function
  * @param rules {...Function} - An arbitrary amount of (rules-) functions. See {@link Set.prototype.rules} for requirements of a rules function.
  * @returns {function(*=): boolean} The resulting rules function that can be attached to a set instance.
  * @see Set.prototype.rules
@@ -744,7 +801,7 @@ global.Set.mergeRulesStrict = mergeRulesStrict
 <br class="clear">
 
 <footer>
-    Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.5.5</a> on Sat Sep 22 2018 22:29:20 GMT+0200 (CEST)
+    Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.5.5</a> on Sat Sep 22 2018 23:17:10 GMT+0200 (CEST)
 </footer>
 
 <script> prettyPrint(); </script>

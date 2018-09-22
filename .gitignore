@@ -62,7 +62,3 @@ typings/
 
 # IDE specific
 .idea
-
-# Distribution build
-build/
-dist/

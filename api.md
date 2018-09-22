@@ -66,7 +66,7 @@ Extended version of <a href="https://developer.mozilla.org/en-US/docs/Web/JavaSc
 * [Set](#Set)
     * [new Set(elements, rulesFct)](#new_Set_new)
     * _instance_
-        * [.add](#Set+add) ⇒ <code>\*</code>
+        * [.add](#Set+add) ⇒ [<code>Set</code>](#Set)
     * _static_
         * [.from](#Set.from) ⇒ [<code>Set</code>](#Set)
         * [.copy](#Set.copy) ⇒ [<code>Set</code>](#Set)
@@ -88,18 +88,20 @@ Use <code>new Set(elements, rulesFct)</code> to create new sets. Alternatively y
 
 <a name="Set+add"></a>
 
-### set.add ⇒ <code>\*</code>
-Overrides Set.prototype.add to respect the internal rules function.
+### set.add ⇒ [<code>Set</code>](#Set)
+Overrides Set.prototype.add. Adds a value to the set. If the set already contains the value, nothing happens.
 
 **Kind**: instance property of [<code>Set</code>](#Set)  
+**Returns**: [<code>Set</code>](#Set) - the Set object  
 **Throws**:
 
 - <code>value</code> Error if rules function exists and  failed the rules check.
 
+**See**: https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Set/add  
 
 | Param | Type | Description |
 | --- | --- | --- |
-| value | <code>\*</code> | any arbitrary value. |
+| value | <code>\*</code> | Required. Any arbitrary value to be added to the set. |
 
 <a name="Set.from"></a>
 

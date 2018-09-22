@@ -57,11 +57,12 @@ function checkSet (set) {
 const _originalAdd = global.Set.prototype.add
 
 /**
- * Overrides Set.prototype.add to respect the internal rules function.
+ * Overrides Set.prototype.add. Adds a value to the set. If the set already contains the value, nothing happens.
  * @name Set.prototype.add
  * @throws Error if rules function exists and {value} failed the rules check.
- * @param {*} value - any arbitrary value.
- * @returns {*}
+ * @param {*} value - Required. Any arbitrary value to be added to the set.
+ * @returns {Set} the Set object
+ * @see https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Set/add
  */
 function add (value) {
   if (this.rulesFct && !this.rulesFct.call(null, value)) {
@@ -74,6 +75,9 @@ global.Set.prototype.add = add
 
 // //////////////////////////////////////////////////////////////////////////////// //
 
+/**
+ * @private
+ */
 function resolve (obj, circ = new _originalSet([obj])) {
   if (typeof obj === 'undefined' ||
     typeof obj === 'string' ||
@@ -122,9 +126,24 @@ const originalHas = global.Set.prototype.has
 global.Set.prototype._has = originalHas
 
 /**
- * Determindes if a set contains an element by deep recursive compare.
- * @param value
- * @returns {*}
+ * Checks if the current set instance contains a given value by deep recursive compare.
+ * Overrides the original Set.prototype.has.
+ * The check is recursive and respects
+ * <ul>
+ *   <li>primitive types</li>
+ *   <li>complex types, such as objects or arrays</li>
+ *   <li>nested objects and cyclic references</li>
+ *   <li>functions</li>
+ *   <li>functions with properties attached</li>
+ *   <li>sets, sets of sets</li>
+ * </ul>
+ *
+ * Note, that functions will be checked against their whitespace-trimmed bodies, which can return false negatives,
+ * if for example a comment is added to the compare function that not exists in the original function.
+ *
+ * @param {*} - value - The value to be checked.
+ * @returns {boolean} - True, if the value is contained by the set. False, if otherwise.
+ * @see https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Set/has
  */
 global.Set.prototype.has = function has (value) {
   const valType = typeof value

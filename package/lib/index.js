@@ -23,6 +23,12 @@
 //
 // //////////////////////////////////////////////////////////////////////////////// //
 
+// //////////////////////////////////////////////////////////////////////////////// //
+//                                                                                  //
+// INTERNAL                                                                         //
+//                                                                                  //
+// //////////////////////////////////////////////////////////////////////////////// //
+
 /**
  * @private
  */
@@ -52,12 +58,14 @@ function checkSet (set) {
 // //////////////////////////////////////////////////////////////////////////////// //
 
 /**
+ * The original add function.
  * @private
  */
 const _originalAdd = global.Set.prototype.add
 
 /**
- * Overrides Set.prototype.add. Adds a value to the set. If the set already contains the value, nothing happens.
+ * Adds a value to the set. If the set already contains the value, nothing happens.
+ * Overrides Set.prototype.add.
  * @name Set.prototype.add
  * @throws Error if rules function exists and {value} failed the rules check.
  * @param {*} value - Required. Any arbitrary value to be added to the set.
@@ -73,15 +81,21 @@ function add (value) {
 
 global.Set.prototype.add = add
 
-// //////////////////////////////////////////////////////////////////////////////// //
+/**
+ * The original has function reference.
+ * @private
+ */
+const originalHas = global.Set.prototype.has
 
 /**
+ * Resolves
  * @private
  */
 function resolve (obj, circ = new _originalSet([obj])) {
   if (typeof obj === 'undefined' ||
     typeof obj === 'string' ||
     typeof obj === 'number' ||
+    typeof obj === 'boolean' ||
     obj === null) {
     return obj
   }
@@ -89,7 +103,7 @@ function resolve (obj, circ = new _originalSet([obj])) {
   if (typeof obj === 'function') {
     const fctObj = { fctStr: String(obj).replace(/\s+/g, '') } // function body to string
     // resolve all function properties / attached references
-    fctObj.refs = Object.getOwnPropertyNames(obj).map(key => circ._has(obj[key]) ? 'circular' : resolve(obj[key], circ))
+    fctObj.refs = Object.getOwnPropertyNames(obj).map(key => originalHas.call(circ, obj[key]) ? 'circular' : resolve(obj[key], circ))
     return fctObj
   }
 
@@ -103,36 +117,26 @@ function resolve (obj, circ = new _originalSet([obj])) {
   circ.add(obj)
 
   if (isArray) {
-    return obj.map(el => circ._has(el) ? 'circular' : resolve(el, circ))
+    return obj.map(el => originalHas.call(circ, el) ? 'circular' : resolve(el, circ))
   }
 
   const copy = {}
   Object.getOwnPropertyNames(obj)
     .sort((a, b) => a.localeCompare(b))
     .forEach(key => {
-      copy[key] = circ._has(obj[key]) ? 'circular' : resolve(obj[key], circ)
+      copy[key] = originalHas.call(circ, obj[key]) ? 'circular' : resolve(obj[key], circ)
     })
   return copy
 }
 
 /**
- * @private
- */
-const originalHas = global.Set.prototype.has
-
-/**
- * @private
- */
-global.Set.prototype._has = originalHas
-
-/**
- * Checks if the current set instance contains a given value by deep recursive compare.
+ * Checks if the current set instance contains a given value by recursive deep compare.
  * Overrides the original Set.prototype.has.
  * The check is recursive and respects
  * <ul>
  *   <li>primitive types</li>
- *   <li>complex types, such as objects or arrays</li>
- *   <li>nested objects and cyclic references</li>
+ *   <li>complex types, such as Objects or Arrays</li>
+ *   <li>nested Objects and cyclic references</li>
  *   <li>functions</li>
  *   <li>functions with properties attached</li>
  *   <li>sets, sets of sets</li>
@@ -147,8 +151,8 @@ global.Set.prototype._has = originalHas
  */
 global.Set.prototype.has = function has (value) {
   const valType = typeof value
-  if (valType === 'string' || valType === 'number') {
-    return this._has(value)
+  if (valType === 'string' || valType === 'number' || valType === 'boolean') {
+    return originalHas.call(this, value)
   }
 
   const iterator = this.values()
@@ -232,7 +236,6 @@ function toArray () {
 }
 
 global.Set.prototype.toArray = toArray
-
 
 /**
  * Returns an arbitrary element of this collection.
@@ -371,7 +374,8 @@ global.Set.from = from
 
 /**
  * Autowraps a value to a Set, unless it is already a Set.
- * @param value {any} Any arbitrary value
+ * @name Set.toSet
+ * @param {*} value - Any arbitrary value
  * @returns {Set} A Set containing the value or the value if it is already a Set.
  */
 function toSet (value) {

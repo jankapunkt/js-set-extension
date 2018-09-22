@@ -159,6 +159,11 @@ global.Set.prototype.has = function has (value) {
   let element
   while ((element = iterator.next().value) !== void 0) {
     const elType = typeof element
+    
+    if (elType !== valType) {
+      return false
+    }
+
     const setCompare = (element instanceof Set && value instanceof Set)
 
     // if both point to the same reference

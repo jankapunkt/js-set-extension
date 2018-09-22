@@ -2,7 +2,7 @@
   "name": "set-extensions",
   "version": "1.0.0",
   "description": "Extending the Set class in order to support mathematical set properties and operations.",
-  "main": "lib/index.js",
+  "main": "dist/index.js",
   "scripts": {
     "lint": "cd ./lib && standard",
     "lint-fix": "cd ./lib && standard --fix",

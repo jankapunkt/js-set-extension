@@ -225,7 +225,7 @@ function toArray () {
   const out = []
   out.length = self.size
   let count = 0
-  self.each(value => {
+  self.forEach(value => {
     out[count++] = value
   })
   return out
@@ -233,21 +233,6 @@ function toArray () {
 
 global.Set.prototype.toArray = toArray
 
-/**
- * Executes a function on each element of the set.
- * The argument, that is passed is the current value of the iterator.
- * @param fct a function with a single argument (value)
- */
-function each (fct) {
-  const self = this
-  const iterator = self.values()
-  let value
-  while ((value = iterator.next().value) !== void 0) {
-    fct.call(self, value)
-  }
-}
-
-global.Set.prototype.each = each
 
 /**
  * Returns an arbitrary element of this collection.
@@ -406,7 +391,7 @@ global.Set.toSet = toSet
 function copy (set) {
   checkSet(set)
   const c = new Set()
-  set.each(el => c.add(el))
+  set.forEach(el => c.add(el))
   return c
 }
 
@@ -424,7 +409,7 @@ global.Set.copy = copy
  */
 function union (...args) {
   const set3 = new Set()
-  args.forEach(set => checkSet(set) && set.each(value => set3.add(value)))
+  args.forEach(set => checkSet(set) && set.forEach(value => set3.add(value)))
   return set3
 }
 
@@ -444,7 +429,7 @@ function intersect (...args) {
   args.forEach(arg => checkSet(arg))
   const set3 = new Set([])
   args.forEach(set => {
-    set.each(value => {
+    set.forEach(value => {
       if (args.every(compare => compare.has(value))) {
         set3.add(value)
       }
@@ -468,7 +453,7 @@ function complement (set1, set2) {
   checkSet(set1)
   checkSet(set2)
   const set3 = new Set([])
-  set1.each(value => {
+  set1.forEach(value => {
     if (!set2.has(value)) {
       set3.add(value)
     }
@@ -485,7 +470,7 @@ function symDiff (set1, set2) {
   const set3 = new Set()
 
   function addToSet (source, compare, target) {
-    source.each(value => {
+    source.forEach(value => {
       if (!compare.has(value)) {
         target.add(value)
       }
@@ -527,7 +512,7 @@ global.Set.cartesian = function cartesianProduct (set1, set2) {
   checkSet(set1)
   checkSet(set2)
   const set3 = new Set()
-  set1.each(value1 => set2.each(value2 => set3.add([value1, value2])))
+  set1.forEach(value1 => set2.forEach(value2 => set3.add([value1, value2])))
   return set3
 }
 
@@ -535,7 +520,7 @@ global.Set.cartesian = function cartesianProduct (set1, set2) {
  * @private
  */
 function addToSubset (e, T) {
-  T.each(X => X.add(e))
+  T.forEach(X => X.add(e))
   return T
 }
 
@@ -565,7 +550,7 @@ function powerSet (S) {
 
   const subs = subsets(S)
   subs.add(new Set())
-  S.each(value => subs.add(Set.from(value)))
+  S.forEach(value => subs.add(Set.from(value)))
   return subs
 }
 

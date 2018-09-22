@@ -435,7 +435,7 @@ global.Set.prototype = _originalSet.prototype
  * const ints = Set.from(1,2,3)
  * const flts = Set.from(4.5, 5.6, 6.7)
  * Set.from(ints, flts) // returns Set { Set {1, 2, 3}, Set { 4.5, 5.6, 6.7 } }
- * @param args {*} - values of any types / length (using comma notation or spread operator)
+ * @param args {...*} - values of any types / length (using comma notation or spread operator)
  * @returns {Set} A set containing the given argument values.
  */
 function from (...args) {
@@ -496,7 +496,10 @@ global.Set.union = union
 
 /**
  * Creates an intersection set of an arbitrary number of sets.
- * An intersection is a set of A and B, which contains all elements that appear in A, as well as in B: <code>C = A ∩ B</code>
+ * An intersection is a set of A and B, which contains all elements that appear in A, as well as in B.
+ * <br>
+ * Expression: <code>C = A ∩ B</code>
+ * <br>
  * Example: <code>{1, 2, 3} ∩ {2, 3, 4} = {2, 3}.</code>
  * @name Set.intersect
  * @function
@@ -601,11 +604,24 @@ function symmetricDifference (...args) {
 global.Set.symDiff = symmetricDifference
 
 /**
- * Creates the cartesian product of two given sets
+ * Creates the cartesian product of two given sets.
+ * The cartesian product of two sets A and B is the set of all ordered pairs (a, b) where a ∈ A and b ∈ B.
+ * <br>
+ * Expression: <code>C = A x B = { (a, b) | a ∈ A and b ∈ B}</code>
+ * <br>
+ * Note, that <code>A x B ≠ B x A</code> (not commutative)
  * @function
  * @name Set.cartesian
- * @param set1
- * @param set2
+ * @param set1 {Set} - A set instance
+ * @param set2 {Set} - A set instance
+ * @example
+ * const a = Set.from(1,2)
+ * const b = Set.from(3,4)
+ * Set.cartesian(a, b) // Set { [1, 3], [1, 4], [2, 3], [2, 4] }
+ * Set.cartesian(b, a) // Set { [3, 1], [3, 2], [4, 1], [4, 2] }
+ * @throws Throws an error unless both arguments are set instances.
+ * @return {Set} a new set instance, that contains the ordered element pairs.
+ * @see https://en.wikipedia.org/wiki/Cartesian_product
  */
 global.Set.cartesian = function cartesianProduct (set1, set2) {
   checkSet(set1)
@@ -616,6 +632,7 @@ global.Set.cartesian = function cartesianProduct (set1, set2) {
 }
 
 /**
+ * https://en.wikipedia.org/wiki/Power_set
  * @private
  */
 function addToSubset (e, T) {
@@ -624,6 +641,7 @@ function addToSubset (e, T) {
 }
 
 /**
+ * https://en.wikipedia.org/wiki/Power_set
  * @private
  */
 function subsets (S) {
@@ -640,18 +658,24 @@ function subsets (S) {
 }
 
 /**
- * Creates the powerset of a set.
+ * Creates the powerset of a given set instance by using a recursive algorithm (see <a href="https://en.wikipedia.org/wiki/Power_set">Wikipedia</a>, section Algorithms).
+ * The powerset of a set contains all possible subsets of the set, plus itself and the empty set.
+ * <br>
+ * <strong>Attention:</strong> This method grows exponentially with the size of the given set.
  * @name Set.power
  * @function
- * @param S
- * @returns {*}
+ * @param set {Set} - A Set instance.
+ * @throws
+ * Throws an error if the given set is not a set instance.
+ * @returns {Set} a new set instance with all subsets of the given set, plus the given set itself and the empty set.
+ * @see https://en.wikipedia.org/wiki/Power_set
  */
-function powerSet (S) {
-  checkSet(S)
+function powerSet (set) {
+  checkSet(set)
 
-  const subs = subsets(S)
+  const subs = subsets(set)
   subs.add(new Set())
-  S.forEach(value => subs.add(Set.from(value)))
+  set.forEach(value => subs.add(Set.from(value)))
   return subs
 }
 

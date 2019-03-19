@@ -757,6 +757,96 @@ describe('Operations (static)', function () {
     })
   })
 
+  describe(Set.complement.name, function () {
+    // used with https://en.wikipedia.org/wiki/Complement_(set_theory)#Absolute_complement
+
+    it('returns the complement of a set from another', function () {
+      const a = new Set([1, 2])
+      const b = new Set([1, 3])
+      const c = new Set([1, 2, 3, 4])
+      const e = new Set([])
+      const u = new Set([1, 2, 3, 4, 5])
+
+      // {1, 2} \ {1, 2} = ∅.
+      // A \ A = ∅.
+      assert.equal(Set.complement(a, a).size, 0)
+
+      // {1, 2, 3, 4} \ {1, 3} = {2, 4}.
+      areEqual(Set.complement(c, b), new Set([2, 4]))
+
+      // If B has an element not in A (impossible since A must be the entire universe), throw an error.
+      assert.throws(function() {
+        Set.complement(a, b)
+      }, /\[set2\] has an element which is not in the universe \[se1\]\./)
+
+      // A \ ∅ = A.
+      areEqual(Set.complement(a, e), a)
+
+      // A ∪ A′ = U.
+      areEqual(Set.union(a, Set.complement(u, a)), u)
+
+      // A ∩ A′ = ∅.
+      areEqual(Set.union(a, Set.intersect(u, a)), e)
+
+      // (A′)′ = A.
+      areEqual(a, Set.complement(u, Set.complement(u, a)))
+
+      // U′ = ∅ and ∅′ = U.
+      areEqual(e, Set.complement(u, u))
+      areEqual(u, Set.complement(u, e))
+
+      // A \ B = A ∩ B′.
+      areEqual(Set.difference(a, b), Set.intersect(a, Set.complement(u, b)))
+    })
+
+    it('recursively respects nested sets', function () {
+      const a = set(set(2), set(4))
+      const b = set(set(1), set(3))
+      const c = set(set(1), set(2), set(3), set(4))
+      const e = new Set()
+
+      assert.equal(Set.complement(a, a).size, 0)
+
+      // {1, 2, 3, 4} \ {1, 3} = {2, 4}.
+      areEqual(Set.complement(c, b), set(set(2), set(4)))
+      const acb = Set.complement(a, b)
+      const bca = Set.complement(b, a)
+
+      areNotEqual(acb, bca)
+      assert.equal(Set.complement(e, a).size, 0)
+      areEqual(Set.complement(a, e), a)
+    })
+
+    it('does not alter the involved sets', function () {
+      const a = new Set([1, 2])
+      const b = new Set([1, 3])
+      const acb = Set.complement(a, b)
+      const bca = Set.complement(b, a)
+      areNotEqual(acb, bca)
+
+      assert.deepEqual(a.toArray(), [1, 2])
+      assert.deepEqual(b.toArray(), [1, 3])
+    })
+
+    it('throws if given parameters are not a Set', function () {
+      assert.throws(function () {
+        Set.complement(set(1), 1)
+      }, /Expected \[set\] to be instanceof \[Set\]/)
+
+      assert.throws(function () {
+        Set.complement(1, set(1))
+      }, /Expected \[set\] to be instanceof \[Set\]/)
+
+      assert.throws(function () {
+        Set.complement(null, null)
+      }, /Expected \[set\] to be instanceof \[Set\]/)
+
+      assert.throws(function () {
+        Set.complement(set(1), null)
+      }, /Expected \[set\] to be instanceof \[Set\]/)
+    })
+  })
+
   describe(Set.symDiff.name, function () {
     // use with https://en.wikipedia.org/wiki/Symmetric_difference
 

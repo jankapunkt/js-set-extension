@@ -454,7 +454,7 @@ global.Set.prototype = _originalSet.prototype
 // //////////////////////////////////////////////////////////////////////////////// //
 
 /**
- * Creates a new Set from arbitrary arguments wihtout the need of "new" and the array notation.
+ * Creates a new Set from arbitrary arguments without the need of "new" and the array notation.
  * @function
  * @name Set.from
  * @example Set.from(1,2,3,4,5) // returns Set { 1, 2, 3, 4, 5 }
@@ -510,7 +510,7 @@ global.Set.copy = copy
  * @name Set.union
  * @function
  * @param args {...Set} - an arbitrary list of Set instances
- * @throws Throws an error if any of the argument is not a Set instance.
+ * @throws Throws an error if any of the arguments is not a Set instance.
  * @returns {Set} a Set instance with the unified elements of the given args.
  * @see https://en.wikipedia.org/wiki/Union_(set_theory)
  */
@@ -532,7 +532,7 @@ global.Set.union = union
  * @name Set.intersect
  * @function
  * @param args {...Set}- an arbitrary list of Set instances
- * @throws Throws an error if any of the argument is not a Set instance.
+ * @throws Throws an error if any of the arguments is not a Set instance.
  * @returns {Set} a Set instance with the unified elements of the given args.
  * @see https://en.wikipedia.org/wiki/Intersection_(set_theory)
  */
@@ -552,16 +552,16 @@ function intersect (...args) {
 global.Set.intersect = intersect
 
 /**
- * Creates a complement of two sets (subtracts B from A): <code>C = A \ B</code>
+ * Computes the set difference of two sets (subtracts B from A): <code>C = A \ B</code>.  This is also known as the "relative complement".
  *
- * @name Set.complement
+ * @name Set.difference
  * @function
- * @throws Throws an error if any of the argument is not a Set instance.
+ * @throws Throws an error if any of the arguments is not a Set instance.
  * @param set1 - A the set to be subtracted from
- * @param set2 - B the set which elements will be subtracted from A
+ * @param set2 - B the set whose elements will be subtracted from A
  * @returns {ExtendedSet|*} A new Set with all elements of A minus the elements of B
  */
-function complement (set1, set2) {
+function difference (set1, set2) {
   checkSet(set1)
   checkSet(set2)
   const set3 = new Set([])
@@ -573,7 +573,7 @@ function complement (set1, set2) {
   return set3
 }
 
-global.Set.complement = complement
+global.Set.difference = difference
 
 /**
  *
@@ -679,7 +679,7 @@ function subsets (S) {
   }
 
   const e = S.any()
-  let T = Set.complement(S, Set.from(e))
+  let T = Set.difference(S, Set.from(e))
   const PT = subsets(T)
   const PTe = addToSubset(e, subsets(T))
   return Set.union(PT, PTe)

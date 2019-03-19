@@ -671,10 +671,10 @@ describe('Operations (static)', function () {
     })
   })
 
-  describe(Set.complement.name, function () {
-    // used with https://en.wikipedia.org/wiki/Complement_(set_theory)
+  describe(Set.difference.name, function () {
+    // used with https://en.wikipedia.org/wiki/Complement_(set_theory)#Relative_complement
 
-    it('returns the complement of a set from another', function () {
+    it('returns the difference of a set from another', function () {
       const a = new Set([1, 2])
       const b = new Set([1, 3])
       const c = new Set([1, 2, 3, 4])
@@ -682,21 +682,21 @@ describe('Operations (static)', function () {
 
       // {1, 2} \ {1, 2} = ∅.
       // A \ A = ∅.
-      assert.equal(Set.complement(a, a).size, 0)
+      assert.equal(Set.difference(a, a).size, 0)
 
       // {1, 2, 3, 4} \ {1, 3} = {2, 4}.
-      areEqual(Set.complement(c, b), new Set([2, 4]))
+      areEqual(Set.difference(c, b), new Set([2, 4]))
 
       // A \ B ≠ B \ A for A ≠ B.
-      const acb = Set.complement(a, b)
-      const bca = Set.complement(b, a)
+      const acb = Set.difference(a, b)
+      const bca = Set.difference(b, a)
       areNotEqual(acb, bca)
 
       // ∅ \ A = ∅.
-      assert.equal(Set.complement(e, a).size, 0)
+      assert.equal(Set.difference(e, a).size, 0)
 
       // A \ ∅ = A.
-      areEqual(Set.complement(a, e), a)
+      areEqual(Set.difference(a, e), a)
 
       // TODO
       // A ∪ A′ = U.
@@ -715,23 +715,23 @@ describe('Operations (static)', function () {
       const c = set(set(1), set(2), set(3), set(4))
       const e = new Set()
 
-      assert.equal(Set.complement(a, a).size, 0)
+      assert.equal(Set.difference(a, a).size, 0)
 
       // {1, 2, 3, 4} \ {1, 3} = {2, 4}.
-      areEqual(Set.complement(c, b), set(set(2), set(4)))
-      const acb = Set.complement(a, b)
-      const bca = Set.complement(b, a)
+      areEqual(Set.difference(c, b), set(set(2), set(4)))
+      const acb = Set.difference(a, b)
+      const bca = Set.difference(b, a)
 
       areNotEqual(acb, bca)
-      assert.equal(Set.complement(e, a).size, 0)
-      areEqual(Set.complement(a, e), a)
+      assert.equal(Set.difference(e, a).size, 0)
+      areEqual(Set.difference(a, e), a)
     })
 
     it('does not alter the involved sets', function () {
       const a = new Set([1, 2])
       const b = new Set([1, 3])
-      const acb = Set.complement(a, b)
-      const bca = Set.complement(b, a)
+      const acb = Set.difference(a, b)
+      const bca = Set.difference(b, a)
       areNotEqual(acb, bca)
 
       assert.deepEqual(a.toArray(), [1, 2])
@@ -740,19 +740,19 @@ describe('Operations (static)', function () {
 
     it('throws if given parameters are not a Set', function () {
       assert.throws(function () {
-        Set.complement(set(1), 1)
+        Set.difference(set(1), 1)
       }, /Expected \[set\] to be instanceof \[Set\]/)
 
       assert.throws(function () {
-        Set.complement(1, set(1))
+        Set.difference(1, set(1))
       }, /Expected \[set\] to be instanceof \[Set\]/)
 
       assert.throws(function () {
-        Set.complement(null, null)
+        Set.difference(null, null)
       }, /Expected \[set\] to be instanceof \[Set\]/)
 
       assert.throws(function () {
-        Set.complement(set(1), null)
+        Set.difference(set(1), null)
       }, /Expected \[set\] to be instanceof \[Set\]/)
     })
   })
@@ -770,11 +770,11 @@ describe('Operations (static)', function () {
       assert.isTrue(asdb.equal(new Set([1, 2, 4])))
 
       // The symmetric difference is equivalent to the union of both relative complements, that is:
-      const unionOfRelativeComplements = Set.union(Set.complement(a, b), Set.complement(b, a))
+      const unionOfRelativeComplements = Set.union(Set.difference(a, b), Set.difference(b, a))
       areEqual(asdb, unionOfRelativeComplements)
 
       // The symmetric difference can also be expressed as the union of the two sets, minus their intersection:
-      const unionMinusIntersection = Set.complement(Set.union(a, b), Set.intersect(a, b))
+      const unionMinusIntersection = Set.difference(Set.union(a, b), Set.intersect(a, b))
       areEqual(asdb, unionMinusIntersection)
 
       // The symmetric difference is commutative and associative:

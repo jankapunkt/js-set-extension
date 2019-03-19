@@ -576,6 +576,28 @@ function difference (set1, set2) {
 global.Set.difference = difference
 
 /**
+ * Computes the complement of set B where U is the universe: <code>C = U \ B</code>.  This is also known as the "absolute complement".
+ *
+ * @name Set.complement
+ * @function
+ * @throws Throws an error if any of the arguments is not a Set instance.
+ * @throws Throws an error if any element in B does not occur in U.
+ * @param set1 - U the set to be subtracted from
+ * @param set2 - B the set whose elements will be subtracted from A
+ * @returns {ExtendedSet|*} A new Set with all elements of U minus the elements of B
+ */
+function complement (set1, set2) {
+  checkSet(set1)
+  checkSet(set2)
+  if (!set1.isSupersetOf(set2)) {
+    throw new Error(`[set2] has an element which is not in the universe [se1].`)
+  }
+  return Set.difference(set1, set2)
+}
+
+global.Set.complement = complement
+
+/**
  *
  * @private
  */

@@ -521,6 +521,7 @@ describe('Operations (static)', function () {
     })
 
     it('creates a union that contains the basic properties of unions', function () {
+      const u = new Set([1, 2, 3, 4, 5, 6, 7])
       const a = new Set([1, 2, 3])
       const b = new Set([3, 4, 5])
       const c = new Set([5, 6, 7])
@@ -543,13 +544,17 @@ describe('Operations (static)', function () {
       // A ∪ A = A.
       assert.isTrue(Set.union(a, a).equal(a))
 
-      // A ∪ U = U. // TODO even possible to test here? -> https://en.wikipedia.org/wiki/Russell%27s_paradox
+      // A ∪ U = U.
+      areEqual(u, Set.union(a, u))
 
       // A ∪ ∅ = A.
       areEqual(Set.union(a, new Set()), a)
 
       // A ⊆ B if and only if A ∪ B = B.
-      // TODO
+      assert.isTrue(c.isSubsetOf(u))
+      areEqual(u, Set.union(c, u))
+      assert.isFalse(c.isSubsetOf(b))
+      areNotEqual(b, Set.union(c, b))
     })
 
     it('recursively respects nested sets', function () {

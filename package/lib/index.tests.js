@@ -675,6 +675,7 @@ describe('Operations (static)', function () {
     // used with https://en.wikipedia.org/wiki/Complement_(set_theory)#Relative_complement
 
     it('returns the difference of a set from another', function () {
+      const u = new Set([1, 2, 3, 4, 5])
       const a = new Set([1, 2])
       const b = new Set([1, 3])
       const c = new Set([1, 2, 3, 4])
@@ -698,15 +699,31 @@ describe('Operations (static)', function () {
       // A \ ∅ = A.
       areEqual(Set.difference(a, e), a)
 
-      // TODO
       // A ∪ A′ = U.
+      areEqual(Set.union(a, Set.difference(u, a)), u)
+
       // A ∩ A′ = ∅.
+      areEqual(Set.intersect(a, Set.difference(u, a)), e)
+
       // (A′)′ = A.
+      areEqual(a, Set.difference(u, Set.difference(u, a)))
+
       // A \ U = ∅.
+      areEqual(e, Set.difference(a, u))
+
       // A \ A′ = A and A′ \ A = A′.
+      areEqual(a, Set.difference(a, Set.difference(u, a)))
+      areEqual(Set.difference(u, a), Set.difference(Set.difference(u, a), a))
+
       // U′ = ∅ and ∅′ = U.
+      areEqual(e, Set.difference(u, u))
+      areEqual(u, Set.difference(u, e))
+
       // A \ B = A ∩ B′.
-      // if A ⊆ B then A \ B = ∅.
+      areEqual(Set.difference(a, b), Set.intersect(a, Set.difference(u, b)))
+
+      // if B ⊆ C then B \ C = ∅.
+      areEqual(e, Set.difference(b, c))
     })
 
     it('recursively respects nested sets', function () {
@@ -761,11 +778,11 @@ describe('Operations (static)', function () {
     // used with https://en.wikipedia.org/wiki/Complement_(set_theory)#Absolute_complement
 
     it('returns the complement of a set from another', function () {
+      const u = new Set([1, 2, 3, 4, 5])
       const a = new Set([1, 2])
       const b = new Set([1, 3])
       const c = new Set([1, 2, 3, 4])
       const e = new Set([])
-      const u = new Set([1, 2, 3, 4, 5])
 
       // {1, 2} \ {1, 2} = ∅.
       // A \ A = ∅.

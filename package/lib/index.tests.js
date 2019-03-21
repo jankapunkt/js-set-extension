@@ -786,7 +786,7 @@ describe('Operations (static)', function () {
       areEqual(Set.union(a, Set.complement(u, a)), u)
 
       // A ∩ A′ = ∅.
-      areEqual(Set.union(a, Set.intersect(u, a)), e)
+      areEqual(Set.intersect(a, Set.complement(u, a)), e)
 
       // (A′)′ = A.
       areEqual(a, Set.complement(u, Set.complement(u, a)))
@@ -809,22 +809,16 @@ describe('Operations (static)', function () {
 
       // {1, 2, 3, 4} \ {1, 3} = {2, 4}.
       areEqual(Set.complement(c, b), set(set(2), set(4)))
-      const acb = Set.complement(a, b)
-      const bca = Set.complement(b, a)
 
-      areNotEqual(acb, bca)
-      assert.equal(Set.complement(e, a).size, 0)
       areEqual(Set.complement(a, e), a)
     })
 
     it('does not alter the involved sets', function () {
-      const a = new Set([1, 2])
+      const a = new Set([1, 2, 3])
       const b = new Set([1, 3])
       const acb = Set.complement(a, b)
-      const bca = Set.complement(b, a)
-      areNotEqual(acb, bca)
 
-      assert.deepEqual(a.toArray(), [1, 2])
+      assert.deepEqual(a.toArray(), [1, 2, 3])
       assert.deepEqual(b.toArray(), [1, 3])
     })
 

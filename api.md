@@ -29,6 +29,7 @@ Extended version of <a href="https://developer.mozilla.org/en-US/docs/Web/JavaSc
         * [.copy(set)](#Set.copy) ⇒ [<code>Set</code>](#Set)
         * [.union(...args)](#Set.union) ⇒ [<code>Set</code>](#Set)
         * [.intersect(...args)](#Set.intersect) ⇒ [<code>Set</code>](#Set)
+        * [.difference(set1, set2)](#Set.difference) ⇒ <code>ExtendedSet</code> \| <code>\*</code>
         * [.complement(set1, set2)](#Set.complement) ⇒ <code>ExtendedSet</code> \| <code>\*</code>
         * [.symDiff(...args)](#Set.symDiff) ⇒ [<code>Set</code>](#Set)
         * [.cartesian(set1, set2)](#Set.cartesian) ⇒ [<code>Set</code>](#Set)
@@ -286,7 +287,7 @@ a.equal(b) // true
 <a name="Set.from"></a>
 
 ### Set.from(...args) ⇒ [<code>Set</code>](#Set)
-Creates a new Set from arbitrary arguments wihtout the need of "new" and the array notation.
+Creates a new Set from arbitrary arguments without the need of "new" and the array notation.
 
 **Kind**: static method of [<code>Set</code>](#Set)  
 **Returns**: [<code>Set</code>](#Set) - A set containing the given argument values.  
@@ -346,7 +347,7 @@ A union of A and B is a set containing all elements of A and B.
 **Returns**: [<code>Set</code>](#Set) - a Set instance with the unified elements of the given args.  
 **Throws**:
 
-- Throws an error if any of the argument is not a Set instance.
+- Throws an error if any of the arguments is not a Set instance.
 
 **See**: https://en.wikipedia.org/wiki/Union_(set_theory)  
 
@@ -368,7 +369,7 @@ Example: <code>{1, 2, 3} ∩ {2, 3, 4} = {2, 3}.</code>
 **Returns**: [<code>Set</code>](#Set) - a Set instance with the unified elements of the given args.  
 **Throws**:
 
-- Throws an error if any of the argument is not a Set instance.
+- Throws an error if any of the arguments is not a Set instance.
 
 **See**: https://en.wikipedia.org/wiki/Intersection_(set_theory)  
 
@@ -376,22 +377,40 @@ Example: <code>{1, 2, 3} ∩ {2, 3, 4} = {2, 3}.</code>
 | --- | --- | --- |
 | ...args | [<code>Set</code>](#Set) | an arbitrary list of Set instances |
 
-<a name="Set.complement"></a>
+<a name="Set.difference"></a>
 
-### Set.complement(set1, set2) ⇒ <code>ExtendedSet</code> \| <code>\*</code>
-Creates a complement of two sets (subtracts B from A): <code>C = A \ B</code>
+### Set.difference(set1, set2) ⇒ <code>ExtendedSet</code> \| <code>\*</code>
+Computes the set difference of two sets (subtracts B from A): <code>C = A \ B</code>.  This is also known as the "relative complement".
 
 **Kind**: static method of [<code>Set</code>](#Set)  
 **Returns**: <code>ExtendedSet</code> \| <code>\*</code> - A new Set with all elements of A minus the elements of B  
 **Throws**:
 
-- Throws an error if any of the argument is not a Set instance.
+- Throws an error if any of the arguments is not a Set instance.
 
 
 | Param | Description |
 | --- | --- |
 | set1 | A the set to be subtracted from |
-| set2 | B the set which elements will be subtracted from A |
+| set2 | B the set whose elements will be subtracted from A |
+
+<a name="Set.complement"></a>
+
+### Set.complement(set1, set2) ⇒ <code>ExtendedSet</code> \| <code>\*</code>
+Computes the complement of set B where U is the universe: <code>C = U \ B</code>.  This is also known as the "absolute complement".
+
+**Kind**: static method of [<code>Set</code>](#Set)  
+**Returns**: <code>ExtendedSet</code> \| <code>\*</code> - A new Set with all elements of U minus the elements of B  
+**Throws**:
+
+- Throws an error if any of the arguments is not a Set instance.
+- Throws an error if any element in B does not occur in U.
+
+
+| Param | Description |
+| --- | --- |
+| set1 | U the set to be subtracted from |
+| set2 | B the set whose elements will be subtracted from A |
 
 <a name="Set.symDiff"></a>
 

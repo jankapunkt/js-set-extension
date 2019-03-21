@@ -590,7 +590,7 @@ function complement (set1, set2) {
   checkSet(set1)
   checkSet(set2)
   if (!set1.isSupersetOf(set2)) {
-    throw new Error(`[set2] has an element which is not in the universe [se1].`)
+    throw new Error(`[set2] has an element which is not in the universe [set1].`)
   }
   return Set.difference(set1, set2)
 }

@@ -775,9 +775,9 @@ describe('Operations (static)', function () {
       areEqual(Set.complement(c, b), new Set([2, 4]))
 
       // If B has an element not in A (impossible since A must be the entire universe), throw an error.
-      assert.throws(function() {
+      assert.throws(function () {
         Set.complement(a, b)
-      }, /\[set2\] has an element which is not in the universe \[se1\]\./)
+      }, /\[set2\] has an element which is not in the universe \[set1\]\./)
 
       // A \ ∅ = A.
       areEqual(Set.complement(a, e), a)
@@ -817,6 +817,7 @@ describe('Operations (static)', function () {
       const a = new Set([1, 2, 3])
       const b = new Set([1, 3])
       const acb = Set.complement(a, b)
+      assert.deepEqual(acb.toArray(), [2])
 
       assert.deepEqual(a.toArray(), [1, 2, 3])
       assert.deepEqual(b.toArray(), [1, 3])

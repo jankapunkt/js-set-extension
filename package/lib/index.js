@@ -51,6 +51,24 @@ function checkSet (set) {
   return true
 }
 
+/**
+ * @private
+ */
+function checkSets (sets) {
+  sets.forEach(set => checkSet(set))
+  return true
+}
+
+/**
+ * @private
+ */
+function checkSingle (args) {
+  if (args.length !== 1) {
+    throw new Error(`The function must be given exactly 1 argument.`)
+  }
+  return true
+}
+
 // //////////////////////////////////////////////////////////////////////////////// //
 //                                                                                  //
 // OVERRIDES                                                                        //
@@ -503,24 +521,48 @@ function copy (set) {
 global.Set.copy = copy
 
 /**
- * Creates a unified set of an arbitrary number of sets.
- * A union of A and B is a set containing all elements of A and B.
- * <br>Expression: <code>C = A ∪ B</code>
- * <br>Example: <code>{1,2} ∪ {2,3,4} = {1,2,3,4}</code>
+ * Creates the set union of an arbitrary number of sets.
+ * The union S of an iterable M of sets Mi is the set that consists of all elements of each Mi.
+ * <br>Expression: <code>S = ∪ M</code>
+ * <br>Example: <code>∪ {{1,2}, {2,3,4}} = {1,2,3,4}</code>
+ * <br>Usage: <code>Set.union(...M)</code>
+ * <br>Usage: <code>Set.union(A, B, C)</code>
  * @name Set.union
  * @function
  * @param args {...Set} - an arbitrary list of Set instances
  * @throws Throws an error if any of the arguments is not a Set instance.
  * @returns {Set} a Set instance with the unified elements of the given args.
- * @see https://en.wikipedia.org/wiki/Union_(set_theory)
+ * @see https://en.wikipedia.org/wiki/Union_(set_theory)#Arbitrary_unions
  */
-function union (...args) {
+function unionArbitrary (...args) {
+  checkSets(args)
   const set3 = new Set()
-  args.forEach(set => checkSet(set) && set.forEach(value => set3.add(value)))
+  args.forEach(set => set.forEach(value => set3.add(value)))
   return set3
 }
+global.Set.union = unionArbitrary
 
-global.Set.union = union
+/**
+ * Creates the set union of two sets.
+ * The union of A and B is the set C that consists of all elements of A and B.
+ * <br>Expression: <code>C = A ∪ B</code>
+ * <br>Example: <code>{1,2} ∪ {2,3,4} = {1,2,3,4}</code>
+ * <br>Usage: <code>A.union(B)</code>
+ * @name Set.union
+ * @function
+ * @param args {set} - the other set to union with.
+ * @throws Throws an error if there is not exactly one argument.
+ * @throws Throws an error if the argument is not a Set instance.
+ * @returns {Set} a Set instance with the unified elements of the given args.
+ * @see https://en.wikipedia.org/wiki/Union_(set_theory)#Union_of_two_sets
+ */
+function unionBinary (...args) {
+  checkSingle(args)
+  const set = args[0]
+  checkSet(set)
+  return Set.union(this, set)
+}
+global.Set.this.union = unionBinary
 
 /**
  * Creates an intersection set of an arbitrary number of sets.

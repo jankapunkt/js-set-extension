@@ -522,11 +522,17 @@ global.Set.copy = copy
 
 /**
  * Creates the set union of an arbitrary number of sets.
- * The union S of an iterable M of sets Mi is the set that consists of all elements of each Mi.
- * <br>Expression: <code>S = ∪ M</code>
- * <br>Example: <code>∪ {{1,2}, {2,3,4}} = {1,2,3,4}</code>
- * <br>Usage: <code>Set.union(...M)</code>
- * <br>Usage: <code>Set.union(A, B, C)</code>
+ * The union S of an iterable M of sets M<sub>i</sub> is the set that consists of all elements of each M<sub>i</sub>.
+ * <br>Expression: <code>∪ M = S</code>
+ * <br>Example: <code>∪ {A, B, C} = S</code>
+ * <br>Example: <code>∪ {{0,4}, {1}, {9}} = {0,1,4,9}</code>
+ * @example
+ * const A = Set.from(0, 4)
+ * const B = Set.from(1)
+ * const C = Set.from(9)
+ * Set.union(A, B, C) // Set { 0, 1, 4, 9 }
+ * const M = [A, B, C]
+ * Set.union(...M) // Set { 0, 1, 4, 9 }
  * @name Set.union
  * @function
  * @param args {...Set} - an arbitrary list of Set instances
@@ -542,14 +548,16 @@ function unionArbitrary (...args) {
 }
 global.Set.union = unionArbitrary
 
-// todo: move unionBinary to prototype section
 /**
  * Creates the set union of two sets.
  * The union of A and B is the set C that consists of all elements of A and B.
- * <br>Expression: <code>C = A ∪ B</code>
- * <br>Example: <code>{1,2} ∪ {2,3,4} = {1,2,3,4}</code>
- * <br>Usage: <code>A.union(B)</code>
- * @name Set.union
+ * <br>Expression: <code>A ∪ B = C</code>
+ * <br>Example: <code>{1,2} ∪ {1,7,8,9} = {1,2,7,8,9}</code>
+ * @example
+ * const A = Set.from(1, 2)
+ * const B = Set.from(1, 7, 8, 9)
+ * A.union(B) // Set { 1, 2, 7, 8, 9 }
+ * @name Set.prototype.union
  * @function
  * @param args {set} - the other set to union with.
  * @throws Throws an error if there is not exactly one argument.

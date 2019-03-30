@@ -497,18 +497,26 @@ describe('Operations (static)', function () {
     const createUnion = setA => arr => Set.union(setA, new Set(arr)).toArray().sort()
 
     it('creates a union of two sets', function () {
-      const setA = new Set([1, 2])
-      const union = createUnion(setA)
+      // this test includes both the binary and arbitrary union operators
+      const a = new Set([1, 2])
+      const b = new Set([2, 3])
+      const c = new Set([1, 2, 3])
+      const d = new Set([3, 4, 5])
+      const f = new Set([1, 2, 3, 4, 5])
+      const union = createUnion(a)
 
       // {1, 2} ∪ {1, 2} = {1, 2}.
       assert.deepEqual(union([1, 2]), [1, 2])
+      assert.deepEqual(a.union(a), a)
 
       // {1, 2} ∪ {2, 3} = {1, 2, 3}.
       assert.deepEqual(union([2, 3.0]), [1, 2, 3])
+      assert.deepEqual(a.union(b), c)
 
       // {1, 2, 3} ∪ {3, 4, 5} = {1, 2, 3, 4, 5}
-      setA.add(3)
+      a.add(3)
       assert.deepEqual(union([3, 4, 5]), [1, 2, 3, 4, 5])
+      assert.deepEqual(c.union(d), f)
     })
 
     it('creates a union of n sets', function () {

@@ -542,6 +542,7 @@ function unionArbitrary (...args) {
 }
 global.Set.union = unionArbitrary
 
+// todo: move unionBinary to prototype section
 /**
  * Creates the set union of two sets.
  * The union of A and B is the set C that consists of all elements of A and B.
@@ -562,7 +563,7 @@ function unionBinary (...args) {
   checkSet(set)
   return Set.union(this, set)
 }
-global.Set.this.union = unionBinary
+global.Set.prototype.union = unionBinary
 
 /**
  * Creates an intersection set of an arbitrary number of sets.

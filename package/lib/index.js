@@ -69,6 +69,19 @@ function checkArgsSingle (args) {
   return true
 }
 
+/**
+ * A decorator which, given an arbitrary set function, produces the corresponding binary operation.
+ * @private
+ */
+function arbitraryToBinary (arbitraryFunc) {
+  return function binaryFunc (...args) {
+    checkArgsSingle(args)
+    const set = args[0]
+    checkSet(set)
+    return arbitraryFunc(this, set)
+  }
+}
+
 // //////////////////////////////////////////////////////////////////////////////// //
 //                                                                                  //
 // OVERRIDES                                                                        //
@@ -565,13 +578,7 @@ global.Set.union = unionArbitrary
  * @returns {Set} a Set instance with the unified elements of the given args.
  * @see https://en.wikipedia.org/wiki/Union_(set_theory)#Union_of_two_sets
  */
-function unionBinary (...args) {
-  checkArgsSingle(args)
-  const set = args[0]
-  checkSet(set)
-  return Set.union(this, set)
-}
-global.Set.prototype.union = unionBinary
+global.Set.prototype.union = arbitraryToBinary(unionArbitrary)
 
 /**
  * Creates an intersection set of an arbitrary number of sets.

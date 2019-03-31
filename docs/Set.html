@@ -383,7 +383,7 @@ Note, that <code>A x B ≠ B x A</code> (not commutative)
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="index.js.html">index.js</a>, <a href="index.js.html#line742">line 742</a>
+        <a href="index.js.html">index.js</a>, <a href="index.js.html#line763">line 763</a>
     </li></ul></dd>
     
 
@@ -580,7 +580,7 @@ Set.cartesian(b, a) // Set { [3, 1], [3, 2], [4, 1], [4, 2] }</code></pre>
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="index.js.html">index.js</a>, <a href="index.js.html#line664">line 664</a>
+        <a href="index.js.html">index.js</a>, <a href="index.js.html#line685">line 685</a>
     </li></ul></dd>
     
 
@@ -839,7 +839,9 @@ Set.cartesian(b, a) // Set { [3, 1], [3, 2], [4, 1], [4, 2] }</code></pre>
 
 
 <div class="description">
-    Computes the set difference of two sets (subtracts B from A): <code>C = A \ B</code>.  This is also known as the "relative complement".
+    Computes the set difference of two sets (subtracts B from A). This is also known as the "relative complement".
+<br>Expression: <code>A \ B = S</code>
+<br>Example: <code>{1,2,3} \ {1,3,5} = {2}</code>
 </div>
 
 
@@ -1007,6 +1009,13 @@ Set.cartesian(b, a) // Set { [3, 1], [3, 2], [4, 1], [4, 2] }</code></pre>
     
 
 
+
+
+    <h5>Example</h5>
+    
+    <pre class="prettyprint"><code>const A = Set.from(1, 2, 3)
+const B = Set.from(1, 3, 5)
+Set.difference(A, B) // Set { 2 }</code></pre>
 
 
 
@@ -1511,7 +1520,7 @@ The resulting function requires the given element to pass at least one of the gi
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="index.js.html">index.js</a>, <a href="index.js.html#line820">line 820</a>
+        <a href="index.js.html">index.js</a>, <a href="index.js.html#line841">line 841</a>
     </li></ul></dd>
     
 
@@ -1702,7 +1711,7 @@ Thus, if the element fails one, it fails all.
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="index.js.html">index.js</a>, <a href="index.js.html#line844">line 844</a>
+        <a href="index.js.html">index.js</a>, <a href="index.js.html#line865">line 865</a>
     </li></ul></dd>
     
 
@@ -1881,7 +1890,7 @@ The powerset of a set contains all possible subsets of the set, plus itself and 
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="index.js.html">index.js</a>, <a href="index.js.html#line796">line 796</a>
+        <a href="index.js.html">index.js</a>, <a href="index.js.html#line817">line 817</a>
     </li></ul></dd>
     
 
@@ -2075,7 +2084,7 @@ Expression: <code>C = A Δ B</code>
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="index.js.html">index.js</a>, <a href="index.js.html#line706">line 706</a>
+        <a href="index.js.html">index.js</a>, <a href="index.js.html#line727">line 727</a>
     </li></ul></dd>
     
 
@@ -3778,7 +3787,7 @@ c.isSupersetOf(b) // true</code></pre>
     
 
     
-    <h4 class="name" id="properSupersetOf"><span class="type-signature"></span>properSupersetOf<span class="signature">(set)</span><span class="type-signature"> &rarr; {boolean}</span></h4>
+    <h4 class="name" id="minus"><span class="type-signature"></span>minus<span class="signature">(set)</span><span class="type-signature"> &rarr; {ExtendedSet|*}</span></h4>
     
 
     
@@ -3786,10 +3795,9 @@ c.isSupersetOf(b) // true</code></pre>
 
 
 <div class="description">
-    Checks, whether the current set (this) is a proper subset of the given set.
-A set A is a proper subset of set B, if B contains all elements of A and their sizes are not equal.
-<br>
-Expression: <code>A ⊂ B</code>
+    Computes the set difference of two sets (subtracts B from A). This is also known as the "relative complement".
+<br>Expression: <code>A \ B = S</code>
+<br>Example: <code>{1,2,3} \ {1,3,5} = {2}</code>
 </div>
 
 
@@ -3830,18 +3838,13 @@ Expression: <code>A ⊂ B</code>
 
             <td class="type">
             
-                
-<span class="param-type"><a href="Set.html">Set</a></span>
-
-
-            
             </td>
 
             
 
             
 
-            <td class="description last">A set instance of which this set is checked to be the proper subset.</td>
+            <td class="description last">B the set whose elements will be subtracted from this.</td>
         </tr>
 
     
@@ -3882,19 +3885,12 @@ Expression: <code>A ⊂ B</code>
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="index.js.html">index.js</a>, <a href="index.js.html#line396">line 396</a>
+        <a href="index.js.html">index.js</a>, <a href="index.js.html#line668">line 668</a>
     </li></ul></dd>
     
 
     
 
-    
-    <dt class="tag-see">See:</dt>
-    <dd class="tag-see">
-        <ul>
-            <li><a href="https://en.wikipedia.org/wiki/Subset">https://en.wikipedia.org/wiki/Subset</a></li>
-        </ul>
-    </dd>
     
 
     
@@ -3910,11 +3906,37 @@ Expression: <code>A ⊂ B</code>
 
 
 
+<h5>Throws:</h5>
+<ul>
+        <li>
+
+    <div class="param-desc">
+    
+        Throws an error if there is not exactly one argument.
+    
+    </div>
+
+</li>
+    
+        <li>
+
+    <div class="param-desc">
+    
+        Throws an error if the argument is not a Set instance.
+    
+    </div>
+
+</li>
+    </ul>
 
 
 <h5>Returns:</h5>
 
         
+<div class="param-desc">
+    A new Set with all elements of this set minus the elements of B
+</div>
+
 
 
 <dl>
@@ -3923,7 +3945,10 @@ Expression: <code>A ⊂ B</code>
     </dt>
     <dd>
         
-<span class="param-type">boolean</span>
+<span class="param-type">ExtendedSet</span>
+|
+
+<span class="param-type">*</span>
 
 
     </dd>
@@ -3932,6 +3957,13 @@ Expression: <code>A ⊂ B</code>
     
 
 
+
+
+    <h5>Example</h5>
+    
+    <pre class="prettyprint"><code>const A = Set.from(1, 2, 3)
+const B = Set.from(1, 3, 5)
+A.minus(B) // Set { 2 }</code></pre>
 
 
 
@@ -4046,6 +4078,169 @@ Expression: <code>A ⊃ B</code>
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
         <a href="index.js.html">index.js</a>, <a href="index.js.html#line379">line 379</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+    <dt class="tag-see">See:</dt>
+    <dd class="tag-see">
+        <ul>
+            <li><a href="https://en.wikipedia.org/wiki/Subset">https://en.wikipedia.org/wiki/Subset</a></li>
+        </ul>
+    </dd>
+    
+
+    
+</dl>
+
+
+
+
+
+
+
+
+
+
+
+
+
+<h5>Returns:</h5>
+
+        
+
+
+<dl>
+    <dt>
+        Type
+    </dt>
+    <dd>
+        
+<span class="param-type">boolean</span>
+
+
+    </dd>
+</dl>
+
+    
+
+
+
+
+
+        
+            
+
+    
+
+    
+    <h4 class="name" id="properSupersetOf"><span class="type-signature"></span>properSupersetOf<span class="signature">(set)</span><span class="type-signature"> &rarr; {boolean}</span></h4>
+    
+
+    
+
+
+
+<div class="description">
+    Checks, whether the current set (this) is a proper subset of the given set.
+A set A is a proper subset of set B, if B contains all elements of A and their sizes are not equal.
+<br>
+Expression: <code>A ⊂ B</code>
+</div>
+
+
+
+
+
+
+
+
+
+    <h5>Parameters:</h5>
+    
+
+<table class="params">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>set</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type"><a href="Set.html">Set</a></span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">A set instance of which this set is checked to be the proper subset.</td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="index.js.html">index.js</a>, <a href="index.js.html#line396">line 396</a>
     </li></ul></dd>
     
 
@@ -4611,7 +4806,7 @@ A.union(B) // Set { 1, 2, 7, 8, 9 }</code></pre>
 <br class="clear">
 
 <footer>
-    Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.5.5</a> on Sun Mar 31 2019 21:04:39 GMT+0200 (CEST)
+    Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.5.5</a> on Sun Mar 31 2019 16:56:33 GMT-0400 (Eastern Daylight Time)
 </footer>
 
 <script> prettyPrint(); </script>

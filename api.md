@@ -25,6 +25,7 @@ Extended version of <a href="https://developer.mozilla.org/en-US/docs/Web/JavaSc
         * [.equal(set)](#Set+equal) ⇒ <code>boolean</code>
         * [.union(args)](#Set+union) ⇒ [<code>Set</code>](#Set)
         * [.intersect(args)](#Set+intersect) ⇒ [<code>Set</code>](#Set)
+        * [.minus(set)](#Set+minus) ⇒ <code>ExtendedSet</code> \| <code>\*</code>
     * _static_
         * [.from(...args)](#Set.from) ⇒ [<code>Set</code>](#Set)
         * [.toSet(value)](#Set.toSet) ⇒ [<code>Set</code>](#Set)
@@ -340,6 +341,31 @@ const A = Set.from(0, 1, 2, 4)
 const B = Set.from(1, 2, 9)
 A.intersect(B) // Set { 1, 2 }
 ```
+<a name="Set+minus"></a>
+
+### set.minus(set) ⇒ <code>ExtendedSet</code> \| <code>\*</code>
+Computes the set difference of two sets (subtracts B from A). This is also known as the "relative complement".
+<br>Expression: <code>A \ B = S</code>
+<br>Example: <code>{1,2,3} \ {1,3,5} = {2}</code>
+
+**Kind**: instance method of [<code>Set</code>](#Set)  
+**Returns**: <code>ExtendedSet</code> \| <code>\*</code> - A new Set with all elements of this set minus the elements of B  
+**Throws**:
+
+- Throws an error if there is not exactly one argument.
+- Throws an error if the argument is not a Set instance.
+
+
+| Param | Description |
+| --- | --- |
+| set | B the set whose elements will be subtracted from this. |
+
+**Example**  
+```js
+const A = Set.from(1, 2, 3)
+const B = Set.from(1, 3, 5)
+A.minus(B) // Set { 2 }
+```
 <a name="Set.from"></a>
 
 ### Set.from(...args) ⇒ [<code>Set</code>](#Set)
@@ -456,7 +482,9 @@ Set.intersection(...M) // Set { 1, 2 }
 <a name="Set.difference"></a>
 
 ### Set.difference(set1, set2) ⇒ <code>ExtendedSet</code> \| <code>\*</code>
-Computes the set difference of two sets (subtracts B from A): <code>C = A \ B</code>.  This is also known as the "relative complement".
+Computes the set difference of two sets (subtracts B from A). This is also known as the "relative complement".
+<br>Expression: <code>A \ B = S</code>
+<br>Example: <code>{1,2,3} \ {1,3,5} = {2}</code>
 
 **Kind**: static method of [<code>Set</code>](#Set)  
 **Returns**: <code>ExtendedSet</code> \| <code>\*</code> - A new Set with all elements of A minus the elements of B  
@@ -470,6 +498,12 @@ Computes the set difference of two sets (subtracts B from A): <code>C = A \ B</c
 | set1 | A the set to be subtracted from |
 | set2 | B the set whose elements will be subtracted from A |
 
+**Example**  
+```js
+const A = Set.from(1, 2, 3)
+const B = Set.from(1, 3, 5)
+Set.difference(A, B) // Set { 2 }
+```
 <a name="Set.complement"></a>
 
 ### Set.complement(set1, set2) ⇒ <code>ExtendedSet</code> \| <code>\*</code>

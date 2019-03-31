@@ -182,7 +182,7 @@ global.Set.prototype.has = function has (value) {
     // same elements as the given set in the argument,
     // we need to check for equality of all elements of this set
     // and the argument set
-    if (setCompare && element.equal(value)) {
+    if (setCompare && element.equals(value)) {
       return true
     } else
 
@@ -337,7 +337,7 @@ global.Set.prototype.isSupersetOf = isSupersetOf
  * @throws Throws an error, if the given set is not a set instance.
  * @returns {boolean} - true if this set is the subset of the given set, false otherwise
  * @see https://en.wikipedia.org/wiki/Subset
- * @see Set.prototype.equal
+ * @see Set.prototype.equals
  * @see Set.prototype.isProperSubsetOf
  */
 function isSubsetOf (set) {
@@ -384,33 +384,32 @@ global.Set.prototype.properSubsetOf = isProperSubsetOf
  * Checks, whether two sets are equal in terms of their contained elements.
  * Note: This implementation uses a deep object comparison in order to check for "sameness".
  * This allows also to check equality for more complex / nested structures without the restriction of interpreting
- * "sameness" as "being the exact same instance". If such an equality is desired, please use Set.prototype.equalSrict
+ * "sameness" as "being the exact same instance". If such an equality is desired, please use Set.prototype.equalsStrict
  * @function
- * @name Set.prototype.equal
+ * @name Set.prototype.equals
  * @example
  * const a = Set.from(1,2,3)
  * const b = Set.from(1,2,3.0) // note that 3.0 will evaluate to 3 here!
  * a === b    // false
- * a.equal(b) // true
+ * a.equals(b) // true
  * @example
  * const a = Set.from({ a:true, b:false })
  * const b = Set.from({ b:false, a:true })
- * a.equal(b) // true
+ * a.equals(b) // true
  * @param set {Set} - A set instance, which this set is to be compared with.
  * @throws Throws an error if the given paramter is not a Set instance.
  * @returns {boolean} true, if all elements of this set equal to the elements of the given set.
  * @see https://developer.mozilla.org/en-US/docs/Web/JavaScript/Equality_comparisons_and_sameness
  * @see Set.prototype.isSubsetOf
  */
-function equal (set) {
+function equals (set) {
   checkSet(set)
   if (this.size !== set.size) {
     return false
   }
   return this.isSubsetOf(set)
 }
-
-global.Set.prototype.equal = equal
+global.Set.prototype.equals = equals
 
 // //////////////////////////////////////////////////////////////////////////////// //
 //                                                                                  //

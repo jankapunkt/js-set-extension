@@ -638,8 +638,13 @@ global.Set.intersection = intersectionArbitrary
 global.Set.prototype.intersect = arbitraryToBinary(intersectionArbitrary)
 
 /**
- * Computes the set difference of two sets (subtracts B from A): <code>C = A \ B</code>.  This is also known as the "relative complement".
- *
+ * Computes the set difference of two sets (subtracts B from A). This is also known as the "relative complement".
+ * <br>Expression: <code>A \ B = S</code>
+ * <br>Example: <code>{1,2,3} \ {1,3,5} = {2}</code>
+ * @example
+ * const A = Set.from(1, 2, 3)
+ * const B = Set.from(1, 3, 5)
+ * Set.difference(A, B) // Set { 2 }
  * @name Set.difference
  * @function
  * @throws Throws an error if any of the arguments is not a Set instance.
@@ -650,7 +655,7 @@ global.Set.prototype.intersect = arbitraryToBinary(intersectionArbitrary)
 function difference (set1, set2) {
   checkSet(set1)
   checkSet(set2)
-  const set3 = new Set([])
+  const set3 = new Set()
   set1.forEach(value => {
     if (!set2.has(value)) {
       set3.add(value)
@@ -658,8 +663,24 @@ function difference (set1, set2) {
   })
   return set3
 }
-
 global.Set.difference = difference
+
+/**
+ * Computes the set difference of two sets (subtracts B from A). This is also known as the "relative complement".
+ * <br>Expression: <code>A \ B = S</code>
+ * <br>Example: <code>{1,2,3} \ {1,3,5} = {2}</code>
+ * @example
+ * const A = Set.from(1, 2, 3)
+ * const B = Set.from(1, 3, 5)
+ * A.minus(B) // Set { 2 }
+ * @name Set.prototype.minus
+ * @function
+ * @throws Throws an error if there is not exactly one argument.
+ * @throws Throws an error if the argument is not a Set instance.
+ * @param set - B the set whose elements will be subtracted from this.
+ * @returns {ExtendedSet|*} A new Set with all elements of this set minus the elements of B
+ */
+global.Set.prototype.minus = arbitraryToBinary(difference)
 
 /**
  * Computes the complement of set B where U is the universe: <code>C = U \ B</code>.  This is also known as the "absolute complement".

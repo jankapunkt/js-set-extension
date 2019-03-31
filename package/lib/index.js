@@ -705,6 +705,26 @@ function complement (set1, set2) {
 global.Set.complement = complement
 
 /**
+ *
+ * @private
+ */
+function symDiff (set1, set2) {
+  const set3 = new Set()
+
+  function addToSet (source, compare, target) {
+    source.forEach(value => {
+      if (!compare.has(value)) {
+        target.add(value)
+      }
+    })
+  }
+
+  addToSet(set1, set2, set3)
+  addToSet(set2, set1, set3)
+  return set3
+}
+
+/**
  * Creates the symmetric difference (disjunctive union) of an arbitrary number (2 .. n) of sets.
  * The symmetric difference of two sets A and B is a set, that contains only those elements,
  * which are in either of the sets and not in their intersection.
@@ -714,36 +734,31 @@ global.Set.complement = complement
  * Expression: <code>C = A Δ B</code>
  *
  * @function
- * @name Set.symmetricDifference
+ * @name Set.symDiff
  * @param args {...Set}- An arbitrary amount of Set instances
  * @example
  * const a = Set.from(1,2,3)
  * const b = Set.from(3,4)
- * Set.symmetricDifference(a, b) // Set { 1, 2, 4 }
+ * Set.symDiff(a, b) // Set { 1, 2, 4 }
  * @throws Throws an error if any of the given arguments is not a set instance.
  * @returns {Set} Returns a new Set, that contains only elements.
  * @see https://en.wikipedia.org/wiki/Symmetric_difference
  */
 function symmetricDifference (...args) {
-  checkSets(args)
-  // count the parity of each element
-  const elToCount = new Map()
-  args.forEach(set => set.forEach(el => {
-    if (!elToCount.has(el)) {
-      elToCount.set(el, 0)
-    }
-    elToCount.set(el, elToCount.get(el) + 1)
-  }))
-  // create the symmetric difference set
-  const set = new Set()
-  elToCount.forEach((count, el) => {
-    if (count % 2 === 1) {
-      set.add(el)
-    }
-  })
-  return set
+  args.forEach(arg => checkSet(arg))
+
+  if (args.length === 2) {
+    return symDiff(...args)
+  }
+
+  let set3 = symDiff(args.shift(), args.shift())
+  while (args.length > 0) {
+    set3 = symDiff(set3, args.shift())
+  }
+  return set3
 }
-global.Set.symmetricDifference = symmetricDifference
+
+global.Set.symDiff = symmetricDifference
 
 /**
  * Creates the cartesian product of two given sets.

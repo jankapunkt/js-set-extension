@@ -441,6 +441,27 @@ describe('Relations', function () {
 })
 
 describe('Operations (instances)', function () {
+  describe('binary operation args', function () {
+    const a = new Set([1, 2])
+    const binaryOpNames = ['union']
+    for (let binaryOpName of binaryOpNames) {
+      it('throws an error if you give it no argument', function () {
+        assert.throws(function () {
+          a[binaryOpName]()
+        }, /The function must be given exactly 1 argument\./)
+      })
+
+      it('throws an error if you give it more than 1 argument', function () {
+        assert.throws(function () {
+          a[binaryOpName](a, a)
+        }, /The function must be given exactly 1 argument\./)
+        assert.throws(function () {
+          a[binaryOpName](a, a, a)
+        }, /The function must be given exactly 1 argument\./)
+      })
+    }
+  })
+
   describe(Set.prototype.rules.name, function () {
     it('adds a rule to a given set', function () {
       const set = new Set([1])

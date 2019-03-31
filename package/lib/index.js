@@ -62,8 +62,8 @@ function checkSets (sets) {
 /**
  * @private
  */
-function checkSingle (args) {
-  if (args.length !== 1) {
+function checkArgsSingle (args) {
+  if (!args || args.length !== 1) {
     throw new Error(`The function must be given exactly 1 argument.`)
   }
   return true
@@ -566,7 +566,7 @@ global.Set.union = unionArbitrary
  * @see https://en.wikipedia.org/wiki/Union_(set_theory)#Union_of_two_sets
  */
 function unionBinary (...args) {
-  checkSingle(args)
+  checkArgsSingle(args)
   const set = args[0]
   checkSet(set)
   return Set.union(this, set)

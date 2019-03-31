@@ -32,6 +32,15 @@
 /**
  * @private
  */
+function suggest (incorrectName, correctName) {
+  return function() {
+    throw new Error(`The function [${incorrectName}] does not exist. You probably meant to use [${correctName}].`)
+  }
+}
+
+/**
+ * @private
+ */
 function checkRules (rules) {
   rules.forEach(rule => {
     if (typeof rule !== 'function') {
@@ -410,6 +419,10 @@ function equals (set) {
   return this.isSubsetOf(set)
 }
 global.Set.prototype.equals = equals
+
+global.Set.prototype.equal = suggest('equal', 'equals')
+global.Set.prototype.isEqual = suggest('isEqual', 'equals')
+global.Set.prototype.isEqualTo = suggest('isEqualTo', 'equals')
 
 // //////////////////////////////////////////////////////////////////////////////// //
 //                                                                                  //

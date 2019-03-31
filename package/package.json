@@ -1,6 +1,6 @@
 {
   "name": "set-extensions",
-  "version": "1.2.0",
+  "version": "1.3.0",
   "description": "Extending the Set class in order to support mathematical set properties and operations.",
   "main": "dist/index.js",
   "scripts": {

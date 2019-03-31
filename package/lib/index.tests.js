@@ -30,11 +30,11 @@ import './index'
 const assert = require('chai').assert
 
 function areEqual (set1, set2) {
-  assert.isTrue(set1.equal(set2))
+  assert.isTrue(set1.equals(set2))
 }
 
 function areNotEqual (set1, set2) {
-  assert.isFalse(set1.equal(set2))
+  assert.isFalse(set1.equals(set2))
 }
 
 const isInt = n => Number.isInteger(n)
@@ -350,7 +350,7 @@ describe('Relations', function () {
     })
   })
 
-  describe(Set.prototype.equal.name, function () {
+  describe(Set.prototype.equals.name, function () {
     it('returns true, if a set is equal to another set', function () {
       const set1 = new Set([1, 2, 3, 4])
       const set2 = new Set([1, 1, 2, 2, 3, 3, 4, 4])
@@ -425,7 +425,7 @@ describe('Relations', function () {
 
     it('throws if the other set is not a set', function () {
       assert.throws(function () {
-        new Set([1, 2, 3, 4]).equal([1, 2, 3, 4])
+        new Set([1, 2, 3, 4]).equals([1, 2, 3, 4])
       })
     })
 
@@ -542,7 +542,7 @@ describe('Operations (static)', function () {
       assert.isTrue(a.isSubsetOf(aub))
 
       // A ∪ A = A.
-      assert.isTrue(Set.union(a, a).equal(a))
+      assert.isTrue(Set.union(a, a).equals(a))
 
       // A ∪ U = U.
       areEqual(u, Set.union(a, u))
@@ -874,7 +874,7 @@ describe('Operations (static)', function () {
       const c = new Set([4, 5, 6])
       const asdb = Set.symDiff(a, b)
 
-      assert.isTrue(asdb.equal(new Set([1, 2, 4])))
+      assert.isTrue(asdb.equals(new Set([1, 2, 4])))
 
       // The symmetric difference is equivalent to the union of both relative complements, that is:
       const unionOfRelativeComplements = Set.union(Set.difference(a, b), Set.difference(b, a))

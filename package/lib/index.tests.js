@@ -443,7 +443,7 @@ describe('Relations', function () {
 describe('Operations (instances)', function () {
   describe('binary operation args', function () {
     const a = new Set([1, 2])
-    const binaryOpNames = ['union', 'intersect']
+    const binaryOpNames = ['union', 'intersect', 'minus']
     for (let binaryOpName of binaryOpNames) {
       it('throws an error if you give it no argument', function () {
         assert.throws(function () {
@@ -750,9 +750,11 @@ describe('Operations (static)', function () {
       // {1, 2} \ {1, 2} = ∅.
       // A \ A = ∅.
       assert.equal(Set.difference(a, a).size, 0)
+      assert.equal(a.minus(a).size, 0)
 
       // {1, 2, 3, 4} \ {1, 3} = {2, 4}.
       areEqual(Set.difference(c, b), new Set([2, 4]))
+      areEqual(c.minus(b), new Set([2, 4]))
 
       // A \ B ≠ B \ A for A ≠ B.
       const acb = Set.difference(a, b)
@@ -761,35 +763,47 @@ describe('Operations (static)', function () {
 
       // ∅ \ A = ∅.
       assert.equal(Set.difference(e, a).size, 0)
+      assert.equal(e.minus(a).size, 0)
 
       // A \ ∅ = A.
       areEqual(Set.difference(a, e), a)
+      areEqual(a.minus(e), a)
 
       // A ∪ A′ = U.
       areEqual(Set.union(a, Set.difference(u, a)), u)
+      areEqual(Set.union(a, u.minus(a)), u)
 
       // A ∩ A′ = ∅.
       areEqual(Set.intersection(a, Set.difference(u, a)), e)
+      areEqual(Set.intersection(a, u.minus(a)), e)
 
       // (A′)′ = A.
       areEqual(a, Set.difference(u, Set.difference(u, a)))
+      areEqual(a, u.minus(u.minus(a)))
 
       // A \ U = ∅.
       areEqual(e, Set.difference(a, u))
+      areEqual(e, a.minus(u))
 
       // A \ A′ = A and A′ \ A = A′.
       areEqual(a, Set.difference(a, Set.difference(u, a)))
+      areEqual(a, a.minus(u.minus(a)))
       areEqual(Set.difference(u, a), Set.difference(Set.difference(u, a), a))
+      areEqual(u.minus(a), u.minus(a).minus(a))
 
       // U′ = ∅ and ∅′ = U.
       areEqual(e, Set.difference(u, u))
+      areEqual(e, u.minus(u))
       areEqual(u, Set.difference(u, e))
+      areEqual(u, u.minus(e))
 
       // A \ B = A ∩ B′.
       areEqual(Set.difference(a, b), Set.intersection(a, Set.difference(u, b)))
+      areEqual(a.minus(b), Set.intersection(a, u.minus(b)))
 
       // if B ⊆ C then B \ C = ∅.
       areEqual(e, Set.difference(b, c))
+      areEqual(e, b.minus(c))
     })
 
     it('recursively respects nested sets', function () {

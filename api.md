@@ -24,12 +24,13 @@ Extended version of <a href="https://developer.mozilla.org/en-US/docs/Web/JavaSc
         * [.properSupersetOf(set)](#Set+properSupersetOf) ⇒ <code>boolean</code>
         * [.equal(set)](#Set+equal) ⇒ <code>boolean</code>
         * [.union(args)](#Set+union) ⇒ [<code>Set</code>](#Set)
+        * [.intersect(args)](#Set+intersect) ⇒ [<code>Set</code>](#Set)
     * _static_
         * [.from(...args)](#Set.from) ⇒ [<code>Set</code>](#Set)
         * [.toSet(value)](#Set.toSet) ⇒ [<code>Set</code>](#Set)
         * [.copy(set)](#Set.copy) ⇒ [<code>Set</code>](#Set)
         * [.union(...args)](#Set.union) ⇒ [<code>Set</code>](#Set)
-        * [.intersect(...args)](#Set.intersect) ⇒ [<code>Set</code>](#Set)
+        * [.intersection(...args)](#Set.intersection) ⇒ [<code>Set</code>](#Set)
         * [.difference(set1, set2)](#Set.difference) ⇒ <code>ExtendedSet</code> \| <code>\*</code>
         * [.complement(set1, set2)](#Set.complement) ⇒ <code>ExtendedSet</code> \| <code>\*</code>
         * [.symDiff(...args)](#Set.symDiff) ⇒ [<code>Set</code>](#Set)
@@ -312,6 +313,33 @@ const A = Set.from(1, 2)
 const B = Set.from(1, 7, 8, 9)
 A.union(B) // Set { 1, 2, 7, 8, 9 }
 ```
+<a name="Set+intersect"></a>
+
+### set.intersect(args) ⇒ [<code>Set</code>](#Set)
+Creates the set intersection of two sets.
+The intersection S of sets A and B is the set whose elements consist of the elements that occur in both A and B.
+<br>Expression: <code>A ∩ B = S</code>
+<br>Example: <code>{0,1,2,4} ∩ {1,2,9} = {1,2}</code>
+
+**Kind**: instance method of [<code>Set</code>](#Set)  
+**Returns**: [<code>Set</code>](#Set) - a Set instance with the shared elements of this set and the other set.  
+**Throws**:
+
+- Throws an error if there is not exactly one argument.
+- Throws an error if the argument is not a Set instance.
+
+**See**: https://en.wikipedia.org/wiki/Intersection_(set_theory)#Definition  
+
+| Param | Type | Description |
+| --- | --- | --- |
+| args | <code>set</code> | the other set to intersect with. |
+
+**Example**  
+```js
+const A = Set.from(0, 1, 2, 4)
+const B = Set.from(1, 2, 9)
+A.intersect(B) // Set { 1, 2 }
+```
 <a name="Set.from"></a>
 
 ### Set.from(...args) ⇒ [<code>Set</code>](#Set)
@@ -367,8 +395,9 @@ Copies all elements of a given Set instance into a new Set and returns it.
 
 ### Set.union(...args) ⇒ [<code>Set</code>](#Set)
 Creates the set union of an arbitrary number of sets.
-The union S of an iterable M of sets M<sub>i</sub> is the set that consists of all elements of each M<sub>i</sub>.
+The union S of any number of sets M<sub>i</sub> is the set that consists of all elements of each M<sub>i</sub>.
 <br>Expression: <code>∪ M = S</code>
+<br>Example: <code>∪ {M_1, M_2, M_3} = S</code>
 <br>Example: <code>∪ {A, B, C} = S</code>
 <br>Example: <code>∪ {{0,4}, {1}, {9}} = {0,1,4,9}</code>
 
@@ -393,28 +422,37 @@ Set.union(A, B, C) // Set { 0, 1, 4, 9 }
 const M = [A, B, C]
 Set.union(...M) // Set { 0, 1, 4, 9 }
 ```
-<a name="Set.intersect"></a>
+<a name="Set.intersection"></a>
 
-### Set.intersect(...args) ⇒ [<code>Set</code>](#Set)
-Creates an intersection set of an arbitrary number of sets.
-An intersection is a set of A and B, which contains all elements that appear in A, as well as in B.
-<br>
-Expression: <code>C = A ∩ B</code>
-<br>
-Example: <code>{1, 2, 3} ∩ {2, 3, 4} = {2, 3}.</code>
+### Set.intersection(...args) ⇒ [<code>Set</code>](#Set)
+Creates the set intersection of an arbitrary number of sets.
+The intersection S of any number of sets M<sub>i</sub> is the set whose elements consist of the elements that occur in every single set M<sub>i</sub>.
+<br>Expression: <code>∩ M = S</code>
+<br>Example: <code>∩ {M_1, M_2, M_3} = S</code>
+<br>Example: <code>∩ {A, B, C} = S</code>
+<br>Example: <code>∩ {{0,1,2,4}, {1,2,9}, {0,1,2}} = {1,2}</code>
 
 **Kind**: static method of [<code>Set</code>](#Set)  
-**Returns**: [<code>Set</code>](#Set) - a Set instance with the unified elements of the given args.  
+**Returns**: [<code>Set</code>](#Set) - a Set instance with the shared elements of the given args.  
 **Throws**:
 
 - Throws an error if any of the arguments is not a Set instance.
 
-**See**: https://en.wikipedia.org/wiki/Intersection_(set_theory)  
+**See**: https://en.wikipedia.org/wiki/Intersection_(set_theory)#Arbitrary_intersections  
 
 | Param | Type | Description |
 | --- | --- | --- |
 | ...args | [<code>Set</code>](#Set) | an arbitrary list of Set instances |
 
+**Example**  
+```js
+const A = Set.from(0, 1, 2, 4)
+const B = Set.from(1, 2, 9)
+const C = Set.from(0, 1, 2)
+Set.intersection(A, B, C) // Set { 1, 2 }
+const M = [A, B, C]
+Set.intersection(...M) // Set { 1, 2 }
+```
 <a name="Set.difference"></a>
 
 ### Set.difference(set1, set2) ⇒ <code>ExtendedSet</code> \| <code>\*</code>

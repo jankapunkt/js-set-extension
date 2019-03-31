@@ -441,6 +441,27 @@ describe('Relations', function () {
 })
 
 describe('Operations (instances)', function () {
+  describe('binary operation args', function () {
+    const a = new Set([1, 2])
+    const binaryOpNames = ['union']
+    for (let binaryOpName of binaryOpNames) {
+      it('throws an error if you give it no argument', function () {
+        assert.throws(function () {
+          a[binaryOpName]()
+        }, /The function must be given exactly 1 argument\./)
+      })
+
+      it('throws an error if you give it more than 1 argument', function () {
+        assert.throws(function () {
+          a[binaryOpName](a, a)
+        }, /The function must be given exactly 1 argument\./)
+        assert.throws(function () {
+          a[binaryOpName](a, a, a)
+        }, /The function must be given exactly 1 argument\./)
+      })
+    }
+  })
+
   describe(Set.prototype.rules.name, function () {
     it('adds a rule to a given set', function () {
       const set = new Set([1])
@@ -497,18 +518,26 @@ describe('Operations (static)', function () {
     const createUnion = setA => arr => Set.union(setA, new Set(arr)).toArray().sort()
 
     it('creates a union of two sets', function () {
-      const setA = new Set([1, 2])
-      const union = createUnion(setA)
+      // this test includes both the binary and arbitrary union operators
+      const a = new Set([1, 2])
+      const b = new Set([2, 3])
+      const c = new Set([1, 2, 3])
+      const d = new Set([3, 4, 5])
+      const f = new Set([1, 2, 3, 4, 5])
+      const union = createUnion(a)
 
       // {1, 2} ∪ {1, 2} = {1, 2}.
       assert.deepEqual(union([1, 2]), [1, 2])
+      assert.deepEqual(a.union(a), a)
 
       // {1, 2} ∪ {2, 3} = {1, 2, 3}.
       assert.deepEqual(union([2, 3.0]), [1, 2, 3])
+      assert.deepEqual(a.union(b), c)
 
       // {1, 2, 3} ∪ {3, 4, 5} = {1, 2, 3, 4, 5}
-      setA.add(3)
+      a.add(3)
       assert.deepEqual(union([3, 4, 5]), [1, 2, 3, 4, 5])
+      assert.deepEqual(c.union(d), f)
     })
 
     it('creates a union of n sets', function () {

@@ -23,6 +23,7 @@ Extended version of <a href="https://developer.mozilla.org/en-US/docs/Web/JavaSc
         * [.properSupersetOf(set)](#Set+properSupersetOf) ⇒ <code>boolean</code>
         * [.properSupersetOf(set)](#Set+properSupersetOf) ⇒ <code>boolean</code>
         * [.equal(set)](#Set+equal) ⇒ <code>boolean</code>
+        * [.union(args)](#Set+union) ⇒ [<code>Set</code>](#Set)
     * _static_
         * [.from(...args)](#Set.from) ⇒ [<code>Set</code>](#Set)
         * [.toSet(value)](#Set.toSet) ⇒ [<code>Set</code>](#Set)
@@ -284,6 +285,33 @@ const a = Set.from({ a:true, b:false })
 const b = Set.from({ b:false, a:true })
 a.equal(b) // true
 ```
+<a name="Set+union"></a>
+
+### set.union(args) ⇒ [<code>Set</code>](#Set)
+Creates the set union of two sets.
+The union of A and B is the set C that consists of all elements of A and B.
+<br>Expression: <code>A ∪ B = C</code>
+<br>Example: <code>{1,2} ∪ {1,7,8,9} = {1,2,7,8,9}</code>
+
+**Kind**: instance method of [<code>Set</code>](#Set)  
+**Returns**: [<code>Set</code>](#Set) - a Set instance with the unified elements of the given args.  
+**Throws**:
+
+- Throws an error if there is not exactly one argument.
+- Throws an error if the argument is not a Set instance.
+
+**See**: https://en.wikipedia.org/wiki/Union_(set_theory)#Union_of_two_sets  
+
+| Param | Type | Description |
+| --- | --- | --- |
+| args | <code>set</code> | the other set to union with. |
+
+**Example**  
+```js
+const A = Set.from(1, 2)
+const B = Set.from(1, 7, 8, 9)
+A.union(B) // Set { 1, 2, 7, 8, 9 }
+```
 <a name="Set.from"></a>
 
 ### Set.from(...args) ⇒ [<code>Set</code>](#Set)
@@ -338,10 +366,11 @@ Copies all elements of a given Set instance into a new Set and returns it.
 <a name="Set.union"></a>
 
 ### Set.union(...args) ⇒ [<code>Set</code>](#Set)
-Creates a unified set of an arbitrary number of sets.
-A union of A and B is a set containing all elements of A and B.
-<br>Expression: <code>C = A ∪ B</code>
-<br>Example: <code>{1,2} ∪ {2,3,4} = {1,2,3,4}</code>
+Creates the set union of an arbitrary number of sets.
+The union S of an iterable M of sets M<sub>i</sub> is the set that consists of all elements of each M<sub>i</sub>.
+<br>Expression: <code>∪ M = S</code>
+<br>Example: <code>∪ {A, B, C} = S</code>
+<br>Example: <code>∪ {{0,4}, {1}, {9}} = {0,1,4,9}</code>
 
 **Kind**: static method of [<code>Set</code>](#Set)  
 **Returns**: [<code>Set</code>](#Set) - a Set instance with the unified elements of the given args.  
@@ -349,12 +378,21 @@ A union of A and B is a set containing all elements of A and B.
 
 - Throws an error if any of the arguments is not a Set instance.
 
-**See**: https://en.wikipedia.org/wiki/Union_(set_theory)  
+**See**: https://en.wikipedia.org/wiki/Union_(set_theory)#Arbitrary_unions  
 
 | Param | Type | Description |
 | --- | --- | --- |
 | ...args | [<code>Set</code>](#Set) | an arbitrary list of Set instances |
 
+**Example**  
+```js
+const A = Set.from(0, 4)
+const B = Set.from(1)
+const C = Set.from(9)
+Set.union(A, B, C) // Set { 0, 1, 4, 9 }
+const M = [A, B, C]
+Set.union(...M) // Set { 0, 1, 4, 9 }
+```
 <a name="Set.intersect"></a>
 
 ### Set.intersect(...args) ⇒ [<code>Set</code>](#Set)

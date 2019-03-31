@@ -443,7 +443,7 @@ describe('Relations', function () {
 describe('Operations (instances)', function () {
   describe('binary operation args', function () {
     const a = new Set([1, 2])
-    const binaryOpNames = ['union']
+    const binaryOpNames = ['union', 'intersect']
     for (let binaryOpName of binaryOpNames) {
       it('throws an error if you give it no argument', function () {
         assert.throws(function () {
@@ -540,6 +540,18 @@ describe('Operations (static)', function () {
       assert.deepEqual(c.union(d), f)
     })
 
+    it('creates a union of 0 sets', function () {
+      const e = new Set()
+      const u = Set.union()
+      assert.deepEqual(e, u)
+    })
+
+    it('creates a union of 1 sets', function () {
+      const a = set(1, 2, 3)
+      const u = Set.union(a)
+      assert.deepEqual(a, u)
+    })
+
     it('creates a union of n sets', function () {
       const a = set(1, 2, 3)
       const b = set(1, 2, 3)
@@ -625,33 +637,53 @@ describe('Operations (static)', function () {
     })
   })
 
-  describe(Set.intersect.name, function () {
+  describe(Set.intersection.name, function () {
     // use with https://en.wikipedia.org/wiki/Intersection_(set_theory)
 
     it('returns a set of all objects that are members of both the sets A and B', function () {
       // The intersection of the sets {1, 2, 3} and {2, 3, 4} is {2, 3}.
       const set1 = new Set([1, 2, 3])
       const set2 = new Set([2, 3, 4])
-      assert.deepEqual(Set.intersect(set1, set2).toArray().sort(), [2, 3])
+      assert.deepEqual(Set.intersection(set1, set2).toArray().sort(), [2, 3])
 
       // The number 9 is not in the intersection of the set of prime numbers {2, 3, 5, 7, 11, ...}
       // and the set of odd numbers {1, 3, 5, 7, 9, 11, ...}, because 9 is not prime.
       const prms = new Set([2, 3, 5, 7, 11])
       const odds = new Set([1, 3, 5, 7, 9])
-      assert.isFalse(Set.intersect(prms, odds).has(9))
+      assert.isFalse(Set.intersection(prms, odds).has(9))
 
       // Intersection is an associative operation; that is, for any sets A, B, and C, one has A ∩ (B ∩ C) = (A ∩ B) ∩ C.
       const a = new Set([1, 2, 3])
       const b = new Set([3, 4, 5])
       const c = new Set([5, 6, 7])
 
-      const aib = Set.intersect(a, b)
-      const bic = Set.intersect(b, c)
-      areEqual(Set.intersect(a, bic), Set.intersect(aib, c))
+      const aib = Set.intersection(a, b)
+      const bic = Set.intersection(b, c)
+      areEqual(Set.intersection(a, bic), Set.intersection(aib, c))
 
       // Intersection is also commutative; for any A and B, one has A ∩ B = B ∩ A.
-      const bia = Set.intersect(b, a)
+      const bia = Set.intersection(b, a)
       areEqual(aib, bia)
+    })
+
+    it('does not create an intersection of 0 sets', function () {
+      assert.throws(function () {
+        Set.intersection()
+      }, /The intersection operator currently does not support 0 arguments\./)
+    })
+
+    it('creates an intersection of 1 sets', function () {
+      const a = set(1, 2, 3)
+      const u = Set.intersection(a)
+      assert.deepEqual(a, u)
+    })
+
+    it('creates an intersection of 2 sets', function () {
+      const a = set(1, 2, 3)
+      const b = set(1, 3, 5)
+      const expected = set(1, 3)
+      assert.deepEqual(Set.intersection(a, b), expected)
+      assert.deepEqual(a.intersect(b), expected)
     })
 
     it('returns an intersection in n sets', function () {
@@ -659,7 +691,7 @@ describe('Operations (static)', function () {
       const b = new Set([2, 3, 4, 5])
       const c = new Set([3, 4, 5, 6])
 
-      const aibic = Set.intersect(a, b, c)
+      const aibic = Set.intersection(a, b, c)
       const compare = set(3, 4)
       areEqual(aibic, compare)
     })
@@ -669,38 +701,38 @@ describe('Operations (static)', function () {
       const b = set(set(3), set(4), set(5))
       const c = set(set(7), set(6), set(7))
 
-      const aib = Set.intersect(a, b)
-      const bic = Set.intersect(b, c)
-      areEqual(Set.intersect(a, bic), Set.intersect(aib, c))
+      const aib = Set.intersection(a, b)
+      const bic = Set.intersection(b, c)
+      areEqual(Set.intersection(a, bic), Set.intersection(aib, c))
 
       // Intersection is also commutative; for any A and B, one has A ∩ B = B ∩ A.
-      const bia = Set.intersect(b, a)
+      const bia = Set.intersection(b, a)
       areEqual(aib, bia)
     })
 
     it('does not alter the involved sets', function () {
       const set1 = new Set([1, 2, 3])
       const set2 = new Set([2, 3, 4])
-      assert.deepEqual(Set.intersect(set1, set2).toArray().sort(), [2, 3])
+      assert.deepEqual(Set.intersection(set1, set2).toArray().sort(), [2, 3])
       assert.deepEqual(set1.toArray(), [1, 2, 3])
       assert.deepEqual(set2.toArray(), [2, 3, 4])
     })
 
     it('throws if given parameters are not a Set', function () {
       assert.throws(function () {
-        Set.intersect(set(1), 1)
+        Set.intersection(set(1), 1)
       }, /Expected \[set\] to be instanceof \[Set\]/)
 
       assert.throws(function () {
-        Set.intersect(1, set(1))
+        Set.intersection(1, set(1))
       }, /Expected \[set\] to be instanceof \[Set\]/)
 
       assert.throws(function () {
-        Set.intersect(null, null)
+        Set.intersection(null, null)
       }, /Expected \[set\] to be instanceof \[Set\]/)
 
       assert.throws(function () {
-        Set.intersect(set(1), null)
+        Set.intersection(set(1), null)
       }, /Expected \[set\] to be instanceof \[Set\]/)
     })
   })
@@ -737,7 +769,7 @@ describe('Operations (static)', function () {
       areEqual(Set.union(a, Set.difference(u, a)), u)
 
       // A ∩ A′ = ∅.
-      areEqual(Set.intersect(a, Set.difference(u, a)), e)
+      areEqual(Set.intersection(a, Set.difference(u, a)), e)
 
       // (A′)′ = A.
       areEqual(a, Set.difference(u, Set.difference(u, a)))
@@ -754,7 +786,7 @@ describe('Operations (static)', function () {
       areEqual(u, Set.difference(u, e))
 
       // A \ B = A ∩ B′.
-      areEqual(Set.difference(a, b), Set.intersect(a, Set.difference(u, b)))
+      areEqual(Set.difference(a, b), Set.intersection(a, Set.difference(u, b)))
 
       // if B ⊆ C then B \ C = ∅.
       areEqual(e, Set.difference(b, c))
@@ -837,7 +869,7 @@ describe('Operations (static)', function () {
       areEqual(Set.union(a, Set.complement(u, a)), u)
 
       // A ∩ A′ = ∅.
-      areEqual(Set.intersect(a, Set.complement(u, a)), e)
+      areEqual(Set.intersection(a, Set.complement(u, a)), e)
 
       // (A′)′ = A.
       areEqual(a, Set.complement(u, Set.complement(u, a)))
@@ -847,7 +879,7 @@ describe('Operations (static)', function () {
       areEqual(u, Set.complement(u, e))
 
       // A \ B = A ∩ B′.
-      areEqual(Set.difference(a, b), Set.intersect(a, Set.complement(u, b)))
+      areEqual(Set.difference(a, b), Set.intersection(a, Set.complement(u, b)))
     })
 
     it('recursively respects nested sets', function () {
@@ -910,7 +942,7 @@ describe('Operations (static)', function () {
       areEqual(asdb, unionOfRelativeComplements)
 
       // The symmetric difference can also be expressed as the union of the two sets, minus their intersection:
-      const unionMinusIntersection = Set.difference(Set.union(a, b), Set.intersect(a, b))
+      const unionMinusIntersection = Set.difference(Set.union(a, b), Set.intersection(a, b))
       areEqual(asdb, unionMinusIntersection)
 
       // The symmetric difference is commutative and associative:

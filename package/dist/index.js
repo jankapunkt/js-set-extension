@@ -54,6 +54,47 @@ function checkSet(set) {
   }
 
   return true;
+}
+/**
+ * @private
+ */
+
+
+function checkSets(sets) {
+  sets.forEach(function (set) {
+    return checkSet(set);
+  });
+  return true;
+}
+/**
+ * @private
+ */
+
+
+function checkArgsSingle(args) {
+  if (!args || args.length !== 1) {
+    throw new Error("The function must be given exactly 1 argument.");
+  }
+
+  return true;
+}
+/**
+ * A decorator which, given an arbitrary set function, produces the corresponding binary operation.
+ * @private
+ */
+
+
+function arbitraryToBinary(arbitraryFunc) {
+  return function binaryFunc() {
+    for (var _len = arguments.length, args = new Array(_len), _key = 0; _key < _len; _key++) {
+      args[_key] = arguments[_key];
+    }
+
+    checkArgsSingle(args);
+    var set = args[0];
+    checkSet(set);
+    return arbitraryFunc(this, set);
+  };
 } // //////////////////////////////////////////////////////////////////////////////// //
 //                                                                                  //
 // OVERRIDES                                                                        //
@@ -484,8 +525,8 @@ global.Set.prototype = _originalSet.prototype; // //////////////////////////////
  */
 
 function from() {
-  for (var _len = arguments.length, args = new Array(_len), _key = 0; _key < _len; _key++) {
-    args[_key] = arguments[_key];
+  for (var _len2 = arguments.length, args = new Array(_len2), _key2 = 0; _key2 < _len2; _key2++) {
+    args[_key2] = arguments[_key2];
   }
 
   return new Set(args.concat());
@@ -526,34 +567,61 @@ function copy(set) {
 
 global.Set.copy = copy;
 /**
- * Creates a unified set of an arbitrary number of sets.
- * A union of A and B is a set containing all elements of A and B.
- * <br>Expression: <code>C = A ∪ B</code>
- * <br>Example: <code>{1,2} ∪ {2,3,4} = {1,2,3,4}</code>
+ * Creates the set union of an arbitrary number of sets.
+ * The union S of an iterable M of sets M<sub>i</sub> is the set that consists of all elements of each M<sub>i</sub>.
+ * <br>Expression: <code>∪ M = S</code>
+ * <br>Example: <code>∪ {A, B, C} = S</code>
+ * <br>Example: <code>∪ {{0,4}, {1}, {9}} = {0,1,4,9}</code>
+ * @example
+ * const A = Set.from(0, 4)
+ * const B = Set.from(1)
+ * const C = Set.from(9)
+ * Set.union(A, B, C) // Set { 0, 1, 4, 9 }
+ * const M = [A, B, C]
+ * Set.union(...M) // Set { 0, 1, 4, 9 }
  * @name Set.union
  * @function
  * @param args {...Set} - an arbitrary list of Set instances
  * @throws Throws an error if any of the arguments is not a Set instance.
  * @returns {Set} a Set instance with the unified elements of the given args.
- * @see https://en.wikipedia.org/wiki/Union_(set_theory)
+ * @see https://en.wikipedia.org/wiki/Union_(set_theory)#Arbitrary_unions
  */
 
-function union() {
-  var set3 = new Set();
-
-  for (var _len2 = arguments.length, args = new Array(_len2), _key2 = 0; _key2 < _len2; _key2++) {
-    args[_key2] = arguments[_key2];
+function unionArbitrary() {
+  for (var _len3 = arguments.length, args = new Array(_len3), _key3 = 0; _key3 < _len3; _key3++) {
+    args[_key3] = arguments[_key3];
   }
 
+  checkSets(args);
+  var set3 = new Set();
   args.forEach(function (set) {
-    return checkSet(set) && set.forEach(function (value) {
+    return set.forEach(function (value) {
       return set3.add(value);
     });
   });
   return set3;
 }
 
-global.Set.union = union;
+global.Set.union = unionArbitrary;
+/**
+ * Creates the set union of two sets.
+ * The union of A and B is the set C that consists of all elements of A and B.
+ * <br>Expression: <code>A ∪ B = C</code>
+ * <br>Example: <code>{1,2} ∪ {1,7,8,9} = {1,2,7,8,9}</code>
+ * @example
+ * const A = Set.from(1, 2)
+ * const B = Set.from(1, 7, 8, 9)
+ * A.union(B) // Set { 1, 2, 7, 8, 9 }
+ * @name Set.prototype.union
+ * @function
+ * @param args {set} - the other set to union with.
+ * @throws Throws an error if there is not exactly one argument.
+ * @throws Throws an error if the argument is not a Set instance.
+ * @returns {Set} a Set instance with the unified elements of the given args.
+ * @see https://en.wikipedia.org/wiki/Union_(set_theory)#Union_of_two_sets
+ */
+
+global.Set.prototype.union = arbitraryToBinary(unionArbitrary);
 /**
  * Creates an intersection set of an arbitrary number of sets.
  * An intersection is a set of A and B, which contains all elements that appear in A, as well as in B.
@@ -570,8 +638,8 @@ global.Set.union = union;
  */
 
 function intersect() {
-  for (var _len3 = arguments.length, args = new Array(_len3), _key3 = 0; _key3 < _len3; _key3++) {
-    args[_key3] = arguments[_key3];
+  for (var _len4 = arguments.length, args = new Array(_len4), _key4 = 0; _key4 < _len4; _key4++) {
+    args[_key4] = arguments[_key4];
   }
 
   args.forEach(function (arg) {
@@ -682,8 +750,8 @@ function symDiff(set1, set2) {
 
 
 function symmetricDifference() {
-  for (var _len4 = arguments.length, args = new Array(_len4), _key4 = 0; _key4 < _len4; _key4++) {
-    args[_key4] = arguments[_key4];
+  for (var _len5 = arguments.length, args = new Array(_len5), _key5 = 0; _key5 < _len5; _key5++) {
+    args[_key5] = arguments[_key5];
   }
 
   args.forEach(function (arg) {
@@ -806,8 +874,8 @@ global.Set.power = powerSet;
  */
 
 function mergeRules() {
-  for (var _len5 = arguments.length, rules = new Array(_len5), _key5 = 0; _key5 < _len5; _key5++) {
-    rules[_key5] = arguments[_key5];
+  for (var _len6 = arguments.length, rules = new Array(_len6), _key6 = 0; _key6 < _len6; _key6++) {
+    rules[_key6] = arguments[_key6];
   }
 
   checkRules(rules);
@@ -839,8 +907,8 @@ global.Set.mergeRules = mergeRules;
  */
 
 function mergeRulesStrict() {
-  for (var _len6 = arguments.length, rules = new Array(_len6), _key6 = 0; _key6 < _len6; _key6++) {
-    rules[_key6] = arguments[_key6];
+  for (var _len7 = arguments.length, rules = new Array(_len7), _key7 = 0; _key7 < _len7; _key7++) {
+    rules[_key7] = arguments[_key7];
   }
 
   checkRules(rules);

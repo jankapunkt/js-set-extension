@@ -465,7 +465,7 @@ const _originalSet = global.Set
  * @see https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Set
  * @returns {Set} An instance of the extended version of <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Set">Set (MDN link)</a>
  */
-function ExtendedSet (elements, rulesFct) {
+function Set (elements, rulesFct) {
   const original = new _originalSet()
   if (rulesFct) {
     original.rules(rulesFct)
@@ -473,8 +473,7 @@ function ExtendedSet (elements, rulesFct) {
   if (elements) { elements.forEach(element => original.add(element)) }
   return original
 }
-
-global.Set = ExtendedSet
+global.Set = Set
 global.Set.prototype = _originalSet.prototype
 
 // //////////////////////////////////////////////////////////////////////////////// //
@@ -865,3 +864,10 @@ function mergeRulesStrict (...rules) {
 }
 
 global.Set.mergeRulesStrict = mergeRulesStrict
+
+/**
+ * Flag to indicate the presence of this polyfill
+ * @type {boolean}
+ * @private
+ */
+global.Set.__isExtended__ = true

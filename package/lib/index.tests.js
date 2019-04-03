@@ -41,6 +41,15 @@ const isInt = n => Number.isInteger(n)
 const set = (...args) => new Set([...args])
 
 describe('Constructor', function () {
+  it('has a flag too indicate the polyfill being prepsent', function () {
+    assert.isTrue(Set.__isExtended__)
+  })
+
+  it('keeps the name and original prorototype constructor name', function () {
+    assert.equal(Set.name, 'Set')
+    assert.equal(Set.prototype.constructor.name, 'Set')
+  })
+
   it('allows to create empty sets', function () {
     assert.equal(new Set().size, 0)
     assert.equal(new Set([]).size, 0)

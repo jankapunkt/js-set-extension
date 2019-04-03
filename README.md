@@ -50,10 +50,10 @@ The package automatically extends the global `Set` object.
 import 'set-extensions'
 ```
 
-You can verify this by checking for the `name` property:
+You can verify the presence of this polyfill by checking for the `__isExtended__` property:
 
 ```javascript
-Set.name // "ExtendedSet", formerly "Set"
+Set.__isExtended__ // true if this package is installed
 ```
 
 ## API Documentation

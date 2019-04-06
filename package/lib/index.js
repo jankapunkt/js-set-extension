@@ -317,25 +317,26 @@ function any () {
 global.Set.prototype.any = any
 
 /**
- * Checks, whether the current set (this) is a superset of the given set.
- * A set A is superset of set B, if A contains all elements of B.
- * <br>
- * Expression: <code>A ⊇ B</code>
+ * Checks whether the current set (this) is a superset of the given set.
+ * Set A is a superset of set B if and only if every element of B is also an element of A.
+ * <br>Expression: <code>A ⊇ B</code>
+ * <br>Example: <code>{1,2,3,4} ⊇ {1,3}</code>
  * @function
- * @name Set.prototype.isSupersetOf
+ * @name Set.prototype.isSuperset
  * @example
- * const a = Set.from(1,2,3,4)
- * const b = Set.from(1,2,3)
- * const c = Set.from(1,2,3,4,5)
- * a.isSupersetOf(b) // true
- * a.isSupersetOf(c) // false
- * c.isSupersetOf(b) // true
+ * const A = Set.from(1,2,3,4)
+ * const B = Set.from(1,3)
+ * const C = Set.from(1,3,5)
+ * A.isSuperset(B) // true
+ * A.isSuperset(C) // false
+ * C.isSuperset(B) // true
  * @param set {Set} - A set instance of which this set is checked to be the superset.
  * @throws Throws an error, if the given set is not a set instance.
- * @returns {boolean} true if this set is the superset of the given set, otherwise false.
+ * @returns {boolean} true if this set is a superset of the given set, otherwise false.
  * @see https://en.wikipedia.org/wiki/Subset
  */
-function isSupersetOf (set) {
+function isSupersetBinary (set) {
+  checkSet(set)
   const iterator = set.values()
   let value
   while ((value = iterator.next().value) !== void 0) {
@@ -343,72 +344,87 @@ function isSupersetOf (set) {
   }
   return true
 }
-
-global.Set.prototype.isSupersetOf = isSupersetOf
+global.Set.prototype.isSuperset = isSupersetBinary
 
 /**
- * Checks, whether the current set (this) is a subset of the given set.
- * A set A is subset of set B, if B contains all elements of A.
- * <br>
- * Expression: <code>A ⊆ B</code>
- * <br>
- * If their sizes are also equal, they can be assumed as equal.
- * If their sizes are not equal, then A is called a proper subset of B.
+ * Checks whether the current set (this) is a subset of the given set.
+ * Set A is a subset of set B if and only if every element of A is also an element of B.
+ * <br>Expression: <code>A ⊆ B</code>
+ * <br>Example: <code>{1,3} ⊆ {1,2,3,4}</code>
  * @function
- * @name Set.prototype.isSubsetOf
+ * @name Set.prototype.isSubset
  * @example
- * const a = Set.from(1,2,3,4)
- * const b = Set.from(1,2,3)
- * const c = Set.from(1,2,3,4,5)
- * a.isSubsetOf(b) // false
- * b.isSubsetOf(c) // true
- * c.isSubsetOf(a) // false
+ * const A = Set.from(1,3)
+ * const B = Set.from(1,2,3,4)
+ * const C = Set.from(1,3,5)
+ * A.isSubset(B) // true
+ * A.isSubset(C) // true
+ * B.isSubset(A) // false
+ * B.isSubset(C) // false
+ * C.isSubset(B) // false
+ * C.isSubset(A) // false
  * @param set {Set} - A set instance of which this set is checked to be the subset.
  * @throws Throws an error, if the given set is not a set instance.
- * @returns {boolean} - true if this set is the subset of the given set, false otherwise
+ * @returns {boolean} true if this set is a subset of the given set, otherwise false.
  * @see https://en.wikipedia.org/wiki/Subset
  * @see Set.prototype.equal
- * @see Set.prototype.isProperSubsetOf
+ * @see Set.prototype.isProperSubset
  */
-function isSubsetOf (set) {
-  return set.isSupersetOf(this)
+function isSubsetBinary (set) {
+  return set.isSuperset(this)
 }
-
-global.Set.prototype.isSubsetOf = isSubsetOf
+global.Set.prototype.isSubset = isSubsetBinary
 
 /**
- * Checks, whether the current set (this) is a proper superset of the given set.
- * A set A is a proper subset of set B, if A contains all elements of B and their sizes are not equal.
- * <br>
- * Expression: <code>A ⊃ B</code>
+ * Checks whether the current set (this) is a proper superset of the given set.
+ * Set A is a proper superset of set B if and only if A is a superset of B and A contains an element that is not in B.
+ * <br>Expression: <code>A ⊃ B</code>
+ * <br>Example: <code>{1,6,8} ⊃ {1,8}</code>
+ * @example
+ * const A = Set.from(1,6,8)
+ * const B = Set.from(1,8)
+ * const C = Set.from(8)
+ * const D = Set.from(7)
+ * A.isProperSuperset(A) // false
+ * A.isProperSuperset(B) // true
+ * A.isProperSuperset(C) // true
+ * A.isProperSuperset(D) // false
  * @function
- * @name Set.prototype.properSupersetOf
+ * @name Set.prototype.isProperSuperset
  * @param set {Set} - A set instance of which this set is checked to be the proper superset.
  * @returns {boolean}
- * @see https://en.wikipedia.org/wiki/Subset
+ * @see https://en.wikipedia.org/wiki/Subset#Definitions
  */
-function isProperSupersetOf (set) {
-  return this.size !== set.size && this.isSupersetOf(set)
+function isProperSupersetBinary (set) {
+  // note: This only works for finite sets.
+  return this.size !== set.size && this.isSuperset(set)
 }
-
-global.Set.prototype.properSupersetOf = isProperSupersetOf
+global.Set.prototype.isProperSuperset = isProperSupersetBinary
 
 /**
- * Checks, whether the current set (this) is a proper subset of the given set.
- * A set A is a proper subset of set B, if B contains all elements of A and their sizes are not equal.
- * <br>
- * Expression: <code>A ⊂ B</code>
+ * Checks whether the current set (this) is a proper subset of the given set.
+ * Set A is a proper subset of set B if and only if A is a subset of B and B contains an element that is not in A.
+ * <br>Expression: <code>A ⊂ B</code>
+ * <br>Example: <code>{1,8} ⊂ {1,6,8}</code>
+ * @example
+ * const A = Set.from(1,8)
+ * const B = Set.from(1,6,8)
+ * const C = Set.from(8)
+ * const D = Set.from(7)
+ * A.isProperSubset(A) // false
+ * A.isProperSubset(B) // true
+ * A.isProperSubset(C) // false
+ * A.isProperSubset(D) // false
  * @function
- * @name Set.prototype.properSupersetOf
+ * @name Set.prototype.isProperSubset
  * @param set {Set} - A set instance of which this set is checked to be the proper subset.
  * @returns {boolean}
- * @see https://en.wikipedia.org/wiki/Subset
+ * @see https://en.wikipedia.org/wiki/Subset#Definitions
  */
-function isProperSubsetOf (set) {
-  return this.size !== set.size && this.isSubsetOf(set)
+function isProperSubsetBinary (set) {
+  return set.isProperSuperset(this)
 }
-
-global.Set.prototype.properSubsetOf = isProperSubsetOf
+global.Set.prototype.isProperSubset = isProperSubsetBinary
 
 /**
  * Checks, whether two sets are equal in terms of their contained elements.
@@ -430,14 +446,14 @@ global.Set.prototype.properSubsetOf = isProperSubsetOf
  * @throws Throws an error if the given paramter is not a Set instance.
  * @returns {boolean} true, if all elements of this set equal to the elements of the given set.
  * @see https://developer.mozilla.org/en-US/docs/Web/JavaScript/Equality_comparisons_and_sameness
- * @see Set.prototype.isSubsetOf
+ * @see Set.prototype.isSubset
  */
 function equal (set) {
   checkSet(set)
   if (this.size !== set.size) {
     return false
   }
-  return this.isSubsetOf(set)
+  return this.isSubset(set)
 }
 
 global.Set.prototype.equal = equal
@@ -674,7 +690,7 @@ global.Set.difference = difference
 function complement (set1, set2) {
   checkSet(set1)
   checkSet(set2)
-  if (!set1.isSupersetOf(set2)) {
+  if (!set1.isSuperset(set2)) {
     throw new Error(`[set2] has an element which is not in the universe [set1].`)
   }
   return Set.difference(set1, set2)

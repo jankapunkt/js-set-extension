@@ -419,8 +419,10 @@ function equals (set) {
   return this.isSubsetOf(set)
 }
 global.Set.prototype.equals = equals
+// temporary: make backwards compatible
+global.Set.prototype.equal = equals
 
-global.Set.prototype.equal = suggest('equal', 'equals')
+// global.Set.prototype.equal = suggest('equal', 'equals')
 global.Set.prototype.isEqual = suggest('isEqual', 'equals')
 global.Set.prototype.isEqualTo = suggest('isEqualTo', 'equals')
 

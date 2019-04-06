@@ -27,13 +27,13 @@ Set's class Methods are primarily designed to
 
 Set's prototype Methods are in contrast designed to work as a binary operation on the current instance but they also won't mutate any of the involved Sets.
 
-Some algorithms may grow exponentially with a raising number of sets to be processes. 
+Some algorithms have runtimes that grow exponentially as you increase the number of sets they act on.  
 Please, see the documentation notes on the respective methods. 
 
 ### Future Implementations
 
 Currently this package only supports finite sets. 
-A future implementation could include generators to support infinite sets and function-based operations with infinite sets. Ideas.concepts and contributions are very welcomed.
+A future implementation could include generators to support infinite sets and function-based operations with infinite sets. Ideas and contributions are very welcome.
 
 ## Installation and Usage
 
@@ -63,8 +63,6 @@ If you think this documentation can be improved, please leave a pull request or 
 
 ## Run the tests
 
-Add the description about testing in the README:
-
 You can run the tests like the following:
 
 ```bash
@@ -84,7 +82,7 @@ or for a single run use
 $ npm run test
 ```
 
-The tests are written in mocha but it should not be that hard to get into it as it is written very intuitive.
+The tests are written in mocha but it should not be that hard to get into it as it is written very intuitively.
 
 ### Linter
 
@@ -94,13 +92,7 @@ Please note, that the tests are very strict about code style and you can check f
 npm run lint
 ```
 
-You should fix these lint errors, since the CI server will reject to run any tests when the linter as thrown an error.
-
-You can also run lint and tests all in one process using
-
-```bash
-npm run lint-test
-```
+You should fix these lint errors, since the CI server will refuse to run any tests when the linter has thrown an error.
 
 The scripts to run these commands are also in the package.json file:
 

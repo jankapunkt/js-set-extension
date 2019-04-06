@@ -33,7 +33,7 @@
  * @private
  */
 function suggest (incorrectName, correctName) {
-  return function() {
+  return function () {
     throw new Error(`The function [${incorrectName}] does not exist. You probably meant to use [${correctName}].`)
   }
 }

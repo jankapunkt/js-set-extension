@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<svg
+   xmlns:osb="http://www.openswatchbook.org/uri/2009/osb"
+   xmlns:dc="http://purl.org/dc/elements/1.1/"
+   xmlns:cc="http://creativecommons.org/ns#"
+   xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+   xmlns:svg="http://www.w3.org/2000/svg"
+   xmlns="http://www.w3.org/2000/svg"
+   id="svg8"
+   version="1.1"
+   viewBox="0 0 79.374998 79.375003"
+   height="300"
+   width="300">
+  <defs
+     id="defs2">
+    <linearGradient
+       osb:paint="solid"
+       id="linearGradient894">
+      <stop
+         id="stop892"
+         offset="0"
+         style="stop-color:#df0000;stop-opacity:1;" />
+    </linearGradient>
+  </defs>
+  <metadata
+     id="metadata5">
+    <rdf:RDF>
+      <cc:Work
+         rdf:about="">
+        <dc:format>image/svg+xml</dc:format>
+        <dc:type
+           rdf:resource="http://purl.org/dc/dcmitype/StillImage" />
+        <dc:title></dc:title>
+      </cc:Work>
+    </rdf:RDF>
+  </metadata>
+  <g
+     transform="translate(0,-217.62496)"
+     id="layer1">
+    <rect
+       transform="matrix(-0.70902881,0.70517951,-0.70902881,-0.70517951,0,0)"
+       y="-238.36806"
+       x="126.69469"
+       height="55.566841"
+       width="55.566841"
+       id="rect2386"
+       style="fill:#ffcc00;fill-opacity:1;stroke:#ffffff;stroke-width:0.76329625;stroke-linecap:butt;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1;paint-order:stroke fill markers" />
+    <path
+       style="fill:#002655;fill-opacity:1;stroke:#ffcc00;stroke-width:0.83836275;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
+       d="m 55.324157,246.97551 a 15.58567,15.585672 0 0 0 -15.585683,-15.58569 15.58567,15.585672 0 0 0 -15.585691,15.58569 15.58567,15.585672 0 0 0 0.880609,5.11138 15.58567,15.585672 0 0 1 14.675607,-10.3862 15.58567,15.585672 0 0 1 14.704752,10.47398 15.58567,15.585672 0 0 0 0.910406,-5.19916 z m -0.910406,5.19916 a 15.58567,15.585672 0 0 1 -3.086548,5.19457 15.58567,15.585672 0 0 1 3.056091,5.12056 15.58567,15.585672 0 0 0 0.911396,-5.20341 15.58567,15.585672 0 0 0 -0.880939,-5.11172 z m -0.03049,10.31513 a 15.58567,15.585672 0 0 1 -14.674295,10.38228 15.58567,15.585672 0 0 1 -14.644821,-10.30958 15.58567,15.585672 0 0 0 -0.911395,5.20342 15.58567,15.585672 0 0 0 15.58569,15.58569 15.58567,15.585672 0 0 0 15.585684,-15.58569 15.58567,15.585672 0 0 0 -0.940863,-5.27612 z m -29.319116,0.0727 a 15.58567,15.585672 0 0 1 3.085566,-5.19032 15.58567,15.585672 0 0 1 -3.116352,-5.28529 15.58567,15.585672 0 0 0 -0.910084,5.19949 15.58567,15.585672 0 0 0 0.94087,5.27612 z m 3.085566,-5.19032 a 15.58567,15.585672 0 0 0 11.588729,5.18868 15.58567,15.585672 0 0 0 11.588729,-5.19163 15.58567,15.585672 0 0 0 -11.588729,-5.189 15.58567,15.585672 0 0 0 -11.588729,5.19195 z"
+       id="path2388" />
+    <text
+       xml:space="preserve"
+       style="font-style:normal;font-weight:normal;font-size:23.89304352px;line-height:1.25;font-family:sans-serif;letter-spacing:0px;word-spacing:0px;fill:#002655;fill-opacity:1;stroke:none;stroke-width:0.59732604"
+       x="8.0007544"
+       y="264.50787"
+       id="text2392"><tspan
+         id="tspan2390"
+         x="8.0007544"
+         y="264.50787"
+         style="font-style:normal;font-variant:normal;font-weight:bold;font-stretch:normal;font-family:sans-serif;-inkscape-font-specification:'sans-serif Bold';fill:#002655;fill-opacity:1;stroke-width:0.59732604">{</tspan></text>
+    <text
+       id="text2396"
+       y="264.50269"
+       x="-71.604393"
+       style="font-style:normal;font-weight:normal;font-size:23.89304352px;line-height:1.25;font-family:sans-serif;letter-spacing:0px;word-spacing:0px;fill:#002655;fill-opacity:1;stroke:none;stroke-width:0.59732604"
+       xml:space="preserve"
+       transform="scale(-1,1)"><tspan
+         style="font-style:normal;font-variant:normal;font-weight:bold;font-stretch:normal;font-family:sans-serif;-inkscape-font-specification:'sans-serif Bold';fill:#002655;fill-opacity:1;stroke-width:0.59732604"
+         y="264.50269"
+         x="-71.604393"
+         id="tspan2394">{</tspan></text>
+  </g>
+</svg>

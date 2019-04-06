@@ -60,6 +60,36 @@ function checkSet (set) {
   return true
 }
 
+/**
+ * @private
+ */
+function checkSets (sets) {
+  sets.forEach(set => checkSet(set))
+  return true
+}
+
+/**
+ * @private
+ */
+function checkArgsSingle (args) {
+  if (!args || args.length !== 1) {
+    throw new Error(`The function must be given exactly 1 argument.`)
+  }
+  return true
+}
+
+/**
+ * A decorator which, given an arbitrary set function, produces the corresponding binary operation.
+ * @private
+ */
+function arbitraryToBinary (arbitraryFunc) {
+  return function binaryFunc (...args) {
+    checkArgsSingle(args)
+    const set = args[0]
+    return arbitraryFunc(this, set)
+  }
+}
+
 // //////////////////////////////////////////////////////////////////////////////// //
 //                                                                                  //
 // OVERRIDES                                                                        //
@@ -449,7 +479,7 @@ const _originalSet = global.Set
  * @see https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Set
  * @returns {Set} An instance of the extended version of <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Set">Set (MDN link)</a>
  */
-function ExtendedSet (elements, rulesFct) {
+function Set (elements, rulesFct) {
   const original = new _originalSet()
   if (rulesFct) {
     original.rules(rulesFct)
@@ -457,8 +487,7 @@ function ExtendedSet (elements, rulesFct) {
   if (elements) { elements.forEach(element => original.add(element)) }
   return original
 }
-
-global.Set = ExtendedSet
+global.Set = Set
 global.Set.prototype = _originalSet.prototype
 
 // //////////////////////////////////////////////////////////////////////////////// //
@@ -517,42 +546,80 @@ function copy (set) {
 global.Set.copy = copy
 
 /**
- * Creates a unified set of an arbitrary number of sets.
- * A union of A and B is a set containing all elements of A and B.
- * <br>Expression: <code>C = A ∪ B</code>
- * <br>Example: <code>{1,2} ∪ {2,3,4} = {1,2,3,4}</code>
+ * Creates the set union of an arbitrary number of sets.
+ * The union S of any number of sets M<sub>i</sub> is the set that consists of all elements of each M<sub>i</sub>.
+ * <br>Expression: <code>∪ M = S</code>
+ * <br>Example: <code>∪ {M_1, M_2, M_3} = S</code>
+ * <br>Example: <code>∪ {A, B, C} = S</code>
+ * <br>Example: <code>∪ {{0,4}, {1}, {9}} = {0,1,4,9}</code>
+ * @example
+ * const A = Set.from(0, 4)
+ * const B = Set.from(1)
+ * const C = Set.from(9)
+ * Set.union(A, B, C) // Set { 0, 1, 4, 9 }
+ * const M = [A, B, C]
+ * Set.union(...M) // Set { 0, 1, 4, 9 }
  * @name Set.union
  * @function
  * @param args {...Set} - an arbitrary list of Set instances
  * @throws Throws an error if any of the arguments is not a Set instance.
  * @returns {Set} a Set instance with the unified elements of the given args.
- * @see https://en.wikipedia.org/wiki/Union_(set_theory)
+ * @see https://en.wikipedia.org/wiki/Union_(set_theory)#Arbitrary_unions
  */
-function union (...args) {
+function unionArbitrary (...args) {
+  checkSets(args)
   const set3 = new Set()
-  args.forEach(set => checkSet(set) && set.forEach(value => set3.add(value)))
+  args.forEach(set => set.forEach(value => set3.add(value)))
   return set3
 }
-
-global.Set.union = union
+global.Set.union = unionArbitrary
 
 /**
- * Creates an intersection set of an arbitrary number of sets.
- * An intersection is a set of A and B, which contains all elements that appear in A, as well as in B.
- * <br>
- * Expression: <code>C = A ∩ B</code>
- * <br>
- * Example: <code>{1, 2, 3} ∩ {2, 3, 4} = {2, 3}.</code>
- * @name Set.intersect
+ * Creates the set union of two sets.
+ * The union of A and B is the set C that consists of all elements of A and B.
+ * <br>Expression: <code>A ∪ B = C</code>
+ * <br>Example: <code>{1,2} ∪ {1,7,8,9} = {1,2,7,8,9}</code>
+ * @example
+ * const A = Set.from(1, 2)
+ * const B = Set.from(1, 7, 8, 9)
+ * A.union(B) // Set { 1, 2, 7, 8, 9 }
+ * @name Set.prototype.union
+ * @function
+ * @param args {set} - the other set to union with.
+ * @throws Throws an error if there is not exactly one argument.
+ * @throws Throws an error if the argument is not a Set instance.
+ * @returns {Set} a Set instance with the unified elements of the given args.
+ * @see https://en.wikipedia.org/wiki/Union_(set_theory)#Union_of_two_sets
+ */
+global.Set.prototype.union = arbitraryToBinary(unionArbitrary)
+
+/**
+ * Creates the set intersection of an arbitrary number of sets.
+ * The intersection S of any number of sets M<sub>i</sub> is the set whose elements consist of the elements that occur in every single set M<sub>i</sub>.
+ * <br>Expression: <code>∩ M = S</code>
+ * <br>Example: <code>∩ {M_1, M_2, M_3} = S</code>
+ * <br>Example: <code>∩ {A, B, C} = S</code>
+ * <br>Example: <code>∩ {{0,1,2,4}, {1,2,9}, {0,1,2}} = {1,2}</code>
+ * @example
+ * const A = Set.from(0, 1, 2, 4)
+ * const B = Set.from(1, 2, 9)
+ * const C = Set.from(0, 1, 2)
+ * Set.intersection(A, B, C) // Set { 1, 2 }
+ * const M = [A, B, C]
+ * Set.intersection(...M) // Set { 1, 2 }
+ * @name Set.intersection
  * @function
  * @param args {...Set}- an arbitrary list of Set instances
  * @throws Throws an error if any of the arguments is not a Set instance.
- * @returns {Set} a Set instance with the unified elements of the given args.
- * @see https://en.wikipedia.org/wiki/Intersection_(set_theory)
+ * @returns {Set} a Set instance with the shared elements of the given args.
+ * @see https://en.wikipedia.org/wiki/Intersection_(set_theory)#Arbitrary_intersections
  */
-function intersect (...args) {
-  args.forEach(arg => checkSet(arg))
-  const set3 = new Set([])
+function intersectionArbitrary (...args) {
+  checkSets(args)
+  if (!args || args.length === 0) {
+    throw new Error(`The intersection operator currently does not support 0 arguments.`)
+  }
+  const set3 = new Set()
   args.forEach(set => {
     set.forEach(value => {
       if (args.every(compare => compare.has(value))) {
@@ -562,8 +629,26 @@ function intersect (...args) {
   })
   return set3
 }
+global.Set.intersection = intersectionArbitrary
 
-global.Set.intersect = intersect
+/**
+ * Creates the set intersection of two sets.
+ * The intersection S of sets A and B is the set whose elements consist of the elements that occur in both A and B.
+ * <br>Expression: <code>A ∩ B = S</code>
+ * <br>Example: <code>{0,1,2,4} ∩ {1,2,9} = {1,2}</code>
+ * @example
+ * const A = Set.from(0, 1, 2, 4)
+ * const B = Set.from(1, 2, 9)
+ * A.intersect(B) // Set { 1, 2 }
+ * @name Set.prototype.intersect
+ * @function
+ * @param args {set} - the other set to intersect with.
+ * @throws Throws an error if there is not exactly one argument.
+ * @throws Throws an error if the argument is not a Set instance.
+ * @returns {Set} a Set instance with the shared elements of this set and the other set.
+ * @see https://en.wikipedia.org/wiki/Intersection_(set_theory)#Definition
+ */
+global.Set.prototype.intersect = arbitraryToBinary(intersectionArbitrary)
 
 /**
  * Computes the set difference of two sets (subtracts B from A): <code>C = A \ B</code>.  This is also known as the "relative complement".
@@ -793,3 +878,10 @@ function mergeRulesStrict (...rules) {
 }
 
 global.Set.mergeRulesStrict = mergeRulesStrict
+
+/**
+ * Flag to indicate the presence of this polyfill
+ * @type {boolean}
+ * @private
+ */
+global.Set.__isExtended__ = true

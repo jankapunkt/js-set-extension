@@ -493,7 +493,7 @@ const _originalSet = global.Set
  * @see https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Set
  * @returns {Set} An instance of the extended version of &lt;a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Set">Set (MDN link)&lt;/a>
  */
-function ExtendedSet (elements, rulesFct) {
+function Set (elements, rulesFct) {
   const original = new _originalSet()
   if (rulesFct) {
     original.rules(rulesFct)
@@ -501,8 +501,7 @@ function ExtendedSet (elements, rulesFct) {
   if (elements) { elements.forEach(element => original.add(element)) }
   return original
 }
-
-global.Set = ExtendedSet
+global.Set = Set
 global.Set.prototype = _originalSet.prototype
 
 // //////////////////////////////////////////////////////////////////////////////// //
@@ -624,7 +623,7 @@ global.Set.prototype.union = arbitraryToBinary(unionArbitrary)
  * Set.intersection(...M) // Set { 1, 2 }
  * @name Set.intersection
  * @function
- * @param args {...Set}- an arbitrary list of Set instances
+ * @param args {...Set} - an arbitrary list of Set instances
  * @throws Throws an error if any of the arguments is not a Set instance.
  * @returns {Set} a Set instance with the shared elements of the given args.
  * @see https://en.wikipedia.org/wiki/Intersection_(set_theory)#Arbitrary_intersections
@@ -768,32 +767,68 @@ function symmetricDifference (...args) {
 global.Set.symDiff = symmetricDifference
 
 /**
- * Creates the cartesian product of two given sets.
- * The cartesian product of two sets A and B is the set of all ordered pairs (a, b) where a ∈ A and b ∈ B.
- * &lt;br>
- * Expression: &lt;code>C = A x B = { (a, b) | a ∈ A and b ∈ B}&lt;/code>
- * &lt;br>
- * Note, that &lt;code>A x B ≠ B x A&lt;/code> (not commutative)
- * @function
- * @name Set.cartesian
- * @param set1 {Set} - A set instance
- * @param set2 {Set} - A set instance
+ * Creates the (n-ary) cartesian product of an arbitrary number of sets.
+ * The cartesian product of sets M&lt;sub>1&lt;/sub> through M&lt;sub>n&lt;/sub> is the set of all ordered tuples (a&lt;sub>1&lt;/sub>, ..., a&lt;sub>n&lt;/sub>) where a&lt;sub>1&lt;/sub> ∈ M&lt;sub>1&lt;/sub>, ..., a&lt;sub>n&lt;/sub> ∈ M&lt;sub>n&lt;/sub>.
+ * &lt;br>Expression: &lt;code>x [M1, ..., Mn] = { (a1, ..., an) | a1 ∈ M1, ..., an ∈ Mn}&lt;/code>
+ * &lt;br>Example: &lt;code>x [{1,2}, {5}, {3,4}] = {(1,5,3), (1,5,4), (2,5,3), (2,5,4)}&lt;/code>
  * @example
- * const a = Set.from(1,2)
- * const b = Set.from(3,4)
- * Set.cartesian(a, b) // Set { [1, 3], [1, 4], [2, 3], [2, 4] }
- * Set.cartesian(b, a) // Set { [3, 1], [3, 2], [4, 1], [4, 2] }
- * @throws Throws an error unless both arguments are set instances.
- * @return {Set} a new set instance, that contains the ordered element pairs.
+ * const M1 = Set.from(1,2)
+ * const M2 = Set.from(5)
+ * const M3 = Set.from(3,4)
+ * Set.cartesianProduct(M1, M2, M3) // Set { [1,5,3], [1,5,4], [2,5,3], [2,5,4] }
+ * Set.cartesianProduct(M3, M1) // Set { [3,1], [4,1], [3,2], [4,2] }
+ * @function
+ * @name Set.cartesianProduct
+ * @param args {...Set} - an arbitrary list of Set instances
+ * @return {Set} a new set instance that contains the ordered element tuples.
+ * @see https://en.wikipedia.org/wiki/Cartesian_product#n-ary_Cartesian_product
+ */
+function _cartesianProductBinary (set1, set2) {
+  const prodSet = new Set()
+  set1.forEach(value1 => set2.forEach(value2 => prodSet.add([value1, value2])))
+  return prodSet
+}
+function _cartesianProductBinaryFlat (set1, set2) {
+  // Helper function for cartesianProductArbitrary.
+  // set1's elements are tuples (arrays).  set2's elements are regular unwrapped elements.
+  const prodSet = _cartesianProductBinary(set1, set2)
+  const prodFlatSet = new Set()
+  prodSet.forEach(([leftArray, rightEl]) => prodFlatSet.add([...leftArray, rightEl]))
+  return prodFlatSet
+}
+function cartesianProductArbitrary (...args) {
+  checkSets(args)
+  // Base case: we must return a set of all tuples, and there is a single tuple (the empty tuple).
+  const emptyTuple = []
+  let prodSet = new Set([ emptyTuple ])
+  // Inductive step: we must append new elements to the end of each tuple.
+  args.forEach(set => {
+    prodSet = _cartesianProductBinaryFlat(prodSet, set)
+  })
+  return prodSet
+}
+global.Set.cartesianProduct = cartesianProductArbitrary
+
+/**
+ * Creates the cartesian product of two sets.
+ * The cartesian product of two sets A and B is the set of all ordered pairs (a, b) where a ∈ A and b ∈ B.
+ * &lt;br>Expression: &lt;code>C = A x B = { (a, b) | a ∈ A and b ∈ B}&lt;/code>
+ * &lt;br>Example: &lt;code>C = {1,2} x {3,4} = {(1,3), (1,4), (2,3), (2,4)}&lt;/code>
+ * &lt;br>Note that &lt;code>A x B ≠ B x A&lt;/code> (not commutative)
+ * &lt;br>Note that &lt;code>(A x B) x C ≠ A x (B x C)&lt;/code> (not associative)
+ * @function
+ * @name Set.prototype.cartesianProduct
+ * @param set {Set} - The other set instance to product with `this` set.
+ * @example
+ * const A = Set.from(1,2)
+ * const B = Set.from(3,4)
+ * A.cartesianProduct(B) // Set { [1, 3], [1, 4], [2, 3], [2, 4] }
+ * B.cartesianProduct(A) // Set { [3, 1], [4, 1], [3, 2], [4, 2] }
+ * @throws Throws an error if the argument is not a set instance.
+ * @return {Set} a new set instance, that contains the ordered pairs.
  * @see https://en.wikipedia.org/wiki/Cartesian_product
  */
-global.Set.cartesian = function cartesianProduct (set1, set2) {
-  checkSet(set1)
-  checkSet(set2)
-  const set3 = new Set()
-  set1.forEach(value1 => set2.forEach(value2 => set3.add([value1, value2])))
-  return set3
-}
+global.Set.prototype.cartesianProduct = arbitraryToBinary(cartesianProductArbitrary)
 
 /**
  * https://en.wikipedia.org/wiki/Power_set
@@ -893,6 +928,13 @@ function mergeRulesStrict (...rules) {
 }
 
 global.Set.mergeRulesStrict = mergeRulesStrict
+
+/**
+ * Flag to indicate the presence of this polyfill
+ * @type {boolean}
+ * @private
+ */
+global.Set.__isExtended__ = true
 </code></pre>
         </article>
     </section>
@@ -909,7 +951,7 @@ global.Set.mergeRulesStrict = mergeRulesStrict
 <br class="clear">
 
 <footer>
-    Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.5.5</a> on Sun Mar 31 2019 21:04:39 GMT+0200 (CEST)
+    Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.5.5</a> on Sun Apr 07 2019 11:25:45 GMT-0400 (Eastern Daylight Time)
 </footer>
 
 <script> prettyPrint(); </script>

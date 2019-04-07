@@ -1060,15 +1060,29 @@ describe('Operations (static)', function () {
   })
 
   describe('Cartesian Product', function () {
-    it('Creates a cartesian product of two sets that contains elements as ordered pairs', function () {
+    it('Creates a cartesian product of 0 sets', function () {
+      // the empty product is the set containing the empty tuple
+      // todo: dbl check that we are using DEEP EQUAL comparison for these tests
+      areEqual(Set.cartesianProduct(), set([]))
+    })
+
+    it('Creates a cartesian product of 1 set', function () {
+      // the product of a single set should return the set with each element wrapped in a tuple of length 1
+      const A = set(1, 3, 4)
+      const wrappedA = set([1], [3], [4])
+      areEqual(Set.cartesianProduct(A), wrappedA)
+    })
+
+    it('Creates a cartesian product of 2 sets that contains elements as ordered pairs', function () {
+      // todo: make this section include BOTH syntaxes (binary + arbitrary)
       // A = {1,2}; B = {3,4}
       const setA = new Set([1, 2])
       const setB = new Set([3, 4])
 
       // A × B = {1,2} × {3,4} = {(1,3), (1,4), (2,3), (2,4)}
       // B × A = {3,4} × {1,2} = {(3,1), (3,2), (4,1), (4,2)}
-      const axb = Set.cartesian(setA, setB)
-      const bxa = Set.cartesian(setB, setA)
+      const axb = Set.cartesianProduct(setA, setB)
+      const bxa = Set.cartesianProduct(setB, setA)
 
       // note, that elements are ordered pairs!
       areEqual(axb, set([1, 3], [1, 4], [2, 3], [2, 4]))
@@ -1079,25 +1093,36 @@ describe('Operations (static)', function () {
       const b = set(1, 2)
 
       // A × B = B × A = {1,2} × {1,2} = {(1,1), (1,2), (2,1), (2,2)}
-      areEqual(Set.cartesian(a, b), Set.cartesian(b, a))
+      areEqual(Set.cartesianProduct(a, b), Set.cartesianProduct(b, a))
 
       // A = {1,2}; C = ∅
       const c = set()
 
       // A × C = {1,2} × ∅ = ∅
       // C × A = ∅ × {1,2} = ∅
-      areEqual(Set.cartesian(a, c), c)
-      areEqual(Set.cartesian(c, a), c)
+      areEqual(Set.cartesianProduct(a, c), c)
+      areEqual(Set.cartesianProduct(c, a), c)
 
       // Strictly speaking, the Cartesian product is not associative (unless one of the involved sets is empty).
       // ( A × B ) × C ≠ A × ( B × C )
       const d = set(1)
 
       // If for example A = {1}, then (A × A) × A = { ((1,1),1) } ≠ { (1,(1,1)) } = A × (A × A).
-      const axa1 = Set.cartesian(Set.cartesian(d, d), d)
-      const axa2 = Set.cartesian(d, Set.cartesian(d, d))
+      const axa1 = Set.cartesianProduct(Set.cartesianProduct(d, d), d)
+      const axa2 = Set.cartesianProduct(d, Set.cartesianProduct(d, d))
 
       areNotEqual(axa1, axa2)
+    })
+
+    it('Creates a cartesian product of 3 sets', function () {
+      // A = {1,2}; B = {3}; C = {4, 5}
+      // × {A, B} = {(1,3), (2,3)}
+      // x {A, B, C} = {(1,3,4), (2,3,4), (1,3,5), (2,3,5)}
+      const A = new Set([1, 2])
+      const B = new Set([3])
+      const C = new Set([4, 5])
+      const x = new Set([ [1,3,4], [2,3,4], [1,3,5], [2,3,5] ])
+      areEqual(Set.cartesianProduct(A, B, C), x)
     })
 
     it('recursively respects nested sets', function () {
@@ -1106,8 +1131,8 @@ describe('Operations (static)', function () {
       const setA = new Set([set(1), set(2)])
       const setB = new Set([set(3), set(4)])
 
-      const axb = Set.cartesian(setA, setB)
-      const bxa = Set.cartesian(setB, setA)
+      const axb = Set.cartesianProduct(setA, setB)
+      const bxa = Set.cartesianProduct(setB, setA)
 
       areEqual(axb, set([set(1), set(3)], [set(1), set(4)], [set(2), set(3)], [set(2), set(4)]))
       areEqual(bxa, set([set(3), set(1)], [set(3), set(2)], [set(4), set(1)], [set(4), set(2)]))
@@ -1117,8 +1142,8 @@ describe('Operations (static)', function () {
       const setA = new Set([1, 2])
       const setB = new Set([3, 4])
 
-      const axb = Set.cartesian(setA, setB)
-      const bxa = Set.cartesian(setB, setA)
+      const axb = Set.cartesianProduct(setA, setB)
+      const bxa = Set.cartesianProduct(setB, setA)
       assert.isDefined(axb)
       assert.isDefined(bxa)
 
@@ -1128,15 +1153,15 @@ describe('Operations (static)', function () {
 
     it('throws if given parameters are not a Set', function () {
       assert.throws(function () {
-        Set.cartesian(null)
+        Set.cartesianProduct(null)
       }, /Expected \[set\] to be instanceof \[Set\]/)
 
       assert.throws(function () {
-        Set.cartesian(1, set(2))
+        Set.cartesianProduct(1, set(2))
       }, /Expected \[set\] to be instanceof \[Set\]/)
 
       assert.throws(function () {
-        Set.cartesian(set(2), 1)
+        Set.cartesianProduct(set(2), 1)
       }, /Expected \[set\] to be instanceof \[Set\]/)
     })
   })

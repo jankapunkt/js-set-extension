@@ -790,7 +790,8 @@ function cartesianProductBinaryFlat (set1, set2) {
   // Helper function for cartesianProductArbitrary.
   // set1's elements are tuples (arrays).  set2's elements are regular unwrapped elements.
   const prodSet = set1.cartesianProduct(set2)
-  const prodFlatSet = prodSet.map(([left_array, right_el]) => left_array.concat([right_el]))
+  const prodFlatSet = new Set()
+  prodSet.forEach(([left_array, right_el]) => prodFlatSet.add([...left_array, right_el]))
   return prodFlatSet
 }
 function cartesianProductArbitrary (...args) {

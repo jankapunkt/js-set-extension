@@ -595,7 +595,7 @@ global.Set.prototype.union = arbitraryToBinary(unionArbitrary)
  * Set.intersection(...M) // Set { 1, 2 }
  * @name Set.intersection
  * @function
- * @param args {...Set}- an arbitrary list of Set instances
+ * @param args {...Set} - an arbitrary list of Set instances
  * @throws Throws an error if any of the arguments is not a Set instance.
  * @returns {Set} a Set instance with the shared elements of the given args.
  * @see https://en.wikipedia.org/wiki/Intersection_(set_theory)#Arbitrary_intersections
@@ -739,24 +739,21 @@ function symmetricDifference (...args) {
 global.Set.symDiff = symmetricDifference
 
 /**
- * Creates the cartesian product of an arbitrary number of sets.
- * The cartesian product of two sets A and B is the set of all ordered pairs (a, b) where a ∈ A and b ∈ B.
- * <br>
- * Expression: <code>C = A x B = { (a, b) | a ∈ A and b ∈ B}</code>
- * <br>
- * Note, that <code>A x B ≠ B x A</code> (not commutative)
- * @function
- * @name Set.cartesian
- * @param set1 {Set} - A set instance
- * @param set2 {Set} - A set instance
+ * Creates the (n-ary) cartesian product of an arbitrary number of sets.
+ * The cartesian product of sets M<sub>1</sub> through M<sub>n</sub> is the set of all ordered tuples (a<sub>1</sub>, ..., a<sub>n</sub>) where a<sub>1</sub> ∈ M<sub>1</sub>, ..., a<sub>n</sub> ∈ M<sub>n</sub>.
+ * <br>Expression: <code>x [M1, ..., Mn] = { (a1, ..., an) | a1 ∈ M1, ..., an ∈ Mn}</code>
+ * <br>Example: <code>x [{1,2}, {5}, {3,4}] = {(1,5,3), (1,5,4), (2,5,3), (2,5,4)}</code>
  * @example
- * const a = Set.from(1,2)
- * const b = Set.from(3,4)
- * Set.cartesian(a, b) // Set { [1, 3], [1, 4], [2, 3], [2, 4] }
- * Set.cartesian(b, a) // Set { [3, 1], [3, 2], [4, 1], [4, 2] }
- * @throws Throws an error unless both arguments are set instances.
- * @return {Set} a new set instance, that contains the ordered element pairs.
- * @see https://en.wikipedia.org/wiki/Cartesian_product
+ * const M1 = Set.from(1,2)
+ * const M2 = Set.from(5)
+ * const M3 = Set.from(3,4)
+ * Set.cartesianProduct(M1, M2, M3) // Set { [1,5,3], [1,5,4], [2,5,3], [2,5,4] }
+ * Set.cartesianProduct(M3, M1) // Set { [3,1], [4,1], [3,2], [4,2] }
+ * @function
+ * @name Set.cartesianProduct
+ * @param args {...Set} - an arbitrary list of Set instances
+ * @return {Set} a new set instance that contains the ordered element tuples.
+ * @see https://en.wikipedia.org/wiki/Cartesian_product#n-ary_Cartesian_product
  */
 function _cartesianProductBinary (set1, set2) {
   const prodSet = new Set()
@@ -787,21 +784,20 @@ global.Set.cartesianProduct = cartesianProductArbitrary
 /**
  * Creates the cartesian product of two sets.
  * The cartesian product of two sets A and B is the set of all ordered pairs (a, b) where a ∈ A and b ∈ B.
- * <br>
- * Expression: <code>C = A x B = { (a, b) | a ∈ A and b ∈ B}</code>
- * <br>
- * Note, that <code>A x B ≠ B x A</code> (not commutative)
+ * <br>Expression: <code>C = A x B = { (a, b) | a ∈ A and b ∈ B}</code>
+ * <br>Example: <code>C = {1,2} x {3,4} = {(1,3), (1,4), (2,3), (2,4)}</code>
+ * <br>Note that <code>A x B ≠ B x A</code> (not commutative)
+ * <br>Note that <code>(A x B) x C ≠ A x (B x C)</code> (not associative)
  * @function
- * @name Set.cartesian
- * @param set1 {Set} - A set instance
- * @param set2 {Set} - A set instance
+ * @name Set.prototype.cartesianProduct
+ * @param set {Set} - The other set instance to product with `this` set.
  * @example
- * const a = Set.from(1,2)
- * const b = Set.from(3,4)
- * Set.cartesian(a, b) // Set { [1, 3], [1, 4], [2, 3], [2, 4] }
- * Set.cartesian(b, a) // Set { [3, 1], [3, 2], [4, 1], [4, 2] }
- * @throws Throws an error unless both arguments are set instances.
- * @return {Set} a new set instance, that contains the ordered element pairs.
+ * const A = Set.from(1,2)
+ * const B = Set.from(3,4)
+ * A.cartesianProduct(B) // Set { [1, 3], [1, 4], [2, 3], [2, 4] }
+ * B.cartesianProduct(A) // Set { [3, 1], [4, 1], [3, 2], [4, 2] }
+ * @throws Throws an error if the argument is not a set instance.
+ * @return {Set} a new set instance, that contains the ordered pairs.
  * @see https://en.wikipedia.org/wiki/Cartesian_product
  */
 global.Set.prototype.cartesianProduct = arbitraryToBinary(cartesianProductArbitrary)

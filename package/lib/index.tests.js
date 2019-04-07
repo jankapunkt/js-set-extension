@@ -1128,7 +1128,7 @@ describe('Operations (static)', function () {
       const A = new Set([1, 2])
       const B = new Set([3])
       const C = new Set([4, 5])
-      const x = new Set([ [1,3,4], [2,3,4], [1,3,5], [2,3,5] ])
+      const x = new Set([ [1, 3, 4], [2, 3, 4], [1, 3, 5], [2, 3, 5] ])
       areEqual(Set.cartesianProduct(A, B, C), x)
     })
 

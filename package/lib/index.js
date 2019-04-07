@@ -765,14 +765,14 @@ function _cartesianProductBinaryFlat (set1, set2) {
   // set1's elements are tuples (arrays).  set2's elements are regular unwrapped elements.
   const prodSet = _cartesianProductBinary(set1, set2)
   const prodFlatSet = new Set()
-  prodSet.forEach(([left_array, right_el]) => prodFlatSet.add([...left_array, right_el]))
+  prodSet.forEach(([leftArray, rightEl]) => prodFlatSet.add([...leftArray, rightEl]))
   return prodFlatSet
 }
 function cartesianProductArbitrary (...args) {
   checkSets(args)
   // Base case: we must return a set of all tuples, and there is a single tuple (the empty tuple).
-  const empty_tuple = []
-  let prodSet = new Set([ empty_tuple ])
+  const emptyTuple = []
+  let prodSet = new Set([ emptyTuple ])
   // Inductive step: we must append new elements to the end of each tuple.
   args.forEach(set => {
     prodSet = _cartesianProductBinaryFlat(prodSet, set)

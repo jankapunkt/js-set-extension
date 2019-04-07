@@ -452,7 +452,7 @@ describe('Relations', function () {
 describe('Operations (instances)', function () {
   describe('binary operation args', function () {
     const a = new Set([1, 2])
-    const binaryOpNames = ['union', 'intersect']
+    const binaryOpNames = ['union', 'intersect', 'cartesianProduct']
     for (let binaryOpName of binaryOpNames) {
       it('throws an error if you give it no argument', function () {
         assert.throws(function () {
@@ -1062,7 +1062,6 @@ describe('Operations (static)', function () {
   describe('Cartesian Product', function () {
     it('Creates a cartesian product of 0 sets', function () {
       // the empty product is the set containing the empty tuple
-      // todo: dbl check that we are using DEEP EQUAL comparison for these tests
       areEqual(Set.cartesianProduct(), set([]))
     })
 
@@ -1074,7 +1073,6 @@ describe('Operations (static)', function () {
     })
 
     it('Creates a cartesian product of 2 sets that contains elements as ordered pairs', function () {
-      // todo: make this section include BOTH syntaxes (binary + arbitrary)
       // A = {1,2}; B = {3,4}
       const setA = new Set([1, 2])
       const setB = new Set([3, 4])
@@ -1087,6 +1085,12 @@ describe('Operations (static)', function () {
       // note, that elements are ordered pairs!
       areEqual(axb, set([1, 3], [1, 4], [2, 3], [2, 4]))
       areEqual(bxa, set([3, 1], [3, 2], [4, 1], [4, 2]))
+
+      // Check that the binary operator does the same thing as the arbitrary operator.
+      const axbBin = setA.cartesianProduct(setB)
+      const bxaBin = setB.cartesianProduct(setA)
+      areEqual(axb, axbBin)
+      areEqual(bxa, bxaBin)
 
       // A = B = {1,2}
       const a = set(1, 2)
@@ -1110,8 +1114,11 @@ describe('Operations (static)', function () {
       // If for example A = {1}, then (A × A) × A = { ((1,1),1) } ≠ { (1,(1,1)) } = A × (A × A).
       const axa1 = Set.cartesianProduct(Set.cartesianProduct(d, d), d)
       const axa2 = Set.cartesianProduct(d, Set.cartesianProduct(d, d))
-
       areNotEqual(axa1, axa2)
+
+      // Check that the binary operator does the same thing as the arbitrary operator.
+      const axa1Bin = d.cartesianProduct(d).cartesianProduct(d)
+      areEqual(axa1, axa1Bin)
     })
 
     it('Creates a cartesian product of 3 sets', function () {

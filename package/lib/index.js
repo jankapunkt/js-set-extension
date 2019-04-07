@@ -739,34 +739,6 @@ function symmetricDifference (...args) {
 global.Set.symDiff = symmetricDifference
 
 /**
- * Creates the cartesian product of two sets.
- * The cartesian product of two sets A and B is the set of all ordered pairs (a, b) where a ∈ A and b ∈ B.
- * <br>
- * Expression: <code>C = A x B = { (a, b) | a ∈ A and b ∈ B}</code>
- * <br>
- * Note, that <code>A x B ≠ B x A</code> (not commutative)
- * @function
- * @name Set.cartesian
- * @param set1 {Set} - A set instance
- * @param set2 {Set} - A set instance
- * @example
- * const a = Set.from(1,2)
- * const b = Set.from(3,4)
- * Set.cartesian(a, b) // Set { [1, 3], [1, 4], [2, 3], [2, 4] }
- * Set.cartesian(b, a) // Set { [3, 1], [3, 2], [4, 1], [4, 2] }
- * @throws Throws an error unless both arguments are set instances.
- * @return {Set} a new set instance, that contains the ordered element pairs.
- * @see https://en.wikipedia.org/wiki/Cartesian_product
- */
-function cartesianProductBinary (otherSet) {
-  checkSet(otherSet)
-  const prodSet = new Set()
-  this.forEach(value1 => otherSet.forEach(value2 => prodSet.add([value1, value2])))
-  return prodSet
-}
-global.Set.prototype.cartesianProduct = cartesianProductBinary
-
-/**
  * Creates the cartesian product of an arbitrary number of sets.
  * The cartesian product of two sets A and B is the set of all ordered pairs (a, b) where a ∈ A and b ∈ B.
  * <br>
@@ -786,10 +758,15 @@ global.Set.prototype.cartesianProduct = cartesianProductBinary
  * @return {Set} a new set instance, that contains the ordered element pairs.
  * @see https://en.wikipedia.org/wiki/Cartesian_product
  */
-function cartesianProductBinaryFlat (set1, set2) {
+function _cartesianProductBinary (set1, set2) {
+  const prodSet = new Set()
+  set1.forEach(value1 => set2.forEach(value2 => prodSet.add([value1, value2])))
+  return prodSet
+}
+function _cartesianProductBinaryFlat (set1, set2) {
   // Helper function for cartesianProductArbitrary.
   // set1's elements are tuples (arrays).  set2's elements are regular unwrapped elements.
-  const prodSet = set1.cartesianProduct(set2)
+  const prodSet = _cartesianProductBinary(set1, set2)
   const prodFlatSet = new Set()
   prodSet.forEach(([left_array, right_el]) => prodFlatSet.add([...left_array, right_el]))
   return prodFlatSet
@@ -801,11 +778,33 @@ function cartesianProductArbitrary (...args) {
   let prodSet = new Set([ empty_tuple ])
   // Inductive step: we must append new elements to the end of each tuple.
   args.forEach(set => {
-    prodSet = cartesianProductBinaryFlat(prodSet, set)
+    prodSet = _cartesianProductBinaryFlat(prodSet, set)
   })
   return prodSet
 }
 global.Set.cartesianProduct = cartesianProductArbitrary
+
+/**
+ * Creates the cartesian product of two sets.
+ * The cartesian product of two sets A and B is the set of all ordered pairs (a, b) where a ∈ A and b ∈ B.
+ * <br>
+ * Expression: <code>C = A x B = { (a, b) | a ∈ A and b ∈ B}</code>
+ * <br>
+ * Note, that <code>A x B ≠ B x A</code> (not commutative)
+ * @function
+ * @name Set.cartesian
+ * @param set1 {Set} - A set instance
+ * @param set2 {Set} - A set instance
+ * @example
+ * const a = Set.from(1,2)
+ * const b = Set.from(3,4)
+ * Set.cartesian(a, b) // Set { [1, 3], [1, 4], [2, 3], [2, 4] }
+ * Set.cartesian(b, a) // Set { [3, 1], [3, 2], [4, 1], [4, 2] }
+ * @throws Throws an error unless both arguments are set instances.
+ * @return {Set} a new set instance, that contains the ordered element pairs.
+ * @see https://en.wikipedia.org/wiki/Cartesian_product
+ */
+global.Set.prototype.cartesianProduct = arbitraryToBinary(cartesianProductArbitrary)
 
 /**
  * https://en.wikipedia.org/wiki/Power_set

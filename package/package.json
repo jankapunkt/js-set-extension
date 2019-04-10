@@ -67,14 +67,18 @@
   },
   "keywords": [
     "set",
+    "set theory",
     "math",
     "superset",
     "subset",
+    "proper superset",
+    "proper subset",
     "union",
     "intersection",
     "complement",
     "symmetric difference",
-    "powerset"
+    "powerset",
+    "difference"
   ],
   "author": "Jan Küster <jkuester@uni-bremen.de>",
   "license": "MIT",

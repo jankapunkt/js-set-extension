@@ -25,6 +25,7 @@ Extended version of <a href="https://developer.mozilla.org/en-US/docs/Web/JavaSc
         * [.equal(set)](#Set+equal) ⇒ <code>boolean</code>
         * [.union(args)](#Set+union) ⇒ [<code>Set</code>](#Set)
         * [.intersect(args)](#Set+intersect) ⇒ [<code>Set</code>](#Set)
+        * [.cartesianProduct(set)](#Set+cartesianProduct) ⇒ [<code>Set</code>](#Set)
     * _static_
         * [.from(...args)](#Set.from) ⇒ [<code>Set</code>](#Set)
         * [.toSet(value)](#Set.toSet) ⇒ [<code>Set</code>](#Set)
@@ -34,7 +35,7 @@ Extended version of <a href="https://developer.mozilla.org/en-US/docs/Web/JavaSc
         * [.difference(set1, set2)](#Set.difference) ⇒ <code>ExtendedSet</code> \| <code>\*</code>
         * [.complement(set1, set2)](#Set.complement) ⇒ <code>ExtendedSet</code> \| <code>\*</code>
         * [.symDiff(...args)](#Set.symDiff) ⇒ [<code>Set</code>](#Set)
-        * [.cartesian(set1, set2)](#Set.cartesian) ⇒ [<code>Set</code>](#Set)
+        * [.cartesianProduct(...args)](#Set.cartesianProduct) ⇒ [<code>Set</code>](#Set)
         * [.power(set)](#Set.power) ⇒ [<code>Set</code>](#Set)
         * [.mergeRules(...rules)](#Set.mergeRules) ⇒ <code>function</code>
         * [.mergeRulesStrict(...rules)](#Set.mergeRulesStrict) ⇒ <code>function</code>
@@ -340,6 +341,35 @@ const A = Set.from(0, 1, 2, 4)
 const B = Set.from(1, 2, 9)
 A.intersect(B) // Set { 1, 2 }
 ```
+<a name="Set+cartesianProduct"></a>
+
+### set.cartesianProduct(set) ⇒ [<code>Set</code>](#Set)
+Creates the cartesian product of two sets.
+The cartesian product of two sets A and B is the set of all ordered pairs (a, b) where a ∈ A and b ∈ B.
+<br>Expression: <code>C = A x B = { (a, b) | a ∈ A and b ∈ B}</code>
+<br>Example: <code>C = {1,2} x {3,4} = {(1,3), (1,4), (2,3), (2,4)}</code>
+<br>Note that <code>A x B ≠ B x A</code> (not commutative)
+<br>Note that <code>(A x B) x C ≠ A x (B x C)</code> (not associative)
+
+**Kind**: instance method of [<code>Set</code>](#Set)  
+**Returns**: [<code>Set</code>](#Set) - a new set instance, that contains the ordered pairs.  
+**Throws**:
+
+- Throws an error if the argument is not a set instance.
+
+**See**: https://en.wikipedia.org/wiki/Cartesian_product  
+
+| Param | Type | Description |
+| --- | --- | --- |
+| set | [<code>Set</code>](#Set) | The other set instance to product with `this` set. |
+
+**Example**  
+```js
+const A = Set.from(1,2)
+const B = Set.from(3,4)
+A.cartesianProduct(B) // Set { [1, 3], [1, 4], [2, 3], [2, 4] }
+B.cartesianProduct(A) // Set { [3, 1], [4, 1], [3, 2], [4, 2] }
+```
 <a name="Set.from"></a>
 
 ### Set.from(...args) ⇒ [<code>Set</code>](#Set)
@@ -517,35 +547,29 @@ const a = Set.from(1,2,3)
 const b = Set.from(3,4)
 Set.symDiff(a, b) // Set { 1, 2, 4 }
 ```
-<a name="Set.cartesian"></a>
+<a name="Set.cartesianProduct"></a>
 
-### Set.cartesian(set1, set2) ⇒ [<code>Set</code>](#Set)
-Creates the cartesian product of two given sets.
-The cartesian product of two sets A and B is the set of all ordered pairs (a, b) where a ∈ A and b ∈ B.
-<br>
-Expression: <code>C = A x B = { (a, b) | a ∈ A and b ∈ B}</code>
-<br>
-Note, that <code>A x B ≠ B x A</code> (not commutative)
+### Set.cartesianProduct(...args) ⇒ [<code>Set</code>](#Set)
+Creates the (n-ary) cartesian product of an arbitrary number of sets.
+The cartesian product of sets M<sub>1</sub> through M<sub>n</sub> is the set of all ordered tuples (a<sub>1</sub>, ..., a<sub>n</sub>) where a<sub>1</sub> ∈ M<sub>1</sub>, ..., a<sub>n</sub> ∈ M<sub>n</sub>.
+<br>Expression: <code>x [M1, ..., Mn] = { (a1, ..., an) | a1 ∈ M1, ..., an ∈ Mn}</code>
+<br>Example: <code>x [{1,2}, {5}, {3,4}] = {(1,5,3), (1,5,4), (2,5,3), (2,5,4)}</code>
 
 **Kind**: static method of [<code>Set</code>](#Set)  
-**Returns**: [<code>Set</code>](#Set) - a new set instance, that contains the ordered element pairs.  
-**Throws**:
-
-- Throws an error unless both arguments are set instances.
-
-**See**: https://en.wikipedia.org/wiki/Cartesian_product  
+**Returns**: [<code>Set</code>](#Set) - a new set instance that contains the ordered element tuples.  
+**See**: https://en.wikipedia.org/wiki/Cartesian_product#n-ary_Cartesian_product  
 
 | Param | Type | Description |
 | --- | --- | --- |
-| set1 | [<code>Set</code>](#Set) | A set instance |
-| set2 | [<code>Set</code>](#Set) | A set instance |
+| ...args | [<code>Set</code>](#Set) | an arbitrary list of Set instances |
 
 **Example**  
 ```js
-const a = Set.from(1,2)
-const b = Set.from(3,4)
-Set.cartesian(a, b) // Set { [1, 3], [1, 4], [2, 3], [2, 4] }
-Set.cartesian(b, a) // Set { [3, 1], [3, 2], [4, 1], [4, 2] }
+const M1 = Set.from(1,2)
+const M2 = Set.from(5)
+const M3 = Set.from(3,4)
+Set.cartesianProduct(M1, M2, M3) // Set { [1,5,3], [1,5,4], [2,5,3], [2,5,4] }
+Set.cartesianProduct(M3, M1) // Set { [3,1], [4,1], [3,2], [4,2] }
 ```
 <a name="Set.power"></a>
 

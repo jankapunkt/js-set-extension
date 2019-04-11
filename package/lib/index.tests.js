@@ -120,7 +120,7 @@ describe('Relations', function () {
     })
   })
 
-  describe(Set.prototype.isSubsetOf.name, function () {
+  describe(Set.prototype.isSubset.name, function () {
     // used with https://en.wikipedia.org/wiki/Subset
 
     it('returns true if a set is a subset of another set', function () {
@@ -130,19 +130,19 @@ describe('Relations', function () {
       const e = new Set()
 
       // The set A = {1, 2} is a proper subset of B = {1, 2, 3}, thus both expressions A ⊆ B and A ⊊ B are true.
-      assert.isTrue(a.isSubsetOf(b))
+      assert.isTrue(a.isSubset(b))
 
       // The set D = {1, 2, 3} is a subset of E = {1, 2, 3}, thus D ⊆ E is true, and D ⊊ E is not true (false).
-      assert.isTrue(c.isSubsetOf(b))
+      assert.isTrue(c.isSubset(b))
 
       // Any set is a subset of itself, but not a proper subset. (X ⊆ X is true, and X ⊊ X is false for any set X.)
-      assert.isTrue(a.isSubsetOf(a))
-      assert.isTrue(b.isSubsetOf(b))
+      assert.isTrue(a.isSubset(a))
+      assert.isTrue(b.isSubset(b))
 
       // The empty set { }, denoted by ∅, is also a subset of any given set X. It is also always a proper subset of any set except itself.
-      assert.isTrue(e.isSubsetOf(a))
-      assert.isTrue(e.isSubsetOf(b))
-      assert.isTrue(e.isSubsetOf(e))
+      assert.isTrue(e.isSubset(a))
+      assert.isTrue(e.isSubset(b))
+      assert.isTrue(e.isSubset(e))
 
       // TODO
       // The set {x: x is a prime number greater than 10} is a proper subset of {x: x is an odd number greater than 10}
@@ -165,7 +165,7 @@ describe('Relations', function () {
       const a = new Set([1, 2])
       const b = new Set([1, 2, 3])
 
-      assert.isFalse(b.isSubsetOf(a))
+      assert.isFalse(b.isSubset(a))
     })
 
     it('recursively respects nested sets', function () {
@@ -175,42 +175,42 @@ describe('Relations', function () {
       const e = new Set()
 
       // The set A = {1, 2} is a proper subset of B = {1, 2, 3}, thus both expressions A ⊆ B and A ⊊ B are true.
-      assert.isTrue(a.isSubsetOf(b))
+      assert.isTrue(a.isSubset(b))
 
       // The set D = {1, 2, 3} is a subset of E = {1, 2, 3}, thus D ⊆ E is true, and D ⊊ E is not true (false).
-      assert.isTrue(c.isSubsetOf(b))
+      assert.isTrue(c.isSubset(b))
 
       // Any set is a subset of itself, but not a proper subset. (X ⊆ X is true, and X ⊊ X is false for any set X.)
-      assert.isTrue(a.isSubsetOf(a))
-      assert.isTrue(b.isSubsetOf(b))
+      assert.isTrue(a.isSubset(a))
+      assert.isTrue(b.isSubset(b))
 
       // The empty set { }, denoted by ∅, is also a subset of any given set X. It is also always a proper subset of any set except itself.
-      assert.isTrue(e.isSubsetOf(a))
-      assert.isTrue(e.isSubsetOf(b))
-      assert.isTrue(e.isSubsetOf(e))
+      assert.isTrue(e.isSubset(a))
+      assert.isTrue(e.isSubset(b))
+      assert.isTrue(e.isSubset(e))
     })
 
     it('does not alter the involved sets', function () {
       const a = new Set([1, 2])
       const b = new Set([1, 2, 3])
-      assert.isTrue(a.isSubsetOf(b))
+      assert.isTrue(a.isSubset(b))
       assert.deepEqual(a.toArray(), [1, 2])
       assert.deepEqual(b.toArray(), [1, 2, 3])
     })
   })
 
-  describe(Set.prototype.properSubsetOf.name, function () {
+  describe(Set.prototype.isProperSubset.name, function () {
     it('is returns true if a set is a proper subset of another set', function () {
       const a = new Set([1, 2])
       const b = new Set([1, 2, 3])
       const e = new Set()
 
       // The set A = {1, 2} is a proper subset of B = {1, 2, 3}, thus both expressions A ⊆ B and A ⊊ B are true.
-      assert.isTrue(a.properSubsetOf(b))
+      assert.isTrue(a.isProperSubset(b))
 
       // The empty set { }, denoted by ∅, is also a subset of any given set X. It is also always a proper subset of any set except itself.
-      assert.isTrue(e.properSubsetOf(a))
-      assert.isTrue(e.properSubsetOf(b))
+      assert.isTrue(e.isProperSubset(a))
+      assert.isTrue(e.isProperSubset(b))
     })
 
     it('returns false if a set is not a proper subset of another set', function () {
@@ -220,14 +220,14 @@ describe('Relations', function () {
       const e = new Set()
 
       // The set D = {1, 2, 3} is a subset of E = {1, 2, 3}, thus D ⊆ E is true, and D ⊊ E is not true (false).
-      assert.isFalse(c.properSubsetOf(b))
+      assert.isFalse(c.isProperSubset(b))
 
       // Any set is a subset of itself, but not a proper subset. (X ⊆ X is true, and X ⊊ X is false for any set X.)
-      assert.isFalse(a.properSubsetOf(a))
-      assert.isFalse(b.properSubsetOf(b))
+      assert.isFalse(a.isProperSubset(a))
+      assert.isFalse(b.isProperSubset(b))
 
       // The empty set { }, denoted by ∅, is also a subset of any given set X. It is also always a proper subset of any set except itself.
-      assert.isFalse(e.properSubsetOf(e))
+      assert.isFalse(e.isProperSubset(e))
     })
 
     it('recursively respects nested sets', function () {
@@ -237,26 +237,26 @@ describe('Relations', function () {
       const e = new Set()
 
       // The set D = {1, 2, 3} is a subset of E = {1, 2, 3}, thus D ⊆ E is true, and D ⊊ E is not true (false).
-      assert.isFalse(c.properSubsetOf(b))
+      assert.isFalse(c.isProperSubset(b))
 
       // Any set is a subset of itself, but not a proper subset. (X ⊆ X is true, and X ⊊ X is false for any set X.)
-      assert.isFalse(a.properSubsetOf(a))
-      assert.isFalse(b.properSubsetOf(b))
+      assert.isFalse(a.isProperSubset(a))
+      assert.isFalse(b.isProperSubset(b))
 
       // The empty set { }, denoted by ∅, is also a subset of any given set X. It is also always a proper subset of any set except itself.
-      assert.isFalse(e.properSubsetOf(e))
+      assert.isFalse(e.isProperSubset(e))
     })
 
     it('does not alter the involved sets', function () {
       const a = new Set([1, 2])
       const b = new Set([1, 2, 3])
-      assert.isTrue(a.properSubsetOf(b))
+      assert.isTrue(a.isProperSubset(b))
       assert.deepEqual(a.toArray(), [1, 2])
       assert.deepEqual(b.toArray(), [1, 2, 3])
     })
   })
 
-  describe(Set.prototype.isSupersetOf.name, function () {
+  describe(Set.prototype.isSuperset.name, function () {
     // used with: https://en.wikipedia.org/wiki/Subset
     // but inverses the assertions
 
@@ -266,13 +266,13 @@ describe('Relations', function () {
       const c = new Set([1, 2, 3])
       const e = new Set()
 
-      assert.isTrue(b.isSupersetOf(a))
-      assert.isTrue(b.isSupersetOf(c))
-      assert.isTrue(a.isSupersetOf(a))
-      assert.isTrue(b.isSupersetOf(b))
-      assert.isTrue(a.isSupersetOf(e))
-      assert.isTrue(b.isSupersetOf(e))
-      assert.isTrue(e.isSupersetOf(e))
+      assert.isTrue(b.isSuperset(a))
+      assert.isTrue(b.isSuperset(c))
+      assert.isTrue(a.isSuperset(a))
+      assert.isTrue(b.isSuperset(b))
+      assert.isTrue(a.isSuperset(e))
+      assert.isTrue(b.isSuperset(e))
+      assert.isTrue(e.isSuperset(e))
     })
 
     it('returns false if a set is not a superset of another set', function () {
@@ -280,9 +280,9 @@ describe('Relations', function () {
       const b = new Set([1, 2, 3])
       const e = new Set()
 
-      assert.isFalse(a.isSupersetOf(b))
-      assert.isFalse(e.isSupersetOf(a))
-      assert.isFalse(e.isSupersetOf(b))
+      assert.isFalse(a.isSuperset(b))
+      assert.isFalse(e.isSuperset(a))
+      assert.isFalse(e.isSuperset(b))
     })
 
     it('recursively respects nested sets', function () {
@@ -291,32 +291,32 @@ describe('Relations', function () {
       const c = set(set(1), set(2), set(3))
       const e = new Set()
 
-      assert.isTrue(b.isSupersetOf(a))
-      assert.isTrue(b.isSupersetOf(c))
-      assert.isTrue(a.isSupersetOf(a))
-      assert.isTrue(b.isSupersetOf(b))
-      assert.isTrue(a.isSupersetOf(e))
-      assert.isTrue(b.isSupersetOf(e))
-      assert.isTrue(e.isSupersetOf(e))
+      assert.isTrue(b.isSuperset(a))
+      assert.isTrue(b.isSuperset(c))
+      assert.isTrue(a.isSuperset(a))
+      assert.isTrue(b.isSuperset(b))
+      assert.isTrue(a.isSuperset(e))
+      assert.isTrue(b.isSuperset(e))
+      assert.isTrue(e.isSuperset(e))
     })
 
     it('does not alter the involved sets', function () {
       const a = new Set([1, 2])
       const b = new Set([1, 2, 3])
-      assert.isTrue(b.isSupersetOf(a))
+      assert.isTrue(b.isSuperset(a))
       assert.deepEqual(a.toArray(), [1, 2])
       assert.deepEqual(b.toArray(), [1, 2, 3])
     })
   })
 
-  describe(Set.prototype.properSupersetOf.name, function () {
+  describe(Set.prototype.isProperSuperset.name, function () {
     it('returns true if a set is a proper superset of another set', function () {
       const a = new Set([1, 2])
       const b = new Set([1, 2, 3])
       const e = new Set()
 
-      assert.isTrue(b.properSupersetOf(a))
-      assert.isTrue(a.properSupersetOf(e))
+      assert.isTrue(b.isProperSuperset(a))
+      assert.isTrue(a.isProperSuperset(e))
     })
 
     it('returns false if a set is not a proper superset of anoter set', function () {
@@ -325,10 +325,10 @@ describe('Relations', function () {
       const c = new Set([1, 2, 3])
       const e = new Set()
 
-      assert.isFalse(a.properSupersetOf(a))
-      assert.isFalse(b.properSupersetOf(c))
-      assert.isFalse(c.properSupersetOf(b))
-      assert.isFalse(e.properSupersetOf(e))
+      assert.isFalse(a.isProperSuperset(a))
+      assert.isFalse(b.isProperSuperset(c))
+      assert.isFalse(c.isProperSuperset(b))
+      assert.isFalse(e.isProperSuperset(e))
     })
 
     it('recursively respects nested sets', function () {
@@ -337,13 +337,13 @@ describe('Relations', function () {
       const c = set(set(1), set(2), set(3))
       const e = new Set()
 
-      assert.isTrue(b.properSupersetOf(a))
-      assert.isTrue(a.properSupersetOf(e))
+      assert.isTrue(b.isProperSuperset(a))
+      assert.isTrue(a.isProperSuperset(e))
 
-      assert.isFalse(a.properSupersetOf(a))
-      assert.isFalse(b.properSupersetOf(c))
-      assert.isFalse(c.properSupersetOf(b))
-      assert.isFalse(e.properSupersetOf(e))
+      assert.isFalse(a.isProperSuperset(a))
+      assert.isFalse(b.isProperSuperset(c))
+      assert.isFalse(c.isProperSuperset(b))
+      assert.isFalse(e.isProperSuperset(e))
     })
 
     it('does not alter the involved sets', function () {
@@ -351,8 +351,8 @@ describe('Relations', function () {
       const b = new Set([1, 2, 3])
       const e = new Set()
 
-      assert.isTrue(b.properSupersetOf(a))
-      assert.isTrue(a.properSupersetOf(e))
+      assert.isTrue(b.isProperSuperset(a))
+      assert.isTrue(a.isProperSuperset(e))
 
       assert.deepEqual(a.toArray(), [1, 2])
       assert.deepEqual(b.toArray(), [1, 2, 3])
@@ -589,7 +589,7 @@ describe('Operations (static)', function () {
       compare(Set.union(a, buc), Set.union(aub, c))
 
       // A ⊆ (A ∪ B).
-      assert.isTrue(a.isSubsetOf(aub))
+      assert.isTrue(a.isSubset(aub))
 
       // A ∪ A = A.
       assert.isTrue(Set.union(a, a).equal(a))
@@ -601,9 +601,9 @@ describe('Operations (static)', function () {
       areEqual(Set.union(a, new Set()), a)
 
       // A ⊆ B if and only if A ∪ B = B.
-      assert.isTrue(c.isSubsetOf(u))
+      assert.isTrue(c.isSubset(u))
       areEqual(u, Set.union(c, u))
-      assert.isFalse(c.isSubsetOf(b))
+      assert.isFalse(c.isSubset(b))
       areNotEqual(b, Set.union(c, b))
     })
 

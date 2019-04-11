@@ -18,10 +18,10 @@ Extended version of <a href="https://developer.mozilla.org/en-US/docs/Web/JavaSc
         * [.rules(value)](#Set+rules) ⇒ <code>function</code> \| <code>undefined</code>
         * [.toArray()](#Set+toArray) ⇒ <code>Array</code>
         * [.any()](#Set+any) ⇒ <code>\*</code>
-        * [.isSupersetOf(set)](#Set+isSupersetOf) ⇒ <code>boolean</code>
-        * [.isSubsetOf(set)](#Set+isSubsetOf) ⇒ <code>boolean</code>
-        * [.properSupersetOf(set)](#Set+properSupersetOf) ⇒ <code>boolean</code>
-        * [.properSupersetOf(set)](#Set+properSupersetOf) ⇒ <code>boolean</code>
+        * [.isSuperset(set)](#Set+isSuperset) ⇒ <code>boolean</code>
+        * [.isSubset(set)](#Set+isSubset) ⇒ <code>boolean</code>
+        * [.isProperSuperset(set)](#Set+isProperSuperset) ⇒ <code>boolean</code>
+        * [.isProperSubset(set)](#Set+isProperSubset) ⇒ <code>boolean</code>
         * [.equal(set)](#Set+equal) ⇒ <code>boolean</code>
         * [.union(args)](#Set+union) ⇒ [<code>Set</code>](#Set)
         * [.intersect(args)](#Set+intersect) ⇒ [<code>Set</code>](#Set)
@@ -154,16 +154,16 @@ Basically the first element, retrieved by iterator.next().value will be used.
 
 **Kind**: instance method of [<code>Set</code>](#Set)  
 **Returns**: <code>\*</code> - An arbitrary element of the current set that could by of any type, depending on the elements of the set.  
-<a name="Set+isSupersetOf"></a>
+<a name="Set+isSuperset"></a>
 
-### set.isSupersetOf(set) ⇒ <code>boolean</code>
-Checks, whether the current set (this) is a superset of the given set.
-A set A is superset of set B, if A contains all elements of B.
-<br>
-Expression: <code>A ⊇ B</code>
+### set.isSuperset(set) ⇒ <code>boolean</code>
+Checks whether the current set (this) is a superset of the given set.
+Set A is a superset of set B if and only if every element of B is also an element of A.
+<br>Expression: <code>A ⊇ B</code>
+<br>Example: <code>{1,2,3,4} ⊇ {1,3}</code>
 
 **Kind**: instance method of [<code>Set</code>](#Set)  
-**Returns**: <code>boolean</code> - true if this set is the superset of the given set, otherwise false.  
+**Returns**: <code>boolean</code> - true if this set is a superset of the given set, otherwise false.  
 **Throws**:
 
 - Throws an error, if the given set is not a set instance.
@@ -176,26 +176,23 @@ Expression: <code>A ⊇ B</code>
 
 **Example**  
 ```js
-const a = Set.from(1,2,3,4)
-const b = Set.from(1,2,3)
-const c = Set.from(1,2,3,4,5)
-a.isSupersetOf(b) // true
-a.isSupersetOf(c) // false
-c.isSupersetOf(b) // true
+const A = Set.from(1,2,3,4)
+const B = Set.from(1,3)
+const C = Set.from(1,3,5)
+A.isSuperset(B) // true
+A.isSuperset(C) // false
+C.isSuperset(B) // true
 ```
-<a name="Set+isSubsetOf"></a>
+<a name="Set+isSubset"></a>
 
-### set.isSubsetOf(set) ⇒ <code>boolean</code>
-Checks, whether the current set (this) is a subset of the given set.
-A set A is subset of set B, if B contains all elements of A.
-<br>
-Expression: <code>A ⊆ B</code>
-<br>
-If their sizes are also equal, they can be assumed as equal.
-If their sizes are not equal, then A is called a proper subset of B.
+### set.isSubset(set) ⇒ <code>boolean</code>
+Checks whether the current set (this) is a subset of the given set.
+Set A is a subset of set B if and only if every element of A is also an element of B.
+<br>Expression: <code>A ⊆ B</code>
+<br>Example: <code>{1,3} ⊆ {1,2,3,4}</code>
 
 **Kind**: instance method of [<code>Set</code>](#Set)  
-**Returns**: <code>boolean</code> - - true if this set is the subset of the given set, false otherwise  
+**Returns**: <code>boolean</code> - true if this set is a subset of the given set, otherwise false.  
 **Throws**:
 
 - Throws an error, if the given set is not a set instance.
@@ -204,7 +201,7 @@ If their sizes are not equal, then A is called a proper subset of B.
 
 - https://en.wikipedia.org/wiki/Subset
 - Set.prototype.equal
-- Set.prototype.isProperSubsetOf
+- Set.prototype.isProperSubset
 
 
 | Param | Type | Description |
@@ -213,43 +210,68 @@ If their sizes are not equal, then A is called a proper subset of B.
 
 **Example**  
 ```js
-const a = Set.from(1,2,3,4)
-const b = Set.from(1,2,3)
-const c = Set.from(1,2,3,4,5)
-a.isSubsetOf(b) // false
-b.isSubsetOf(c) // true
-c.isSubsetOf(a) // false
+const A = Set.from(1,3)
+const B = Set.from(1,2,3,4)
+const C = Set.from(1,3,5)
+A.isSubset(B) // true
+A.isSubset(C) // true
+B.isSubset(A) // false
+B.isSubset(C) // false
+C.isSubset(B) // false
+C.isSubset(A) // false
 ```
-<a name="Set+properSupersetOf"></a>
+<a name="Set+isProperSuperset"></a>
 
-### set.properSupersetOf(set) ⇒ <code>boolean</code>
-Checks, whether the current set (this) is a proper superset of the given set.
-A set A is a proper subset of set B, if A contains all elements of B and their sizes are not equal.
-<br>
-Expression: <code>A ⊃ B</code>
+### set.isProperSuperset(set) ⇒ <code>boolean</code>
+Checks whether the current set (this) is a proper superset of the given set.
+Set A is a proper superset of set B if and only if A is a superset of B and A contains an element that is not in B.
+<br>Expression: <code>A ⊃ B</code>
+<br>Example: <code>{1,6,8} ⊃ {1,8}</code>
 
 **Kind**: instance method of [<code>Set</code>](#Set)  
-**See**: https://en.wikipedia.org/wiki/Subset  
+**See**: https://en.wikipedia.org/wiki/Subset#Definitions  
 
 | Param | Type | Description |
 | --- | --- | --- |
 | set | [<code>Set</code>](#Set) | A set instance of which this set is checked to be the proper superset. |
 
-<a name="Set+properSupersetOf"></a>
+**Example**  
+```js
+const A = Set.from(1,6,8)
+const B = Set.from(1,8)
+const C = Set.from(8)
+const D = Set.from(7)
+A.isProperSuperset(A) // false
+A.isProperSuperset(B) // true
+A.isProperSuperset(C) // true
+A.isProperSuperset(D) // false
+```
+<a name="Set+isProperSubset"></a>
 
-### set.properSupersetOf(set) ⇒ <code>boolean</code>
-Checks, whether the current set (this) is a proper subset of the given set.
-A set A is a proper subset of set B, if B contains all elements of A and their sizes are not equal.
-<br>
-Expression: <code>A ⊂ B</code>
+### set.isProperSubset(set) ⇒ <code>boolean</code>
+Checks whether the current set (this) is a proper subset of the given set.
+Set A is a proper subset of set B if and only if A is a subset of B and B contains an element that is not in A.
+<br>Expression: <code>A ⊂ B</code>
+<br>Example: <code>{1,8} ⊂ {1,6,8}</code>
 
 **Kind**: instance method of [<code>Set</code>](#Set)  
-**See**: https://en.wikipedia.org/wiki/Subset  
+**See**: https://en.wikipedia.org/wiki/Subset#Definitions  
 
 | Param | Type | Description |
 | --- | --- | --- |
 | set | [<code>Set</code>](#Set) | A set instance of which this set is checked to be the proper subset. |
 
+**Example**  
+```js
+const A = Set.from(1,8)
+const B = Set.from(1,6,8)
+const C = Set.from(8)
+const D = Set.from(7)
+A.isProperSubset(A) // false
+A.isProperSubset(B) // true
+A.isProperSubset(C) // false
+A.isProperSubset(D) // false
+```
 <a name="Set+equal"></a>
 
 ### set.equal(set) ⇒ <code>boolean</code>
@@ -267,7 +289,7 @@ This allows also to check equality for more complex / nested structures without 
 **See**
 
 - https://developer.mozilla.org/en-US/docs/Web/JavaScript/Equality_comparisons_and_sameness
-- Set.prototype.isSubsetOf
+- Set.prototype.isSubset
 
 
 | Param | Type | Description |

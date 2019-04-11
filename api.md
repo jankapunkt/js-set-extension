@@ -22,7 +22,7 @@ Extended version of <a href="https://developer.mozilla.org/en-US/docs/Web/JavaSc
         * [.isSubset(set)](#Set+isSubset) ⇒ <code>boolean</code>
         * [.isProperSuperset(set)](#Set+isProperSuperset) ⇒ <code>boolean</code>
         * [.isProperSubset(set)](#Set+isProperSubset) ⇒ <code>boolean</code>
-        * [.equal(set)](#Set+equal) ⇒ <code>boolean</code>
+        * [.equals(set)](#Set+equals) ⇒ <code>boolean</code>
         * [.union(args)](#Set+union) ⇒ [<code>Set</code>](#Set)
         * [.intersect(args)](#Set+intersect) ⇒ [<code>Set</code>](#Set)
         * [.minus(set)](#Set+minus) ⇒ <code>ExtendedSet</code> \| <code>\*</code>
@@ -202,7 +202,7 @@ Set A is a subset of set B if and only if every element of A is also an element 
 **See**
 
 - https://en.wikipedia.org/wiki/Subset
-- Set.prototype.equal
+- Set.prototype.equals
 - Set.prototype.isProperSubset
 
 
@@ -274,13 +274,13 @@ A.isProperSubset(B) // true
 A.isProperSubset(C) // false
 A.isProperSubset(D) // false
 ```
-<a name="Set+equal"></a>
+<a name="Set+equals"></a>
 
-### set.equal(set) ⇒ <code>boolean</code>
+### set.equals(set) ⇒ <code>boolean</code>
 Checks, whether two sets are equal in terms of their contained elements.
 Note: This implementation uses a deep object comparison in order to check for "sameness".
 This allows also to check equality for more complex / nested structures without the restriction of interpreting
-"sameness" as "being the exact same instance". If such an equality is desired, please use Set.prototype.equalSrict
+"sameness" as "being the exact same instance". If such an equality is desired, please use Set.prototype.equalsStrict
 
 **Kind**: instance method of [<code>Set</code>](#Set)  
 **Returns**: <code>boolean</code> - true, if all elements of this set equal to the elements of the given set.  
@@ -303,13 +303,13 @@ This allows also to check equality for more complex / nested structures without 
 const a = Set.from(1,2,3)
 const b = Set.from(1,2,3.0) // note that 3.0 will evaluate to 3 here!
 a === b    // false
-a.equal(b) // true
+a.equals(b) // true
 ```
 **Example**  
 ```js
 const a = Set.from({ a:true, b:false })
 const b = Set.from({ b:false, a:true })
-a.equal(b) // true
+a.equals(b) // true
 ```
 <a name="Set+union"></a>
 

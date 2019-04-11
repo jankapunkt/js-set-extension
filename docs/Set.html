@@ -370,7 +370,7 @@ The cartesian product of sets M<sub>1</sub> through M<sub>n</sub> is the set of 
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="index.js.html">index.js</a>, <a href="index.js.html#line757">line 757</a>
+        <a href="index.js.html">index.js</a>, <a href="index.js.html#line804">line 804</a>
     </li></ul></dd>
     
 
@@ -556,7 +556,7 @@ Set.cartesianProduct(M3, M1) // Set { [3,1], [4,1], [3,2], [4,2] }</code></pre>
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="index.js.html">index.js</a>, <a href="index.js.html#line679">line 679</a>
+        <a href="index.js.html">index.js</a>, <a href="index.js.html#line700">line 700</a>
     </li></ul></dd>
     
 
@@ -815,7 +815,9 @@ Set.cartesianProduct(M3, M1) // Set { [3,1], [4,1], [3,2], [4,2] }</code></pre>
 
 
 <div class="description">
-    Computes the set difference of two sets (subtracts B from A): <code>C = A \ B</code>.  This is also known as the "relative complement".
+    Computes the set difference of two sets (subtracts B from A). This is also known as the "relative complement".
+<br>Expression: <code>A \ B = S</code>
+<br>Example: <code>{1,2,3} \ {1,3,5} = {2}</code>
 </div>
 
 
@@ -983,6 +985,13 @@ Set.cartesianProduct(M3, M1) // Set { [3,1], [4,1], [3,2], [4,2] }</code></pre>
     
 
 
+
+
+    <h5>Example</h5>
+    
+    <pre class="prettyprint"><code>const A = Set.from(1, 2, 3)
+const B = Set.from(1, 3, 5)
+Set.difference(A, B) // Set { 2 }</code></pre>
 
 
 
@@ -1487,7 +1496,7 @@ The resulting function requires the given element to pass at least one of the gi
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="index.js.html">index.js</a>, <a href="index.js.html#line871">line 871</a>
+        <a href="index.js.html">index.js</a>, <a href="index.js.html#line918">line 918</a>
     </li></ul></dd>
     
 
@@ -1678,7 +1687,7 @@ Thus, if the element fails one, it fails all.
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="index.js.html">index.js</a>, <a href="index.js.html#line895">line 895</a>
+        <a href="index.js.html">index.js</a>, <a href="index.js.html#line942">line 942</a>
     </li></ul></dd>
     
 
@@ -1857,7 +1866,7 @@ The powerset of a set contains all possible subsets of the set, plus itself and 
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="index.js.html">index.js</a>, <a href="index.js.html#line847">line 847</a>
+        <a href="index.js.html">index.js</a>, <a href="index.js.html#line894">line 894</a>
     </li></ul></dd>
     
 
@@ -1932,7 +1941,7 @@ The powerset of a set contains all possible subsets of the set, plus itself and 
     
 
     
-    <h4 class="name" id=".symDiff"><span class="type-signature">(static) </span>symDiff<span class="signature">(&hellip;args)</span><span class="type-signature"> &rarr; {<a href="Set.html">Set</a>}</span></h4>
+    <h4 class="name" id=".symmetricDifference"><span class="type-signature">(static) </span>symmetricDifference<span class="signature">(&hellip;args)</span><span class="type-signature"> &rarr; {<a href="Set.html">Set</a>}</span></h4>
     
 
     
@@ -1940,13 +1949,13 @@ The powerset of a set contains all possible subsets of the set, plus itself and 
 
 
 <div class="description">
-    Creates the symmetric difference (disjunctive union) of an arbitrary number (2 .. n) of sets.
-The symmetric difference of two sets A and B is a set, that contains only those elements,
-which are in either of the sets and not in their intersection.
-The symmetric difference is commutative and associative, which is why arbitrary number of sets can be used as input
+    Creates the symmetric difference (disjunctive union) of an arbitrary number (0 .. n) of sets.
+The symmetric difference of n sets is the set consisting of the elements which occur an odd number of times among the n sets.
+The binary symmetric difference is commutative and associative, which is why arbitrary number of sets can be used as input
 for a sequencial-computed symmetric difference.
-<br>
-Expression: <code>C = A Δ B</code>
+<br>Expression: <code>Δ M = S</code>
+<br>Example: <code>Δ {A, B, C} = S</code>
+<br>Example: <code>Δ {{0,1}, {1,3}, {0,1,2,3,4}} = {1,2,4}</code>
 </div>
 
 
@@ -2051,7 +2060,7 @@ Expression: <code>C = A Δ B</code>
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="index.js.html">index.js</a>, <a href="index.js.html#line721">line 721</a>
+        <a href="index.js.html">index.js</a>, <a href="index.js.html#line742">line 742</a>
     </li></ul></dd>
     
 
@@ -2061,7 +2070,7 @@ Expression: <code>C = A Δ B</code>
     <dt class="tag-see">See:</dt>
     <dd class="tag-see">
         <ul>
-            <li><a href="https://en.wikipedia.org/wiki/Symmetric_difference">https://en.wikipedia.org/wiki/Symmetric_difference</a></li>
+            <li><a href="https://en.wikipedia.org/wiki/Symmetric_difference#n-ary_symmetric_difference">https://en.wikipedia.org/wiki/Symmetric_difference#n-ary_symmetric_difference</a></li>
         </ul>
     </dd>
     
@@ -2097,7 +2106,7 @@ Expression: <code>C = A Δ B</code>
 
         
 <div class="param-desc">
-    Returns a new Set, that contains only elements.
+    Returns a new Set that contains only elements which are present in an odd number of the arguments.
 </div>
 
 
@@ -2121,9 +2130,12 @@ Expression: <code>C = A Δ B</code>
 
     <h5>Example</h5>
     
-    <pre class="prettyprint"><code>const a = Set.from(1,2,3)
-const b = Set.from(3,4)
-Set.symDiff(a, b) // Set { 1, 2, 4 }</code></pre>
+    <pre class="prettyprint"><code>const A = Set.from(0, 1)
+const B = Set.from(1, 3)
+const C = Set.from(0, 1, 2, 3, 4)
+Set.symmetricDifference(A, B, C) // Set { 1, 2, 4 }
+const M = [A, B, C]
+Set.symmetricDifference(...M) // Set { 1, 2, 4 }</code></pre>
 
 
 
@@ -2902,7 +2914,7 @@ The cartesian product of two sets A and B is the set of all ordered pairs (a, b)
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="index.js.html">index.js</a>, <a href="index.js.html#line800">line 800</a>
+        <a href="index.js.html">index.js</a>, <a href="index.js.html#line847">line 847</a>
     </li></ul></dd>
     
 
@@ -4293,6 +4305,192 @@ C.isSuperset(B) // true</code></pre>
     
 
     
+    <h4 class="name" id="minus"><span class="type-signature"></span>minus<span class="signature">(set)</span><span class="type-signature"> &rarr; {ExtendedSet|*}</span></h4>
+    
+
+    
+
+
+
+<div class="description">
+    Computes the set difference of two sets (subtracts B from A). This is also known as the "relative complement".
+<br>Expression: <code>A \ B = S</code>
+<br>Example: <code>{1,2,3} \ {1,3,5} = {2}</code>
+</div>
+
+
+
+
+
+
+
+
+
+    <h5>Parameters:</h5>
+    
+
+<table class="params">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>set</code></td>
+            
+
+            <td class="type">
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">B the set whose elements will be subtracted from this.</td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="index.js.html">index.js</a>, <a href="index.js.html#line683">line 683</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+
+
+
+
+
+
+<h5>Throws:</h5>
+<ul>
+        <li>
+
+    <div class="param-desc">
+    
+        Throws an error if there is not exactly one argument.
+    
+    </div>
+
+</li>
+    
+        <li>
+
+    <div class="param-desc">
+    
+        Throws an error if the argument is not a Set instance.
+    
+    </div>
+
+</li>
+    </ul>
+
+
+<h5>Returns:</h5>
+
+        
+<div class="param-desc">
+    A new Set with all elements of this set minus the elements of B
+</div>
+
+
+
+<dl>
+    <dt>
+        Type
+    </dt>
+    <dd>
+        
+<span class="param-type">ExtendedSet</span>
+|
+
+<span class="param-type">*</span>
+
+
+    </dd>
+</dl>
+
+    
+
+
+
+
+    <h5>Example</h5>
+    
+    <pre class="prettyprint"><code>const A = Set.from(1, 2, 3)
+const B = Set.from(1, 3, 5)
+A.minus(B) // Set { 2 }</code></pre>
+
+
+
+        
+            
+
+    
+
+    
     <h4 class="name" id="rules"><span class="type-signature"></span>rules<span class="signature">(value)</span><span class="type-signature"> &rarr; {function|undefined}</span></h4>
     
 
@@ -4466,6 +4664,246 @@ integers.rules(isInt)
 integers.add(1)   // OK, no error
 integers.add(1.5) // throws error!
 integers.add(1.0) // OK, because 1.0 === 1 in JS Number</code></pre>
+
+
+
+        
+            
+
+    
+
+    
+    <h4 class="name" id="symmetricDifference"><span class="type-signature"></span>symmetricDifference<span class="signature">(&hellip;args, set)</span><span class="type-signature"> &rarr; {<a href="Set.html">Set</a>}</span></h4>
+    
+
+    
+
+
+
+<div class="description">
+    Creates the symmetric difference (disjunctive union) of two sets.
+The symmetric difference S of two sets A and B is the set that contains only those elements
+which are in either of the sets but not in their intersection.
+The symmetric difference is commutative and associative.
+<br>Expression: <code>A Δ B = S</code>
+<br>Example: <code>Δ {{0,1}, {1,3,5} = {0,3,5}</code>
+</div>
+
+
+
+
+
+
+
+
+
+    <h5>Parameters:</h5>
+    
+
+<table class="params">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+        <th>Attributes</th>
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>args</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type"><a href="Set.html">Set</a></span>
+
+
+            
+            </td>
+
+            
+                <td class="attributes">
+                
+
+                
+
+                
+                    &lt;repeatable><br>
+                
+                </td>
+            
+
+            
+
+            <td class="description last">An arbitrary amount of Set instances</td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>set</code></td>
+            
+
+            <td class="type">
+            
+            </td>
+
+            
+                <td class="attributes">
+                
+
+                
+
+                
+                </td>
+            
+
+            
+
+            <td class="description last">B the set whose elements will be symmetrically subtracted from this.</td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="index.js.html">index.js</a>, <a href="index.js.html#line778">line 778</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+    <dt class="tag-see">See:</dt>
+    <dd class="tag-see">
+        <ul>
+            <li><a href="https://en.wikipedia.org/wiki/Symmetric_difference">https://en.wikipedia.org/wiki/Symmetric_difference</a></li>
+        </ul>
+    </dd>
+    
+
+    
+</dl>
+
+
+
+
+
+
+
+
+
+
+
+<h5>Throws:</h5>
+<ul>
+        <li>
+
+    <div class="param-desc">
+    
+        Throws an error if there is not exactly one argument.
+    
+    </div>
+
+</li>
+    
+        <li>
+
+    <div class="param-desc">
+    
+        Throws an error if the argument is not a Set instance.
+    
+    </div>
+
+</li>
+    </ul>
+
+
+<h5>Returns:</h5>
+
+        
+<div class="param-desc">
+    Returns a new Set whose elements are in this or in B, but not in both.
+</div>
+
+
+
+<dl>
+    <dt>
+        Type
+    </dt>
+    <dd>
+        
+<span class="param-type"><a href="Set.html">Set</a></span>
+
+
+    </dd>
+</dl>
+
+    
+
+
+
+
+    <h5>Examples</h5>
+    
+    <pre class="prettyprint"><code>const A = Set.from(0, 1)
+const B = Set.from(1, 3, 5)
+A.symmetricDifference(B) // Set { 0, 3, 5 }</code></pre>
+
+    <pre class="prettyprint"><code>const a = Set.from(1,2,3)
+const b = Set.from(3,4)
+Set.symmetricDifference(a, b) // Set { 1, 2, 4 }</code></pre>
 
 
 
@@ -4800,7 +5238,7 @@ A.union(B) // Set { 1, 2, 7, 8, 9 }</code></pre>
 <br class="clear">
 
 <footer>
-    Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.5.5</a> on Wed Apr 10 2019 22:12:16 GMT-0400 (Eastern Daylight Time)
+    Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.5.5</a> on Wed Apr 10 2019 22:16:35 GMT-0400 (Eastern Daylight Time)
 </footer>
 
 <script> prettyPrint(); </script>

@@ -653,8 +653,13 @@ global.Set.intersection = intersectionArbitrary
 global.Set.prototype.intersect = arbitraryToBinary(intersectionArbitrary)
 
 /**
- * Computes the set difference of two sets (subtracts B from A): <code>C = A \ B</code>.  This is also known as the "relative complement".
- *
+ * Computes the set difference of two sets (subtracts B from A). This is also known as the "relative complement".
+ * <br>Expression: <code>A \ B = S</code>
+ * <br>Example: <code>{1,2,3} \ {1,3,5} = {2}</code>
+ * @example
+ * const A = Set.from(1, 2, 3)
+ * const B = Set.from(1, 3, 5)
+ * Set.difference(A, B) // Set { 2 }
  * @name Set.difference
  * @function
  * @throws Throws an error if any of the arguments is not a Set instance.
@@ -665,7 +670,7 @@ global.Set.prototype.intersect = arbitraryToBinary(intersectionArbitrary)
 function difference (set1, set2) {
   checkSet(set1)
   checkSet(set2)
-  const set3 = new Set([])
+  const set3 = new Set()
   set1.forEach(value => {
     if (!set2.has(value)) {
       set3.add(value)
@@ -673,8 +678,24 @@ function difference (set1, set2) {
   })
   return set3
 }
-
 global.Set.difference = difference
+
+/**
+ * Computes the set difference of two sets (subtracts B from A). This is also known as the "relative complement".
+ * <br>Expression: <code>A \ B = S</code>
+ * <br>Example: <code>{1,2,3} \ {1,3,5} = {2}</code>
+ * @example
+ * const A = Set.from(1, 2, 3)
+ * const B = Set.from(1, 3, 5)
+ * A.minus(B) // Set { 2 }
+ * @name Set.prototype.minus
+ * @function
+ * @throws Throws an error if there is not exactly one argument.
+ * @throws Throws an error if the argument is not a Set instance.
+ * @param set - B the set whose elements will be subtracted from this.
+ * @returns {ExtendedSet|*} A new Set with all elements of this set minus the elements of B
+ */
+global.Set.prototype.minus = arbitraryToBinary(difference)
 
 /**
  * Computes the complement of set B where U is the universe: <code>C = U \ B</code>.  This is also known as the "absolute complement".
@@ -702,7 +723,7 @@ global.Set.complement = complement
  *
  * @private
  */
-function symDiff (set1, set2) {
+function _symmetricDifferenceBinary (set1, set2) {
   const set3 = new Set()
 
   function addToSet (source, compare, target) {
@@ -719,40 +740,66 @@ function symDiff (set1, set2) {
 }
 
 /**
- * Creates the symmetric difference (disjunctive union) of an arbitrary number (2 .. n) of sets.
- * The symmetric difference of two sets A and B is a set, that contains only those elements,
- * which are in either of the sets and not in their intersection.
- * The symmetric difference is commutative and associative, which is why arbitrary number of sets can be used as input
+ * Creates the symmetric difference (disjunctive union) of an arbitrary number (0 .. n) of sets.
+ * The symmetric difference of n sets is the set consisting of the elements which occur an odd number of times among the n sets.
+ * The binary symmetric difference is commutative and associative, which is why arbitrary number of sets can be used as input
  * for a sequencial-computed symmetric difference.
- * <br>
- * Expression: <code>C = A Δ B</code>
- *
+ * <br>Expression: <code>Δ M = S</code>
+ * <br>Example: <code>Δ {A, B, C} = S</code>
+ * <br>Example: <code>Δ {{0,1}, {1,3}, {0,1,2,3,4}} = {1,2,4}</code>
+ * @example
+ * const A = Set.from(0, 1)
+ * const B = Set.from(1, 3)
+ * const C = Set.from(0, 1, 2, 3, 4)
+ * Set.symmetricDifference(A, B, C) // Set { 1, 2, 4 }
+ * const M = [A, B, C]
+ * Set.symmetricDifference(...M) // Set { 1, 2, 4 }
  * @function
- * @name Set.symDiff
+ * @name Set.symmetricDifference
+ * @param args {...Set}- An arbitrary amount of Set instances
+ * @throws Throws an error if any of the given arguments is not a set instance.
+ * @returns {Set} Returns a new Set that contains only elements which are present in an odd number of the arguments.
+ * @see https://en.wikipedia.org/wiki/Symmetric_difference#n-ary_symmetric_difference
+ */
+function symmetricDifferenceArbitrary (...args) {
+  checkSets(args)
+  if (!args || args.length === 0) {
+    return new Set()
+  } else {
+    let set = args.shift()
+    while (args.length > 0) {
+      set = _symmetricDifferenceBinary(set, args.shift())
+    }
+    return set
+  }
+}
+global.Set.symmetricDifference = symmetricDifferenceArbitrary
+
+/**
+ * Creates the symmetric difference (disjunctive union) of two sets.
+ * The symmetric difference S of two sets A and B is the set that contains only those elements
+ * which are in either of the sets but not in their intersection.
+ * The symmetric difference is commutative and associative.
+ * <br>Expression: <code>A Δ B = S</code>
+ * <br>Example: <code>Δ {{0,1}, {1,3,5} = {0,3,5}</code>
+ * @example
+ * const A = Set.from(0, 1)
+ * const B = Set.from(1, 3, 5)
+ * A.symmetricDifference(B) // Set { 0, 3, 5 }
+ * @function
+ * @name Set.prototype.symmetricDifference
  * @param args {...Set}- An arbitrary amount of Set instances
  * @example
  * const a = Set.from(1,2,3)
  * const b = Set.from(3,4)
- * Set.symDiff(a, b) // Set { 1, 2, 4 }
- * @throws Throws an error if any of the given arguments is not a set instance.
- * @returns {Set} Returns a new Set, that contains only elements.
+ * Set.symmetricDifference(a, b) // Set { 1, 2, 4 }
+ * @throws Throws an error if there is not exactly one argument.
+ * @throws Throws an error if the argument is not a Set instance.
+ * @param set - B the set whose elements will be symmetrically subtracted from this.
+ * @returns {Set} Returns a new Set whose elements are in this or in B, but not in both.
  * @see https://en.wikipedia.org/wiki/Symmetric_difference
  */
-function symmetricDifference (...args) {
-  args.forEach(arg => checkSet(arg))
-
-  if (args.length === 2) {
-    return symDiff(...args)
-  }
-
-  let set3 = symDiff(args.shift(), args.shift())
-  while (args.length > 0) {
-    set3 = symDiff(set3, args.shift())
-  }
-  return set3
-}
-
-global.Set.symDiff = symmetricDifference
+global.Set.prototype.symmetricDifference = arbitraryToBinary(symmetricDifferenceArbitrary)
 
 /**
  * Creates the (n-ary) cartesian product of an arbitrary number of sets.

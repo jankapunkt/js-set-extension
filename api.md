@@ -25,6 +25,8 @@ Extended version of <a href="https://developer.mozilla.org/en-US/docs/Web/JavaSc
         * [.equal(set)](#Set+equal) ⇒ <code>boolean</code>
         * [.union(args)](#Set+union) ⇒ [<code>Set</code>](#Set)
         * [.intersect(args)](#Set+intersect) ⇒ [<code>Set</code>](#Set)
+        * [.minus(set)](#Set+minus) ⇒ <code>ExtendedSet</code> \| <code>\*</code>
+        * [.symmetricDifference(...args, set)](#Set+symmetricDifference) ⇒ [<code>Set</code>](#Set)
         * [.cartesianProduct(set)](#Set+cartesianProduct) ⇒ [<code>Set</code>](#Set)
     * _static_
         * [.from(...args)](#Set.from) ⇒ [<code>Set</code>](#Set)
@@ -34,7 +36,7 @@ Extended version of <a href="https://developer.mozilla.org/en-US/docs/Web/JavaSc
         * [.intersection(...args)](#Set.intersection) ⇒ [<code>Set</code>](#Set)
         * [.difference(set1, set2)](#Set.difference) ⇒ <code>ExtendedSet</code> \| <code>\*</code>
         * [.complement(set1, set2)](#Set.complement) ⇒ <code>ExtendedSet</code> \| <code>\*</code>
-        * [.symDiff(...args)](#Set.symDiff) ⇒ [<code>Set</code>](#Set)
+        * [.symmetricDifference(...args)](#Set.symmetricDifference) ⇒ [<code>Set</code>](#Set)
         * [.cartesianProduct(...args)](#Set.cartesianProduct) ⇒ [<code>Set</code>](#Set)
         * [.power(set)](#Set.power) ⇒ [<code>Set</code>](#Set)
         * [.mergeRules(...rules)](#Set.mergeRules) ⇒ <code>function</code>
@@ -363,6 +365,67 @@ const A = Set.from(0, 1, 2, 4)
 const B = Set.from(1, 2, 9)
 A.intersect(B) // Set { 1, 2 }
 ```
+<a name="Set+minus"></a>
+
+### set.minus(set) ⇒ <code>ExtendedSet</code> \| <code>\*</code>
+Computes the set difference of two sets (subtracts B from A). This is also known as the "relative complement".
+<br>Expression: <code>A \ B = S</code>
+<br>Example: <code>{1,2,3} \ {1,3,5} = {2}</code>
+
+**Kind**: instance method of [<code>Set</code>](#Set)  
+**Returns**: <code>ExtendedSet</code> \| <code>\*</code> - A new Set with all elements of this set minus the elements of B  
+**Throws**:
+
+- Throws an error if there is not exactly one argument.
+- Throws an error if the argument is not a Set instance.
+
+
+| Param | Description |
+| --- | --- |
+| set | B the set whose elements will be subtracted from this. |
+
+**Example**  
+```js
+const A = Set.from(1, 2, 3)
+const B = Set.from(1, 3, 5)
+A.minus(B) // Set { 2 }
+```
+<a name="Set+symmetricDifference"></a>
+
+### set.symmetricDifference(...args, set) ⇒ [<code>Set</code>](#Set)
+Creates the symmetric difference (disjunctive union) of two sets.
+The symmetric difference S of two sets A and B is the set that contains only those elements
+which are in either of the sets but not in their intersection.
+The symmetric difference is commutative and associative.
+<br>Expression: <code>A Δ B = S</code>
+<br>Example: <code>Δ {{0,1}, {1,3,5} = {0,3,5}</code>
+
+**Kind**: instance method of [<code>Set</code>](#Set)  
+**Returns**: [<code>Set</code>](#Set) - Returns a new Set whose elements are in this or in B, but not in both.  
+**Throws**:
+
+- Throws an error if there is not exactly one argument.
+- Throws an error if the argument is not a Set instance.
+
+**See**: https://en.wikipedia.org/wiki/Symmetric_difference  
+
+| Param | Type | Description |
+| --- | --- | --- |
+| ...args | [<code>Set</code>](#Set) | An arbitrary amount of Set instances |
+| set |  | B the set whose elements will be symmetrically subtracted from this. |
+
+**Example**  
+```js
+const A = Set.from(0, 1)
+const B = Set.from(1, 3, 5)
+A.symmetricDifference(B) // Set { 0, 3, 5 }
+```
+**Example**  
+```js
+const a = Set.from(1,2,3)
+const b = Set.from(3,4)
+Set.symmetricDifference(a, b) // Set { 1, 2, 4 }
+```
 <a name="Set+cartesianProduct"></a>
 
 ### set.cartesianProduct(set) ⇒ [<code>Set</code>](#Set)
@@ -508,7 +571,9 @@ Set.intersection(...M) // Set { 1, 2 }
 <a name="Set.difference"></a>
 
 ### Set.difference(set1, set2) ⇒ <code>ExtendedSet</code> \| <code>\*</code>
-Computes the set difference of two sets (subtracts B from A): <code>C = A \ B</code>.  This is also known as the "relative complement".
+Computes the set difference of two sets (subtracts B from A). This is also known as the "relative complement".
+<br>Expression: <code>A \ B = S</code>
+<br>Example: <code>{1,2,3} \ {1,3,5} = {2}</code>
 
 **Kind**: static method of [<code>Set</code>](#Set)  
 **Returns**: <code>ExtendedSet</code> \| <code>\*</code> - A new Set with all elements of A minus the elements of B  
@@ -522,6 +587,12 @@ Computes the set difference of two sets (subtracts B from A): <code>C = A \ B</c
 | set1 | A the set to be subtracted from |
 | set2 | B the set whose elements will be subtracted from A |
 
+**Example**  
+```js
+const A = Set.from(1, 2, 3)
+const B = Set.from(1, 3, 5)
+Set.difference(A, B) // Set { 2 }
+```
 <a name="Set.complement"></a>
 
 ### Set.complement(set1, set2) ⇒ <code>ExtendedSet</code> \| <code>\*</code>
@@ -540,24 +611,24 @@ Computes the complement of set B where U is the universe: <code>C = U \ B</code>
 | set1 | U the set to be subtracted from |
 | set2 | B the set whose elements will be subtracted from A |
 
-<a name="Set.symDiff"></a>
+<a name="Set.symmetricDifference"></a>
 
-### Set.symDiff(...args) ⇒ [<code>Set</code>](#Set)
-Creates the symmetric difference (disjunctive union) of an arbitrary number (2 .. n) of sets.
-The symmetric difference of two sets A and B is a set, that contains only those elements,
-which are in either of the sets and not in their intersection.
-The symmetric difference is commutative and associative, which is why arbitrary number of sets can be used as input
+### Set.symmetricDifference(...args) ⇒ [<code>Set</code>](#Set)
+Creates the symmetric difference (disjunctive union) of an arbitrary number (0 .. n) of sets.
+The symmetric difference of n sets is the set consisting of the elements which occur an odd number of times among the n sets.
+The binary symmetric difference is commutative and associative, which is why arbitrary number of sets can be used as input
 for a sequencial-computed symmetric difference.
-<br>
-Expression: <code>C = A Δ B</code>
+<br>Expression: <code>Δ M = S</code>
+<br>Example: <code>Δ {A, B, C} = S</code>
+<br>Example: <code>Δ {{0,1}, {1,3}, {0,1,2,3,4}} = {1,2,4}</code>
 
 **Kind**: static method of [<code>Set</code>](#Set)  
-**Returns**: [<code>Set</code>](#Set) - Returns a new Set, that contains only elements.  
+**Returns**: [<code>Set</code>](#Set) - Returns a new Set that contains only elements which are present in an odd number of the arguments.  
 **Throws**:
 
 - Throws an error if any of the given arguments is not a set instance.
 
-**See**: https://en.wikipedia.org/wiki/Symmetric_difference  
+**See**: https://en.wikipedia.org/wiki/Symmetric_difference#n-ary_symmetric_difference  
 
 | Param | Type | Description |
 | --- | --- | --- |
@@ -565,9 +636,12 @@ Expression: <code>C = A Δ B</code>
 
 **Example**  
 ```js
-const a = Set.from(1,2,3)
-const b = Set.from(3,4)
-Set.symDiff(a, b) // Set { 1, 2, 4 }
+const A = Set.from(0, 1)
+const B = Set.from(1, 3)
+const C = Set.from(0, 1, 2, 3, 4)
+Set.symmetricDifference(A, B, C) // Set { 1, 2, 4 }
+const M = [A, B, C]
+Set.symmetricDifference(...M) // Set { 1, 2, 4 }
 ```
 <a name="Set.cartesianProduct"></a>
 

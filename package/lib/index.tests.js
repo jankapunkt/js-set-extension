@@ -452,7 +452,7 @@ describe('Relations', function () {
 describe('Operations (instances)', function () {
   describe('binary operation args', function () {
     const a = new Set([1, 2])
-    const binaryOpNames = ['union', 'intersect', 'cartesianProduct']
+    const binaryOpNames = ['union', 'intersect', 'cartesianProduct', 'minus', 'symmetricDifference']
     for (let binaryOpName of binaryOpNames) {
       it('throws an error if you give it no argument', function () {
         assert.throws(function () {
@@ -759,9 +759,11 @@ describe('Operations (static)', function () {
       // {1, 2} \ {1, 2} = ∅.
       // A \ A = ∅.
       assert.equal(Set.difference(a, a).size, 0)
+      assert.equal(a.minus(a).size, 0)
 
       // {1, 2, 3, 4} \ {1, 3} = {2, 4}.
       areEqual(Set.difference(c, b), new Set([2, 4]))
+      areEqual(c.minus(b), new Set([2, 4]))
 
       // A \ B ≠ B \ A for A ≠ B.
       const acb = Set.difference(a, b)
@@ -770,35 +772,47 @@ describe('Operations (static)', function () {
 
       // ∅ \ A = ∅.
       assert.equal(Set.difference(e, a).size, 0)
+      assert.equal(e.minus(a).size, 0)
 
       // A \ ∅ = A.
       areEqual(Set.difference(a, e), a)
+      areEqual(a.minus(e), a)
 
       // A ∪ A′ = U.
       areEqual(Set.union(a, Set.difference(u, a)), u)
+      areEqual(Set.union(a, u.minus(a)), u)
 
       // A ∩ A′ = ∅.
       areEqual(Set.intersection(a, Set.difference(u, a)), e)
+      areEqual(Set.intersection(a, u.minus(a)), e)
 
       // (A′)′ = A.
       areEqual(a, Set.difference(u, Set.difference(u, a)))
+      areEqual(a, u.minus(u.minus(a)))
 
       // A \ U = ∅.
       areEqual(e, Set.difference(a, u))
+      areEqual(e, a.minus(u))
 
       // A \ A′ = A and A′ \ A = A′.
       areEqual(a, Set.difference(a, Set.difference(u, a)))
+      areEqual(a, a.minus(u.minus(a)))
       areEqual(Set.difference(u, a), Set.difference(Set.difference(u, a), a))
+      areEqual(u.minus(a), u.minus(a).minus(a))
 
       // U′ = ∅ and ∅′ = U.
       areEqual(e, Set.difference(u, u))
+      areEqual(e, u.minus(u))
       areEqual(u, Set.difference(u, e))
+      areEqual(u, u.minus(e))
 
       // A \ B = A ∩ B′.
       areEqual(Set.difference(a, b), Set.intersection(a, Set.difference(u, b)))
+      areEqual(a.minus(b), Set.intersection(a, u.minus(b)))
 
       // if B ⊆ C then B \ C = ∅.
       areEqual(e, Set.difference(b, c))
+      areEqual(e, b.minus(c))
     })
 
     it('recursively respects nested sets', function () {
@@ -934,16 +948,33 @@ describe('Operations (static)', function () {
     })
   })
 
-  describe(Set.symDiff.name, function () {
+  describe(Set.symmetricDifference.name, function () {
     // use with https://en.wikipedia.org/wiki/Symmetric_difference
 
-    it('returns a symmetric difference of two sets', function () {
+    it('returns a symmetric difference of 0 sets', function () {
+      const e = new Set()
+      const s = Set.symmetricDifference()
+      assert.deepEqual(e, s)
+    })
+
+    it('returns a symmetric difference of 1 sets', function () {
+      const a = set(1, 2, 3)
+      const s = Set.symmetricDifference(a)
+      assert.deepEqual(a, s)
+    })
+
+    it('returns a symmetric difference of 2 sets', function () {
       // the symmetric difference of the sets { 1 , 2 , 3 } and { 3 , 4 } is { 1 , 2 , 4 }
       const a = new Set([1, 2, 3])
       const b = new Set([3, 4])
       const c = new Set([4, 5, 6])
-      const asdb = Set.symDiff(a, b)
+      const asdb = Set.symmetricDifference(a, b)
 
+      // verify binary op works
+      const asdb2 = a.symmetricDifference(b)
+      assert.isTrue(asdb.equal(asdb2))
+
+      // verify symmetric difference of a and b
       assert.isTrue(asdb.equal(new Set([1, 2, 4])))
 
       // The symmetric difference is equivalent to the union of both relative complements, that is:
@@ -955,11 +986,11 @@ describe('Operations (static)', function () {
       areEqual(asdb, unionMinusIntersection)
 
       // The symmetric difference is commutative and associative:
-      const bsda = Set.symDiff(b, a)
+      const bsda = Set.symmetricDifference(b, a)
       areEqual(asdb, bsda)
 
-      const bsdc = Set.symDiff(b, c)
-      areEqual(Set.symDiff(asdb, c), Set.symDiff(a, bsdc))
+      const bsdc = Set.symmetricDifference(b, c)
+      areEqual(Set.symmetricDifference(asdb, c), Set.symmetricDifference(a, bsdc))
     })
 
     it('returns a symmetric difference of n sets', function () {
@@ -967,15 +998,15 @@ describe('Operations (static)', function () {
       const b = new Set([3, 4, 5, 6, 7, 8]) // -> minus 3, 4, 5, 6
       const c = new Set([5, 6, 7, 8, 9, 10]) // -> plus        5, 6 ,  minus 7, 8
 
-      const tripleSymDiff = Set.symDiff(a, b, c)
+      const triplesymmetricDifference = Set.symmetricDifference(a, b, c)
       const compare = new Set([1, 2, 5, 6, 9, 10])
-      areEqual(tripleSymDiff, compare)
+      areEqual(triplesymmetricDifference, compare)
     })
 
     it('recursively respects nested sets', function () {
       const a = set(set(1), set(2), set(3))
       const b = set(set(3), set(4))
-      const asdb = Set.symDiff(a, b)
+      const asdb = Set.symmetricDifference(a, b)
 
       areEqual(asdb, set(set(1), set(2), set(4)))
     })
@@ -983,7 +1014,7 @@ describe('Operations (static)', function () {
     it('does not alter the involved sets', function () {
       const a = new Set([1, 2, 3])
       const b = new Set([3, 4])
-      areEqual(Set.symDiff(a, b), new Set([1, 2, 4]))
+      areEqual(Set.symmetricDifference(a, b), new Set([1, 2, 4]))
 
       assert.deepEqual(a.toArray(), [1, 2, 3])
       assert.deepEqual(b.toArray(), [3, 4])
@@ -991,19 +1022,19 @@ describe('Operations (static)', function () {
 
     it('throws if given parameters are not a Set', function () {
       assert.throws(function () {
-        Set.symDiff(set(1), 1)
+        Set.symmetricDifference(set(1), 1)
       }, /Expected \[set\] to be instanceof \[Set\]/)
 
       assert.throws(function () {
-        Set.symDiff(1, set(1))
+        Set.symmetricDifference(1, set(1))
       }, /Expected \[set\] to be instanceof \[Set\]/)
 
       assert.throws(function () {
-        Set.symDiff(null, null)
+        Set.symmetricDifference(null, null)
       }, /Expected \[set\] to be instanceof \[Set\]/)
 
       assert.throws(function () {
-        Set.symDiff(set(1), null)
+        Set.symmetricDifference(set(1), null)
       }, /Expected \[set\] to be instanceof \[Set\]/)
     })
   })

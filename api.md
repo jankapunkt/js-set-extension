@@ -23,6 +23,7 @@ Extended version of <a href="https://developer.mozilla.org/en-US/docs/Web/JavaSc
         * [.isProperSuperset(set)](#Set+isProperSuperset) ⇒ <code>boolean</code>
         * [.isProperSubset(set)](#Set+isProperSubset) ⇒ <code>boolean</code>
         * [.equals(set)](#Set+equals) ⇒ <code>boolean</code>
+        * [.isEmpty()](#Set+isEmpty) ⇒ <code>boolean</code>
         * [.union(args)](#Set+union) ⇒ [<code>Set</code>](#Set)
         * [.intersect(args)](#Set+intersect) ⇒ [<code>Set</code>](#Set)
         * [.minus(set)](#Set+minus) ⇒ <code>ExtendedSet</code> \| <code>\*</code>
@@ -310,6 +311,29 @@ a.equals(b) // true
 const a = Set.from({ a:true, b:false })
 const b = Set.from({ b:false, a:true })
 a.equals(b) // true
+```
+<a name="Set+isEmpty"></a>
+
+### set.isEmpty() ⇒ <code>boolean</code>
+Checks whether this set is the empty set.
+A Set is empty if and only if it has no elements.  This is the same thing as having size (cardinality) 0.  The empty set is often denoted ∅ or {}.
+
+**Kind**: instance method of [<code>Set</code>](#Set)  
+**Throws**:
+
+- Throws an error if any arguments are given.
+
+**See**: https://en.wikipedia.org/wiki/Empty_set  
+**Example**  
+```js
+const A = new Set()
+const B = new Set([])
+const C = Set.from()
+const D = Set.from(7)
+A.isEmpty() // true
+B.isEmpty() // true
+C.isEmpty() // true
+D.isEmpty() // false
 ```
 <a name="Set+union"></a>
 

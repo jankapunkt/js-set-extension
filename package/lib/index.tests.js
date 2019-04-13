@@ -120,6 +120,17 @@ describe('Relations', function () {
     })
   })
 
+  describe(Set.prototype.randomElement.name, function () {
+    // TODO: test for actual 'randomness' and for a uniform distribution, too.
+    it('chooses an element in the set', function () {
+      const A = new Set([2, 6, 8, 3, 'z'])
+      for (let i = 0; i < 10; i++) {
+        let el = A.randomElement()
+        assert.isTrue(A.has(el))
+      }
+    })
+  })
+
   describe(Set.prototype.isSubsetOf.name, function () {
     // used with https://en.wikipedia.org/wiki/Subset
 

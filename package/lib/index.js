@@ -442,6 +442,29 @@ function equal (set) {
 
 global.Set.prototype.equal = equal
 
+/**
+ * Checks whether this set is the empty set.
+ * A Set is empty if and only if it has no elements.  This is the same thing as having size (cardinality) 0.  The empty set is often denoted ∅ or {}.
+ * @example
+ * const A = new Set()
+ * const B = new Set([])
+ * const C = Set.from()
+ * const D = Set.from(7)
+ * A.isEmpty() // true
+ * B.isEmpty() // true
+ * C.isEmpty() // true
+ * D.isEmpty() // false
+ * @function
+ * @name Set.prototype.isEmpty
+ * @throws Throws an error if any arguments are given.
+ * @returns {boolean}
+ * @see https://en.wikipedia.org/wiki/Empty_set
+ */
+function isEmptyUnary () {
+  return this.size === 0
+}
+global.Set.prototype.isEmpty = isEmptyUnary
+
 // //////////////////////////////////////////////////////////////////////////////// //
 //                                                                                  //
 // CONSTRUCTOR                                                                      //

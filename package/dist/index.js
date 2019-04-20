@@ -463,7 +463,31 @@ function equal(set) {
   return this.isSubsetOf(set);
 }
 
-global.Set.prototype.equal = equal; // //////////////////////////////////////////////////////////////////////////////// //
+global.Set.prototype.equal = equal;
+/**
+ * Checks whether this set is the empty set.
+ * A Set is empty if and only if it has no elements.  This is the same thing as having size (cardinality) 0.  The empty set is often denoted ∅ or {}.
+ * @example
+ * const A = new Set()
+ * const B = new Set([])
+ * const C = Set.from()
+ * const D = Set.from(7)
+ * A.isEmpty() // true
+ * B.isEmpty() // true
+ * C.isEmpty() // true
+ * D.isEmpty() // false
+ * @function
+ * @name Set.prototype.isEmpty
+ * @throws Throws an error if any arguments are given.
+ * @returns {boolean}
+ * @see https://en.wikipedia.org/wiki/Empty_set
+ */
+
+function isEmptyUnary() {
+  return this.size === 0;
+}
+
+global.Set.prototype.isEmpty = isEmptyUnary; // //////////////////////////////////////////////////////////////////////////////// //
 //                                                                                  //
 // CONSTRUCTOR                                                                      //
 //                                                                                  //
@@ -487,7 +511,7 @@ var _originalSet = global.Set;
  * @returns {Set} An instance of the extended version of <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Set">Set (MDN link)</a>
  */
 
-function ExtendedSet(elements, rulesFct) {
+function Set(elements, rulesFct) {
   var original = new _originalSet();
 
   if (rulesFct) {
@@ -503,7 +527,7 @@ function ExtendedSet(elements, rulesFct) {
   return original;
 }
 
-global.Set = ExtendedSet;
+global.Set = Set;
 global.Set.prototype = _originalSet.prototype; // //////////////////////////////////////////////////////////////////////////////// //
 //                                                                                  //
 // STATICS                                                                          //
@@ -955,4 +979,11 @@ function mergeRulesStrict() {
 }
 
 global.Set.mergeRulesStrict = mergeRulesStrict;
+/**
+ * Flag to indicate the presence of this polyfill
+ * @type {boolean}
+ * @private
+ */
+
+global.Set.__isExtended__ = true;
 //# sourceMappingURL=index.js.map

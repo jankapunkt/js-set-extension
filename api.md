@@ -161,7 +161,7 @@ Returns a random element of this set.
 One element of this set is chosen at random and returned.  The probability distribution is uniform.  Math.random() is used internally for this purpose.
 
 **Kind**: instance method of [<code>Set</code>](#Set)  
-**Returns**: <code>\*</code> - An element chosen randomly from the current set that could by of any type, depending on the elements of the set.  
+**Returns**: <code>\*</code> - An element chosen randomly from the current set that could be of any type, depending on the elements of the set.  
 <a name="Set+isSupersetOf"></a>
 
 ### set.isSupersetOf(set) ⇒ <code>boolean</code>

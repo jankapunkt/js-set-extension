@@ -320,7 +320,7 @@ global.Set.prototype.any = any
  * One element of this set is chosen at random and returned.  The probability distribution is uniform.  Math.random() is used internally for this purpose.
  * @function
  * @name Set.prototype.randomElement
- * @returns {*} An element chosen randomly from the current set that could by of any type, depending on the elements of the set.
+ * @returns {*} An element chosen randomly from the current set that could be of any type, depending on the elements of the set.
  */
 function randomElementUnary () {
   const array = this.toArray()

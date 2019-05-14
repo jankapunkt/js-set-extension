@@ -26,7 +26,7 @@
 
 <nav >
     
-    <h2><a href="index.html">Home</a></h2><h3>Classes</h3><ul><li><a href="Set.html">Set</a><ul class='methods'><li data-type='method'><a href="Set.html#.cartesian">cartesian</a></li><li data-type='method'><a href="Set.html#.complement">complement</a></li><li data-type='method'><a href="Set.html#.copy">copy</a></li><li data-type='method'><a href="Set.html#.difference">difference</a></li><li data-type='method'><a href="Set.html#.from">from</a></li><li data-type='method'><a href="Set.html#.intersection">intersection</a></li><li data-type='method'><a href="Set.html#.mergeRules">mergeRules</a></li><li data-type='method'><a href="Set.html#.mergeRulesStrict">mergeRulesStrict</a></li><li data-type='method'><a href="Set.html#.power">power</a></li><li data-type='method'><a href="Set.html#.symDiff">symDiff</a></li><li data-type='method'><a href="Set.html#.toSet">toSet</a></li><li data-type='method'><a href="Set.html#.union">union</a></li><li data-type='method'><a href="Set.html#add">add</a></li><li data-type='method'><a href="Set.html#any">any</a></li><li data-type='method'><a href="Set.html#equal">equal</a></li><li data-type='method'><a href="Set.html#has">has</a></li><li data-type='method'><a href="Set.html#intersect">intersect</a></li><li data-type='method'><a href="Set.html#isEmpty">isEmpty</a></li><li data-type='method'><a href="Set.html#isSubsetOf">isSubsetOf</a></li><li data-type='method'><a href="Set.html#isSupersetOf">isSupersetOf</a></li><li data-type='method'><a href="Set.html#properSupersetOf">properSupersetOf</a></li><li data-type='method'><a href="Set.html#properSupersetOf">properSupersetOf</a></li><li data-type='method'><a href="Set.html#rules">rules</a></li><li data-type='method'><a href="Set.html#toArray">toArray</a></li><li data-type='method'><a href="Set.html#union">union</a></li></ul></li></ul>
+    <h2><a href="index.html">Home</a></h2><h3>Classes</h3><ul><li><a href="Set.html">Set</a><ul class='methods'><li data-type='method'><a href="Set.html#.cartesian">cartesian</a></li><li data-type='method'><a href="Set.html#.complement">complement</a></li><li data-type='method'><a href="Set.html#.copy">copy</a></li><li data-type='method'><a href="Set.html#.difference">difference</a></li><li data-type='method'><a href="Set.html#.from">from</a></li><li data-type='method'><a href="Set.html#.intersection">intersection</a></li><li data-type='method'><a href="Set.html#.mergeRules">mergeRules</a></li><li data-type='method'><a href="Set.html#.mergeRulesStrict">mergeRulesStrict</a></li><li data-type='method'><a href="Set.html#.power">power</a></li><li data-type='method'><a href="Set.html#.symDiff">symDiff</a></li><li data-type='method'><a href="Set.html#.toSet">toSet</a></li><li data-type='method'><a href="Set.html#.union">union</a></li><li data-type='method'><a href="Set.html#add">add</a></li><li data-type='method'><a href="Set.html#any">any</a></li><li data-type='method'><a href="Set.html#equal">equal</a></li><li data-type='method'><a href="Set.html#has">has</a></li><li data-type='method'><a href="Set.html#intersect">intersect</a></li><li data-type='method'><a href="Set.html#isEmpty">isEmpty</a></li><li data-type='method'><a href="Set.html#isSubsetOf">isSubsetOf</a></li><li data-type='method'><a href="Set.html#isSupersetOf">isSupersetOf</a></li><li data-type='method'><a href="Set.html#properSupersetOf">properSupersetOf</a></li><li data-type='method'><a href="Set.html#properSupersetOf">properSupersetOf</a></li><li data-type='method'><a href="Set.html#randomElement">randomElement</a></li><li data-type='method'><a href="Set.html#rules">rules</a></li><li data-type='method'><a href="Set.html#toArray">toArray</a></li><li data-type='method'><a href="Set.html#union">union</a></li></ul></li></ul>
 </nav>
 
 <div id="main">
@@ -345,7 +345,7 @@ function toArray () {
 global.Set.prototype.toArray = toArray
 
 /**
- * Returns an arbitrary element of this collection.
+ * Returns an arbitrary element of this set.
  * Basically the first element, retrieved by iterator.next().value will be used.
  * @function
  * @name Set.prototype.any
@@ -356,8 +356,21 @@ function any () {
   const iterator = self.values()
   return iterator.next().value
 }
-
 global.Set.prototype.any = any
+
+/**
+ * Returns a random element of this set.
+ * One element of this set is chosen at random and returned.  The probability distribution is uniform.  Math.random() is used internally for this purpose.
+ * @function
+ * @name Set.prototype.randomElement
+ * @returns {*} An element chosen randomly from the current set that could be of any type, depending on the elements of the set.
+ */
+function randomElementUnary () {
+  const array = this.toArray()
+  const randomIndex = Math.floor(Math.random() * array.length)
+  return array[randomIndex]
+}
+global.Set.prototype.randomElement = randomElementUnary
 
 /**
  * Checks, whether the current set (this) is a superset of the given set.
@@ -951,7 +964,7 @@ global.Set.__isExtended__ = true
 <br class="clear">
 
 <footer>
-    Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.5.5</a> on Tue May 14 2019 15:39:18 GMT-0400 (Eastern Daylight Time) using the <a href="https://github.com/clenemt/docdash">docdash</a> theme.
+    Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.5.5</a> on Tue May 14 2019 15:41:44 GMT-0400 (Eastern Daylight Time) using the <a href="https://github.com/clenemt/docdash">docdash</a> theme.
 </footer>
 
 <script>prettyPrint();</script>

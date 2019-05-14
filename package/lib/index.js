@@ -302,7 +302,7 @@ function toArray () {
 global.Set.prototype.toArray = toArray
 
 /**
- * Returns an arbitrary element of this collection.
+ * Returns an arbitrary element of this set.
  * Basically the first element, retrieved by iterator.next().value will be used.
  * @function
  * @name Set.prototype.any
@@ -313,8 +313,21 @@ function any () {
   const iterator = self.values()
   return iterator.next().value
 }
-
 global.Set.prototype.any = any
+
+/**
+ * Returns a random element of this set.
+ * One element of this set is chosen at random and returned.  The probability distribution is uniform.  Math.random() is used internally for this purpose.
+ * @function
+ * @name Set.prototype.randomElement
+ * @returns {*} An element chosen randomly from the current set that could be of any type, depending on the elements of the set.
+ */
+function randomElementUnary () {
+  const array = this.toArray()
+  const randomIndex = Math.floor(Math.random() * array.length)
+  return array[randomIndex]
+}
+global.Set.prototype.randomElement = randomElementUnary
 
 /**
  * Checks, whether the current set (this) is a superset of the given set.

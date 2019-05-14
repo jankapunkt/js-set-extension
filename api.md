@@ -18,6 +18,7 @@ Extended version of <a href="https://developer.mozilla.org/en-US/docs/Web/JavaSc
         * [.rules(value)](#Set+rules) ⇒ <code>function</code> \| <code>undefined</code>
         * [.toArray()](#Set+toArray) ⇒ <code>Array</code>
         * [.any()](#Set+any) ⇒ <code>\*</code>
+        * [.randomElement()](#Set+randomElement) ⇒ <code>\*</code>
         * [.isSupersetOf(set)](#Set+isSupersetOf) ⇒ <code>boolean</code>
         * [.isSubsetOf(set)](#Set+isSubsetOf) ⇒ <code>boolean</code>
         * [.properSupersetOf(set)](#Set+properSupersetOf) ⇒ <code>boolean</code>
@@ -149,11 +150,19 @@ new Set([1, 2, 3, 4]).toArray() // [ 1, 2, 3, 4 ]
 <a name="Set+any"></a>
 
 ### set.any() ⇒ <code>\*</code>
-Returns an arbitrary element of this collection.
+Returns an arbitrary element of this set.
 Basically the first element, retrieved by iterator.next().value will be used.
 
 **Kind**: instance method of [<code>Set</code>](#Set)  
 **Returns**: <code>\*</code> - An arbitrary element of the current set that could by of any type, depending on the elements of the set.  
+<a name="Set+randomElement"></a>
+
+### set.randomElement() ⇒ <code>\*</code>
+Returns a random element of this set.
+One element of this set is chosen at random and returned.  The probability distribution is uniform.  Math.random() is used internally for this purpose.
+
+**Kind**: instance method of [<code>Set</code>](#Set)  
+**Returns**: <code>\*</code> - An element chosen randomly from the current set that could be of any type, depending on the elements of the set.  
 <a name="Set+isSupersetOf"></a>
 
 ### set.isSupersetOf(set) ⇒ <code>boolean</code>

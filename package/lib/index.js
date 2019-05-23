@@ -30,6 +30,8 @@
 // //////////////////////////////////////////////////////////////////////////////// //
 
 /**
+ * Suggest to user which function name they should be using.
+ * Note: We should consider removing the suggest feature once migration to 2.x.x has been completed and the package has been in use for a while.
  * @private
  */
 function suggest (incorrectName, correctName) {
@@ -974,6 +976,7 @@ global.Set.mergeRulesStrict = mergeRulesStrict
 
 /**
  * Suggest function names when user guesses a name that doesn't exist but is nonetheless unambiguous.
+ * Note: We should consider removing the suggest feature once migration to 2.x.x has been completed and the package has been in use for a while.
  */
 const correctSetNameToIncorrectNames = new Map([
   ['from', []],
@@ -1006,6 +1009,7 @@ const correctSetPrototypeNameToIncorrectNames = new Map([
   ['symmetricDifference', ['symDiff', 'symDifference', 'symmetricDiff']],
   ['cartesianProduct', ['prod', 'product', 'cartProd', 'cartProduct', 'cartesianProd']]
 ])
+// Note: We should consider removing the suggest feature once migration to 2.x.x has been completed and the package has been in use for a while.
 function setSuggestions (object, suggestionDict) {
   suggestionDict.forEach((incorrectNames, correctName) => {
     incorrectNames.forEach(incorrectName => {

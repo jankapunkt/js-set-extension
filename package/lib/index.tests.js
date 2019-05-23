@@ -40,6 +40,7 @@ function areNotEqual (set1, set2) {
 const isInt = n => Number.isInteger(n)
 const set = (...args) => new Set([...args])
 
+// Note: We should consider removing the suggest feature once migration to 2.x.x has been completed and the package has been in use for a while.
 describe('Invalid functions', function () {
   it('gives a suggestion if you use a wrong but unambiguous function name', function () {
     // Set level function

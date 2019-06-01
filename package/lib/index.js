@@ -30,11 +30,13 @@
 // //////////////////////////////////////////////////////////////////////////////// //
 
 /**
+ * Suggest to user which function name they should be using.
+ * Note: We should consider removing the suggest feature once migration to 2.x.x has been completed and the package has been in use for a while.
  * @private
  */
 function suggest (incorrectName, correctName) {
   return function () {
-    throw new Error(`The function [${incorrectName}] does not exist. You probably meant to use [${correctName}].`)
+    throw new Error(`[${incorrectName}] is not a valid function. Please use [${correctName}] instead.`)
   }
 }
 
@@ -465,12 +467,6 @@ function equals (set) {
   return this.isSubset(set)
 }
 global.Set.prototype.equals = equals
-// temporary: make backwards compatible
-global.Set.prototype.equal = equals
-
-// global.Set.prototype.equal = suggest('equal', 'equals')
-global.Set.prototype.isEqual = suggest('isEqual', 'equals')
-global.Set.prototype.isEqualTo = suggest('isEqualTo', 'equals')
 
 // //////////////////////////////////////////////////////////////////////////////// //
 //                                                                                  //
@@ -977,6 +973,52 @@ function mergeRulesStrict (...rules) {
 }
 
 global.Set.mergeRulesStrict = mergeRulesStrict
+
+/**
+ * Suggest function names when user guesses a name that doesn't exist but is nonetheless unambiguous.
+ * Note: We should consider removing the suggest feature once migration to 2.x.x has been completed and the package has been in use for a while.
+ */
+const correctSetNameToIncorrectNames = new Map([
+  ['from', []],
+  ['toSet', []],
+  ['copy', ['clone']],
+  ['union', []],
+  ['intersection', ['intersect']],
+  ['difference', ['minus']],
+  ['complement', []],
+  ['symmetricDifference', ['symDiff', 'symDifference', 'symmetricDiff']],
+  ['cartesianProduct', ['prod', 'product', 'cartProd', 'cartProduct', 'cartesianProd']],
+  ['powerSet', ['powerset', 'subsets']]
+])
+const correctSetPrototypeNameToIncorrectNames = new Map([
+  ['add', ['append', 'push', 'insert']],
+  ['has', []],
+  ['rules', []],
+  ['toArray', ['array']],
+  ['any', ['anElement']],
+  ['randomElement', ['rand', 'random', 'randElement']],
+  ['isEmpty', ['empty']],
+  ['isSuperset', ['superset', 'isSupersetOf', 'supersetOf']],
+  ['isSubset', ['subset', 'isSubsetOf', 'subsetOf']],
+  ['isProperSuperset', ['properSuperset', 'isProperSupersetOf', 'properSupersetOf', 'isStrictSuperset', 'strictSuperset', 'isStrictSupersetOf', 'strictSupersetOf']],
+  ['isProperSubset', ['properSubset', 'isProperSubsetOf', 'properSubsetOf', 'isStrictSubset', 'strictSubset', 'isStrictSubsetOf', 'strictSubsetOf']],
+  ['equals', ['equal', 'isEqualTo']],
+  ['union', []],
+  ['intersect', ['intersection']],
+  ['minus', ['difference']],
+  ['symmetricDifference', ['symDiff', 'symDifference', 'symmetricDiff']],
+  ['cartesianProduct', ['prod', 'product', 'cartProd', 'cartProduct', 'cartesianProd']]
+])
+// Note: We should consider removing the suggest feature once migration to 2.x.x has been completed and the package has been in use for a while.
+function setSuggestions (object, suggestionDict) {
+  suggestionDict.forEach((incorrectNames, correctName) => {
+    incorrectNames.forEach(incorrectName => {
+      object[incorrectName] = suggest(incorrectName, correctName)
+    })
+  })
+}
+setSuggestions(global.Set, correctSetNameToIncorrectNames)
+setSuggestions(global.Set.prototype, correctSetPrototypeNameToIncorrectNames)
 
 /**
  * Flag to indicate the presence of this polyfill

@@ -40,6 +40,24 @@ function areNotEqual (set1, set2) {
 const isInt = n => Number.isInteger(n)
 const set = (...args) => new Set([...args])
 
+// Note: We should consider removing the suggest feature once migration to 2.x.x has been completed and the package has been in use for a while.
+describe('Invalid functions', function () {
+  it('gives a suggestion if you use a wrong but unambiguous function name', function () {
+    // Set level function
+    assert.throws(function () {
+      const A = new Set([])
+      const B = new Set([])
+      Set.product(A, B)
+    }, /\[product\] is not a valid function. Please use \[cartesianProduct\] instead\./)
+    // Set prototype level function
+    assert.throws(function () {
+      const A = new Set([])
+      const B = new Set([])
+      A.isSubsetOf(B)
+    }, /\[isSubsetOf\] is not a valid function. Please use \[isSubset\] instead\./)
+  })
+})
+
 describe('Constructor', function () {
   it('has a flag to indicate the polyfill being present', function () {
     assert.isTrue(Set.__isExtended__)

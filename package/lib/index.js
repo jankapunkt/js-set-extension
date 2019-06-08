@@ -903,9 +903,9 @@ function subsets (S) {
 
 /**
  * Creates the powerset of a given Set instance. Sometimes referred to as "subsets".
- * <br>
+ * <br><br>
  * The powerset of a set contains all possible subsets of the set. This includes itself and the empty set.
- * This is achieved using a recursive algorithm. (see <a href="https://en.wikipedia.org/wiki/Power_set">Wikipedia</a>, section Algorithms).
+ * This is achieved using a recursive algorithm. (see <a href="https://en.wikipedia.org/wiki/Power_set#Algorithms">Wikipedia, section Algorithms</a>).
  * <br>
  * <strong>Attention:</strong> This method grows exponentially with the size of the given set.
  * @name Set.powerSet

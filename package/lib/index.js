@@ -902,15 +902,19 @@ function subsets (S) {
 }
 
 /**
- * Creates the powerset of a given set instance by using a recursive algorithm (see <a href="https://en.wikipedia.org/wiki/Power_set">Wikipedia</a>, section Algorithms).
- * The powerset of a set contains all possible subsets of the set, plus itself and the empty set.
+ * Creates the powerset of a given Set instance. Sometimes referred to as "subsets".
+ * <br>
+ * The powerset of a set contains all possible subsets of the set. This includes itself and the empty set.
+ * This is achieved using a recursive algorithm. (see <a href="https://en.wikipedia.org/wiki/Power_set">Wikipedia</a>, section Algorithms).
  * <br>
  * <strong>Attention:</strong> This method grows exponentially with the size of the given set.
- * @name Set.power
+ * @name Set.powerSet
  * @function
  * @param set {Set} - A Set instance.
- * @throws
- * Throws an error if the given set is not a set instance.
+ * @example
+ * const A = Set.from(1,2,4) // Set { 1, 2, 4 }
+ * Set.powerSet(A) // Set { {}, {1}, {2}, {4}, {1,2}, {1,4}, {2,4}, {1,2,4} }
+ * @throws Throws an error if the given set is not a set instance.
  * @returns {Set} a new set instance with all subsets of the given set, plus the given set itself and the empty set.
  * @see https://en.wikipedia.org/wiki/Power_set
  */
@@ -923,7 +927,7 @@ function powerSet (set) {
   return subs
 }
 
-global.Set.power = powerSet
+global.Set.powerSet = powerSet
 
 /**
  * Merges two rules functions with a strict pass concept.

@@ -175,7 +175,7 @@ describe('Relations', function () {
 
       // TODO
       // The set of rational numbers is a proper subset of the set of real numbers.
-      // In this example, both sets are infinite but the latter set has a larger cardinality
+      // In this example, both sets are infinite but the latter set has a larger cardinality (or power)
       // than the former set.
     })
 
@@ -1057,11 +1057,11 @@ describe('Operations (static)', function () {
     })
   })
 
-  describe(Set.powerSet.name, function () {
-    it('creates a powerset including the set, empty and all subsets of S', function () {
-      // the powerset of the set {1, 2, 3} is {{1, 2, 3}, {1, 2}, {1, 3}, {2, 3}, {1}, {2}, {3}, ∅}
+  describe(Set.power.name, function () {
+    it('creates a power set including the set, empty and all subsets of S', function () {
+      // the power set of the set {1, 2, 3} is {{1, 2, 3}, {1, 2}, {1, 3}, {2, 3}, {1}, {2}, {3}, ∅}
 
-      const pwr = Set.powerSet(new Set([1, 2, 3]))
+      const pwr = Set.power(new Set([1, 2, 3]))
       const cmp = set(
         new Set([1, 2, 3]),
         new Set([1, 2]),
@@ -1076,7 +1076,7 @@ describe('Operations (static)', function () {
     })
 
     it('recursively respects nested sets', function () {
-      const pwr = Set.powerSet(set(set(1), set(2), set(3)))
+      const pwr = Set.power(set(set(1), set(2), set(3)))
       const cmp = set(
         new Set([set(1), set(2), set(3)]),
         new Set([set(1), set(2)]),
@@ -1092,18 +1092,18 @@ describe('Operations (static)', function () {
 
     it('does not alter the involved sets', function () {
       const input = new Set([1, 2, 3])
-      const pwr = Set.powerSet(input)
+      const pwr = Set.power(input)
       assert.isDefined(pwr)
       areEqual(input, new Set([1, 2, 3]))
     })
 
     it('throws if given parameters are not a Set', function () {
       assert.throws(function () {
-        Set.powerSet(null)
+        Set.power(null)
       }, /Expected \[set\] to be instanceof \[Set\]/)
 
       assert.throws(function () {
-        Set.powerSet(1)
+        Set.power(1)
       }, /Expected \[set\] to be instanceof \[Set\]/)
     })
   })

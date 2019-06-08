@@ -1,23 +1,38 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
+    
     <meta charset="utf-8">
-    <title>JSDoc: Class: Set</title>
-
-    <script src="scripts/prettify/prettify.js"> </script>
-    <script src="scripts/prettify/lang-css.js"> </script>
+    <title>Set - Documentation</title>
+    
+    
+    <script src="scripts/prettify/prettify.js"></script>
+    <script src="scripts/prettify/lang-css.js"></script>
     <!--[if lt IE 9]>
       <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
     <![endif]-->
-    <link type="text/css" rel="stylesheet" href="styles/prettify-tomorrow.css">
-    <link type="text/css" rel="stylesheet" href="styles/jsdoc-default.css">
+    <link type="text/css" rel="stylesheet" href="styles/prettify.css">
+    <link type="text/css" rel="stylesheet" href="styles/jsdoc.css">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
 </head>
-
 <body>
 
-<div id="main">
+<input type="checkbox" id="nav-trigger" class="nav-trigger" />
+<label for="nav-trigger" class="navicon-button x">
+  <div class="navicon"></div>
+</label>
 
-    <h1 class="page-title">Class: Set</h1>
+<label for="nav-trigger" class="overlay"></label>
+
+<nav >
+    
+    <h2><a href="index.html">Home</a></h2><h3>Classes</h3><ul><li><a href="Set.html">Set</a><ul class='methods'><li data-type='method'><a href="Set.html#.cartesianProduct">cartesianProduct</a></li><li data-type='method'><a href="Set.html#.complement">complement</a></li><li data-type='method'><a href="Set.html#.copy">copy</a></li><li data-type='method'><a href="Set.html#.difference">difference</a></li><li data-type='method'><a href="Set.html#.from">from</a></li><li data-type='method'><a href="Set.html#.intersection">intersection</a></li><li data-type='method'><a href="Set.html#.mergeRules">mergeRules</a></li><li data-type='method'><a href="Set.html#.mergeRulesStrict">mergeRulesStrict</a></li><li data-type='method'><a href="Set.html#.power">power</a></li><li data-type='method'><a href="Set.html#.symmetricDifference">symmetricDifference</a></li><li data-type='method'><a href="Set.html#.toSet">toSet</a></li><li data-type='method'><a href="Set.html#.union">union</a></li><li data-type='method'><a href="Set.html#add">add</a></li><li data-type='method'><a href="Set.html#any">any</a></li><li data-type='method'><a href="Set.html#cartesianProduct">cartesianProduct</a></li><li data-type='method'><a href="Set.html#equals">equals</a></li><li data-type='method'><a href="Set.html#has">has</a></li><li data-type='method'><a href="Set.html#intersect">intersect</a></li><li data-type='method'><a href="Set.html#isEmpty">isEmpty</a></li><li data-type='method'><a href="Set.html#isProperSubset">isProperSubset</a></li><li data-type='method'><a href="Set.html#isProperSuperset">isProperSuperset</a></li><li data-type='method'><a href="Set.html#isSubset">isSubset</a></li><li data-type='method'><a href="Set.html#isSuperset">isSuperset</a></li><li data-type='method'><a href="Set.html#minus">minus</a></li><li data-type='method'><a href="Set.html#randomElement">randomElement</a></li><li data-type='method'><a href="Set.html#rules">rules</a></li><li data-type='method'><a href="Set.html#symmetricDifference">symmetricDifference</a></li><li data-type='method'><a href="Set.html#toArray">toArray</a></li><li data-type='method'><a href="Set.html#union">union</a></li></ul></li></ul><h3>Global</h3><ul><li><a href="global.html#correctSetNameToIncorrectNames">correctSetNameToIncorrectNames</a></li></ul>
+</nav>
+
+<div id="main">
+    
+    <h1 class="page-title">Set</h1>
+    
 
     
 
@@ -28,7 +43,9 @@
 
 <header>
     
-        <h2><span class="attribs"><span class="type-signature"></span></span>Set<span class="signature">(elements, rulesFct)</span><span class="type-signature"> &rarr; {<a href="Set.html">Set</a>}</span></h2>
+        <h2>
+        Set
+        </h2>
         
             <div class="class-description">Extended version of <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Set">Set (MDN link)</a></div>
         
@@ -36,25 +53,80 @@
 </header>
 
 <article>
-    <div class="container-overview">
     
+        <div class="container-overview">
         
+            
 
     
     <h2>Constructor</h2>
     
 
-    
     <h4 class="name" id="Set"><span class="type-signature"></span>new Set<span class="signature">(elements, rulesFct)</span><span class="type-signature"> &rarr; {<a href="Set.html">Set</a>}</span></h4>
+
+    
+
+
+
+
+<dl class="details">
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="index.js.html">index.js</a>, <a href="index.js.html#line520">line 520</a>
+    </li></ul></dd>
     
 
     
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-see">See:</dt>
+    <dd class="tag-see">
+        <ul>
+            <li><a href="Set.html#.from">Set.from</a></li>
+        
+            <li><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Set">https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Set</a></li>
+        </ul>
+    </dd>
+    
+
+    
+</dl>
+
+
 
 
 
 <div class="description">
     Use <code>new Set(elements, rulesFct)</code> to create new sets. Alternatively you can use <code>Set.from</code>
 </div>
+
+
 
 
 
@@ -140,57 +212,6 @@
 
 
 
-<dl class="details">
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-    <dt class="tag-source">Source:</dt>
-    <dd class="tag-source"><ul class="dummy"><li>
-        <a href="index.js.html">index.js</a>, <a href="index.js.html#line487">line 487</a>
-    </li></ul></dd>
-    
-
-    
-
-    
-    <dt class="tag-see">See:</dt>
-    <dd class="tag-see">
-        <ul>
-            <li><a href="Set.html#.from">Set.from</a></li>
-        
-            <li><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Set">https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Set</a></li>
-        </ul>
-    </dd>
-    
-
-    
-</dl>
-
-
-
 
 
 
@@ -210,7 +231,7 @@
 
 
 
-<dl>
+<dl class="param-type">
     <dt>
         Type
     </dt>
@@ -226,11 +247,8 @@
 
 
 
-
-
-    
-    </div>
-
+        
+        </div>
     
 
     
@@ -238,8 +256,10 @@
     
 
     
-
     
+    
+
+     
 
     
 
@@ -253,11 +273,61 @@
 
     
 
-    
     <h4 class="name" id=".cartesianProduct"><span class="type-signature">(static) </span>cartesianProduct<span class="signature">(&hellip;args)</span><span class="type-signature"> &rarr; {<a href="Set.html">Set</a>}</span></h4>
+
+    
+
+
+
+
+<dl class="details">
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="index.js.html">index.js</a>, <a href="index.js.html#line851">line 851</a>
+    </li></ul></dd>
     
 
     
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-see">See:</dt>
+    <dd class="tag-see">
+        <ul>
+            <li><a href="https://en.wikipedia.org/wiki/Cartesian_product#n-ary_Cartesian_product">https://en.wikipedia.org/wiki/Cartesian_product#n-ary_Cartesian_product</a></li>
+        </ul>
+    </dd>
+    
+
+    
+</dl>
+
+
 
 
 
@@ -272,6 +342,17 @@ The cartesian product of sets M<sub>1</sub> through M<sub>n</sub> is the set of 
 
 
 
+
+
+
+
+    <h5>Example</h5>
+    
+    <pre class="prettyprint"><code>const M1 = Set.from(1,2)
+const M2 = Set.from(5)
+const M3 = Set.from(3,4)
+Set.cartesianProduct(M1, M2, M3) // Set { [1,5,3], [1,5,4], [2,5,3], [2,5,4] }
+Set.cartesianProduct(M3, M1) // Set { [3,1], [4,1], [3,2], [4,2] }</code></pre>
 
 
 
@@ -341,55 +422,6 @@ The cartesian product of sets M<sub>1</sub> through M<sub>n</sub> is the set of 
 
 
 
-<dl class="details">
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-    <dt class="tag-source">Source:</dt>
-    <dd class="tag-source"><ul class="dummy"><li>
-        <a href="index.js.html">index.js</a>, <a href="index.js.html#line818">line 818</a>
-    </li></ul></dd>
-    
-
-    
-
-    
-    <dt class="tag-see">See:</dt>
-    <dd class="tag-see">
-        <ul>
-            <li><a href="https://en.wikipedia.org/wiki/Cartesian_product#n-ary_Cartesian_product">https://en.wikipedia.org/wiki/Cartesian_product#n-ary_Cartesian_product</a></li>
-        </ul>
-    </dd>
-    
-
-    
-</dl>
-
-
-
 
 
 
@@ -409,7 +441,7 @@ The cartesian product of sets M<sub>1</sub> through M<sub>n</sub> is the set of 
 
 
 
-<dl>
+<dl class="param-type">
     <dt>
         Type
     </dt>
@@ -425,33 +457,67 @@ The cartesian product of sets M<sub>1</sub> through M<sub>n</sub> is the set of 
 
 
 
-
-    <h5>Example</h5>
-    
-    <pre class="prettyprint"><code>const M1 = Set.from(1,2)
-const M2 = Set.from(5)
-const M3 = Set.from(3,4)
-Set.cartesianProduct(M1, M2, M3) // Set { [1,5,3], [1,5,4], [2,5,3], [2,5,4] }
-Set.cartesianProduct(M3, M1) // Set { [3,1], [4,1], [3,2], [4,2] }</code></pre>
-
-
-
         
             
 
     
 
-    
     <h4 class="name" id=".complement"><span class="type-signature">(static) </span>complement<span class="signature">(set1, set2)</span><span class="type-signature"> &rarr; {ExtendedSet|*}</span></h4>
+
+    
+
+
+
+
+<dl class="details">
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="index.js.html">index.js</a>, <a href="index.js.html#line747">line 747</a>
+    </li></ul></dd>
     
 
     
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+</dl>
+
+
 
 
 
 <div class="description">
     Computes the complement of set B where U is the universe: <code>C = U \ B</code>.  This is also known as the "absolute complement".
 </div>
+
+
 
 
 
@@ -527,48 +593,6 @@ Set.cartesianProduct(M3, M1) // Set { [3,1], [4,1], [3,2], [4,2] }</code></pre>
 
 
 
-<dl class="details">
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-    <dt class="tag-source">Source:</dt>
-    <dd class="tag-source"><ul class="dummy"><li>
-        <a href="index.js.html">index.js</a>, <a href="index.js.html#line714">line 714</a>
-    </li></ul></dd>
-    
-
-    
-
-    
-
-    
-</dl>
-
-
-
 
 
 
@@ -610,7 +634,7 @@ Set.cartesianProduct(M3, M1) // Set { [3,1], [4,1], [3,2], [4,2] }</code></pre>
 
 
 
-<dl>
+<dl class="param-type">
     <dt>
         Type
     </dt>
@@ -629,18 +653,59 @@ Set.cartesianProduct(M3, M1) // Set { [3,1], [4,1], [3,2], [4,2] }</code></pre>
 
 
 
-
-
         
             
 
     
 
-    
     <h4 class="name" id=".copy"><span class="type-signature">(static) </span>copy<span class="signature">(set)</span><span class="type-signature"> &rarr; {<a href="Set.html">Set</a>}</span></h4>
+
+    
+
+
+
+
+<dl class="details">
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="index.js.html">index.js</a>, <a href="index.js.html#line579">line 579</a>
+    </li></ul></dd>
     
 
     
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+</dl>
+
+
 
 
 
@@ -648,6 +713,8 @@ Set.cartesianProduct(M3, M1) // Set { [3,1], [4,1], [3,2], [4,2] }</code></pre>
     Copies all elements of a given Set instance into a new Set and returns it.
 <strong>It does not deep-clone the elements of the set.</strong>
 </div>
+
+
 
 
 
@@ -710,48 +777,6 @@ Set.cartesianProduct(M3, M1) // Set { [3,1], [4,1], [3,2], [4,2] }</code></pre>
 
 
 
-<dl class="details">
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-    <dt class="tag-source">Source:</dt>
-    <dd class="tag-source"><ul class="dummy"><li>
-        <a href="index.js.html">index.js</a>, <a href="index.js.html#line546">line 546</a>
-    </li></ul></dd>
-    
-
-    
-
-    
-
-    
-</dl>
-
-
-
 
 
 
@@ -783,7 +808,7 @@ Set.cartesianProduct(M3, M1) // Set { [3,1], [4,1], [3,2], [4,2] }</code></pre>
 
 
 
-<dl>
+<dl class="param-type">
     <dt>
         Type
     </dt>
@@ -799,18 +824,59 @@ Set.cartesianProduct(M3, M1) // Set { [3,1], [4,1], [3,2], [4,2] }</code></pre>
 
 
 
-
-
         
             
 
     
 
-    
     <h4 class="name" id=".difference"><span class="type-signature">(static) </span>difference<span class="signature">(set1, set2)</span><span class="type-signature"> &rarr; {ExtendedSet|*}</span></h4>
+
+    
+
+
+
+
+<dl class="details">
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="index.js.html">index.js</a>, <a href="index.js.html#line702">line 702</a>
+    </li></ul></dd>
     
 
     
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+</dl>
+
+
 
 
 
@@ -824,6 +890,15 @@ Set.cartesianProduct(M3, M1) // Set { [3,1], [4,1], [3,2], [4,2] }</code></pre>
 
 
 
+
+
+
+
+    <h5>Example</h5>
+    
+    <pre class="prettyprint"><code>const A = Set.from(1, 2, 3)
+const B = Set.from(1, 3, 5)
+Set.difference(A, B) // Set { 2 }</code></pre>
 
 
 
@@ -894,48 +969,6 @@ Set.cartesianProduct(M3, M1) // Set { [3,1], [4,1], [3,2], [4,2] }</code></pre>
 
 
 
-<dl class="details">
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-    <dt class="tag-source">Source:</dt>
-    <dd class="tag-source"><ul class="dummy"><li>
-        <a href="index.js.html">index.js</a>, <a href="index.js.html#line669">line 669</a>
-    </li></ul></dd>
-    
-
-    
-
-    
-
-    
-</dl>
-
-
-
 
 
 
@@ -967,7 +1000,7 @@ Set.cartesianProduct(M3, M1) // Set { [3,1], [4,1], [3,2], [4,2] }</code></pre>
 
 
 
-<dl>
+<dl class="param-type">
     <dt>
         Type
     </dt>
@@ -986,25 +1019,59 @@ Set.cartesianProduct(M3, M1) // Set { [3,1], [4,1], [3,2], [4,2] }</code></pre>
 
 
 
-
-    <h5>Example</h5>
-    
-    <pre class="prettyprint"><code>const A = Set.from(1, 2, 3)
-const B = Set.from(1, 3, 5)
-Set.difference(A, B) // Set { 2 }</code></pre>
-
-
-
         
             
 
     
 
-    
     <h4 class="name" id=".from"><span class="type-signature">(static) </span>from<span class="signature">(&hellip;args)</span><span class="type-signature"> &rarr; {<a href="Set.html">Set</a>}</span></h4>
+
+    
+
+
+
+
+<dl class="details">
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="index.js.html">index.js</a>, <a href="index.js.html#line548">line 548</a>
+    </li></ul></dd>
     
 
     
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+</dl>
+
+
 
 
 
@@ -1016,6 +1083,17 @@ Set.difference(A, B) // Set { 2 }</code></pre>
 
 
 
+
+
+
+
+    <h5>Examples</h5>
+    
+    <pre class="prettyprint"><code>Set.from(1,2,3,4,5) // returns Set { 1, 2, 3, 4, 5 }</code></pre>
+
+    <pre class="prettyprint"><code>const ints = Set.from(1,2,3)
+const flts = Set.from(4.5, 5.6, 6.7)
+Set.from(ints, flts) // returns Set { Set {1, 2, 3}, Set { 4.5, 5.6, 6.7 } }</code></pre>
 
 
 
@@ -1085,48 +1163,6 @@ Set.difference(A, B) // Set { 2 }</code></pre>
 
 
 
-<dl class="details">
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-    <dt class="tag-source">Source:</dt>
-    <dd class="tag-source"><ul class="dummy"><li>
-        <a href="index.js.html">index.js</a>, <a href="index.js.html#line515">line 515</a>
-    </li></ul></dd>
-    
-
-    
-
-    
-
-    
-</dl>
-
-
-
 
 
 
@@ -1146,7 +1182,7 @@ Set.difference(A, B) // Set { 2 }</code></pre>
 
 
 
-<dl>
+<dl class="param-type">
     <dt>
         Type
     </dt>
@@ -1162,27 +1198,66 @@ Set.difference(A, B) // Set { 2 }</code></pre>
 
 
 
-
-    <h5>Examples</h5>
-    
-    <pre class="prettyprint"><code>Set.from(1,2,3,4,5) // returns Set { 1, 2, 3, 4, 5 }</code></pre>
-
-    <pre class="prettyprint"><code>const ints = Set.from(1,2,3)
-const flts = Set.from(4.5, 5.6, 6.7)
-Set.from(ints, flts) // returns Set { Set {1, 2, 3}, Set { 4.5, 5.6, 6.7 } }</code></pre>
-
-
-
         
             
 
     
 
-    
     <h4 class="name" id=".intersection"><span class="type-signature">(static) </span>intersection<span class="signature">(&hellip;args)</span><span class="type-signature"> &rarr; {<a href="Set.html">Set</a>}</span></h4>
+
+    
+
+
+
+
+<dl class="details">
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="index.js.html">index.js</a>, <a href="index.js.html#line645">line 645</a>
+    </li></ul></dd>
     
 
     
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-see">See:</dt>
+    <dd class="tag-see">
+        <ul>
+            <li><a href="https://en.wikipedia.org/wiki/Intersection_(set_theory)#Arbitrary_intersections">https://en.wikipedia.org/wiki/Intersection_(set_theory)#Arbitrary_intersections</a></li>
+        </ul>
+    </dd>
+    
+
+    
+</dl>
+
+
 
 
 
@@ -1199,6 +1274,18 @@ The intersection S of any number of sets M<sub>i</sub> is the set whose elements
 
 
 
+
+
+
+
+    <h5>Example</h5>
+    
+    <pre class="prettyprint"><code>const A = Set.from(0, 1, 2, 4)
+const B = Set.from(1, 2, 9)
+const C = Set.from(0, 1, 2)
+Set.intersection(A, B, C) // Set { 1, 2 }
+const M = [A, B, C]
+Set.intersection(...M) // Set { 1, 2 }</code></pre>
 
 
 
@@ -1268,55 +1355,6 @@ The intersection S of any number of sets M<sub>i</sub> is the set whose elements
 
 
 
-<dl class="details">
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-    <dt class="tag-source">Source:</dt>
-    <dd class="tag-source"><ul class="dummy"><li>
-        <a href="index.js.html">index.js</a>, <a href="index.js.html#line612">line 612</a>
-    </li></ul></dd>
-    
-
-    
-
-    
-    <dt class="tag-see">See:</dt>
-    <dd class="tag-see">
-        <ul>
-            <li><a href="https://en.wikipedia.org/wiki/Intersection_(set_theory)#Arbitrary_intersections">https://en.wikipedia.org/wiki/Intersection_(set_theory)#Arbitrary_intersections</a></li>
-        </ul>
-    </dd>
-    
-
-    
-</dl>
-
-
-
 
 
 
@@ -1348,7 +1386,7 @@ The intersection S of any number of sets M<sub>i</sub> is the set whose elements
 
 
 
-<dl>
+<dl class="param-type">
     <dt>
         Type
     </dt>
@@ -1364,28 +1402,66 @@ The intersection S of any number of sets M<sub>i</sub> is the set whose elements
 
 
 
-
-    <h5>Example</h5>
-    
-    <pre class="prettyprint"><code>const A = Set.from(0, 1, 2, 4)
-const B = Set.from(1, 2, 9)
-const C = Set.from(0, 1, 2)
-Set.intersection(A, B, C) // Set { 1, 2 }
-const M = [A, B, C]
-Set.intersection(...M) // Set { 1, 2 }</code></pre>
-
-
-
         
             
 
     
 
-    
     <h4 class="name" id=".mergeRules"><span class="type-signature">(static) </span>mergeRules<span class="signature">(&hellip;rules)</span><span class="type-signature"> &rarr; {function}</span></h4>
+
+    
+
+
+
+
+<dl class="details">
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="index.js.html">index.js</a>, <a href="index.js.html#line965">line 965</a>
+    </li></ul></dd>
     
 
     
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-see">See:</dt>
+    <dd class="tag-see">
+        <ul>
+            <li>Set.prototype.rules</li>
+        </ul>
+    </dd>
+    
+
+    
+</dl>
+
+
 
 
 
@@ -1393,6 +1469,8 @@ Set.intersection(...M) // Set { 1, 2 }</code></pre>
     Merges two rules functions with a strict pass concept.
 The resulting function requires the given element to pass at least one of the given functions (logical OR).
 </div>
+
+
 
 
 
@@ -1467,55 +1545,6 @@ The resulting function requires the given element to pass at least one of the gi
 
 
 
-<dl class="details">
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-    <dt class="tag-source">Source:</dt>
-    <dd class="tag-source"><ul class="dummy"><li>
-        <a href="index.js.html">index.js</a>, <a href="index.js.html#line932">line 932</a>
-    </li></ul></dd>
-    
-
-    
-
-    
-    <dt class="tag-see">See:</dt>
-    <dd class="tag-see">
-        <ul>
-            <li>Set.prototype.rules</li>
-        </ul>
-    </dd>
-    
-
-    
-</dl>
-
-
-
 
 
 
@@ -1547,7 +1576,7 @@ The resulting function requires the given element to pass at least one of the gi
 
 
 
-<dl>
+<dl class="param-type">
     <dt>
         Type
     </dt>
@@ -1563,18 +1592,66 @@ The resulting function requires the given element to pass at least one of the gi
 
 
 
-
-
         
             
 
     
 
-    
     <h4 class="name" id=".mergeRulesStrict"><span class="type-signature">(static) </span>mergeRulesStrict<span class="signature">(&hellip;rules)</span><span class="type-signature"> &rarr; {function}</span></h4>
+
+    
+
+
+
+
+<dl class="details">
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="index.js.html">index.js</a>, <a href="index.js.html#line989">line 989</a>
+    </li></ul></dd>
     
 
     
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-see">See:</dt>
+    <dd class="tag-see">
+        <ul>
+            <li>Set.prototype.rules</li>
+        </ul>
+    </dd>
+    
+
+    
+</dl>
+
+
 
 
 
@@ -1593,6 +1670,8 @@ Thus, if the element fails one, it fails all.
 
 
 
+
+
     <h5>Parameters:</h5>
     
 
@@ -1658,55 +1737,6 @@ Thus, if the element fails one, it fails all.
 
 
 
-<dl class="details">
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-    <dt class="tag-source">Source:</dt>
-    <dd class="tag-source"><ul class="dummy"><li>
-        <a href="index.js.html">index.js</a>, <a href="index.js.html#line956">line 956</a>
-    </li></ul></dd>
-    
-
-    
-
-    
-    <dt class="tag-see">See:</dt>
-    <dd class="tag-see">
-        <ul>
-            <li>Set.prototype.rules</li>
-        </ul>
-    </dd>
-    
-
-    
-</dl>
-
-
-
 
 
 
@@ -1738,7 +1768,7 @@ Thus, if the element fails one, it fails all.
 
 
 
-<dl>
+<dl class="param-type">
     <dt>
         Type
     </dt>
@@ -1754,18 +1784,66 @@ Thus, if the element fails one, it fails all.
 
 
 
-
-
         
             
 
     
 
-    
     <h4 class="name" id=".power"><span class="type-signature">(static) </span>power<span class="signature">(set)</span><span class="type-signature"> &rarr; {<a href="Set.html">Set</a>}</span></h4>
+
+    
+
+
+
+
+<dl class="details">
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="index.js.html">index.js</a>, <a href="index.js.html#line941">line 941</a>
+    </li></ul></dd>
     
 
     
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-see">See:</dt>
+    <dd class="tag-see">
+        <ul>
+            <li><a href="https://en.wikipedia.org/wiki/Power_set">https://en.wikipedia.org/wiki/Power_set</a></li>
+        </ul>
+    </dd>
+    
+
+    
+</dl>
+
+
 
 
 
@@ -1775,6 +1853,8 @@ The powerset of a set contains all possible subsets of the set, plus itself and 
 <br>
 <strong>Attention:</strong> This method grows exponentially with the size of the given set.
 </div>
+
+
 
 
 
@@ -1837,55 +1917,6 @@ The powerset of a set contains all possible subsets of the set, plus itself and 
 
 
 
-<dl class="details">
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-    <dt class="tag-source">Source:</dt>
-    <dd class="tag-source"><ul class="dummy"><li>
-        <a href="index.js.html">index.js</a>, <a href="index.js.html#line908">line 908</a>
-    </li></ul></dd>
-    
-
-    
-
-    
-    <dt class="tag-see">See:</dt>
-    <dd class="tag-see">
-        <ul>
-            <li><a href="https://en.wikipedia.org/wiki/Power_set">https://en.wikipedia.org/wiki/Power_set</a></li>
-        </ul>
-    </dd>
-    
-
-    
-</dl>
-
-
-
 
 
 
@@ -1917,7 +1948,7 @@ The powerset of a set contains all possible subsets of the set, plus itself and 
 
 
 
-<dl>
+<dl class="param-type">
     <dt>
         Type
     </dt>
@@ -1933,18 +1964,66 @@ The powerset of a set contains all possible subsets of the set, plus itself and 
 
 
 
-
-
         
             
 
     
 
-    
     <h4 class="name" id=".symmetricDifference"><span class="type-signature">(static) </span>symmetricDifference<span class="signature">(&hellip;args)</span><span class="type-signature"> &rarr; {<a href="Set.html">Set</a>}</span></h4>
+
+    
+
+
+
+
+<dl class="details">
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="index.js.html">index.js</a>, <a href="index.js.html#line789">line 789</a>
+    </li></ul></dd>
     
 
     
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-see">See:</dt>
+    <dd class="tag-see">
+        <ul>
+            <li><a href="https://en.wikipedia.org/wiki/Symmetric_difference#n-ary_symmetric_difference">https://en.wikipedia.org/wiki/Symmetric_difference#n-ary_symmetric_difference</a></li>
+        </ul>
+    </dd>
+    
+
+    
+</dl>
+
+
 
 
 
@@ -1962,6 +2041,18 @@ for a sequencial-computed symmetric difference.
 
 
 
+
+
+
+
+    <h5>Example</h5>
+    
+    <pre class="prettyprint"><code>const A = Set.from(0, 1)
+const B = Set.from(1, 3)
+const C = Set.from(0, 1, 2, 3, 4)
+Set.symmetricDifference(A, B, C) // Set { 1, 2, 4 }
+const M = [A, B, C]
+Set.symmetricDifference(...M) // Set { 1, 2, 4 }</code></pre>
 
 
 
@@ -2031,55 +2122,6 @@ for a sequencial-computed symmetric difference.
 
 
 
-<dl class="details">
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-    <dt class="tag-source">Source:</dt>
-    <dd class="tag-source"><ul class="dummy"><li>
-        <a href="index.js.html">index.js</a>, <a href="index.js.html#line756">line 756</a>
-    </li></ul></dd>
-    
-
-    
-
-    
-    <dt class="tag-see">See:</dt>
-    <dd class="tag-see">
-        <ul>
-            <li><a href="https://en.wikipedia.org/wiki/Symmetric_difference#n-ary_symmetric_difference">https://en.wikipedia.org/wiki/Symmetric_difference#n-ary_symmetric_difference</a></li>
-        </ul>
-    </dd>
-    
-
-    
-</dl>
-
-
-
 
 
 
@@ -2111,7 +2153,7 @@ for a sequencial-computed symmetric difference.
 
 
 
-<dl>
+<dl class="param-type">
     <dt>
         Type
     </dt>
@@ -2127,34 +2169,67 @@ for a sequencial-computed symmetric difference.
 
 
 
-
-    <h5>Example</h5>
-    
-    <pre class="prettyprint"><code>const A = Set.from(0, 1)
-const B = Set.from(1, 3)
-const C = Set.from(0, 1, 2, 3, 4)
-Set.symmetricDifference(A, B, C) // Set { 1, 2, 4 }
-const M = [A, B, C]
-Set.symmetricDifference(...M) // Set { 1, 2, 4 }</code></pre>
-
-
-
         
             
 
     
 
-    
     <h4 class="name" id=".toSet"><span class="type-signature">(static) </span>toSet<span class="signature">(value)</span><span class="type-signature"> &rarr; {<a href="Set.html">Set</a>}</span></h4>
+
+    
+
+
+
+
+<dl class="details">
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="index.js.html">index.js</a>, <a href="index.js.html#line566">line 566</a>
+    </li></ul></dd>
     
 
     
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+</dl>
+
+
 
 
 
 <div class="description">
     Autowraps a value to a Set, unless it is already a Set.
 </div>
+
+
 
 
 
@@ -2217,48 +2292,6 @@ Set.symmetricDifference(...M) // Set { 1, 2, 4 }</code></pre>
 
 
 
-<dl class="details">
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-    <dt class="tag-source">Source:</dt>
-    <dd class="tag-source"><ul class="dummy"><li>
-        <a href="index.js.html">index.js</a>, <a href="index.js.html#line533">line 533</a>
-    </li></ul></dd>
-    
-
-    
-
-    
-
-    
-</dl>
-
-
-
 
 
 
@@ -2278,7 +2311,7 @@ Set.symmetricDifference(...M) // Set { 1, 2, 4 }</code></pre>
 
 
 
-<dl>
+<dl class="param-type">
     <dt>
         Type
     </dt>
@@ -2294,18 +2327,66 @@ Set.symmetricDifference(...M) // Set { 1, 2, 4 }</code></pre>
 
 
 
-
-
         
             
 
     
 
-    
     <h4 class="name" id=".union"><span class="type-signature">(static) </span>union<span class="signature">(&hellip;args)</span><span class="type-signature"> &rarr; {<a href="Set.html">Set</a>}</span></h4>
+
+    
+
+
+
+
+<dl class="details">
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="index.js.html">index.js</a>, <a href="index.js.html#line597">line 597</a>
+    </li></ul></dd>
     
 
     
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-see">See:</dt>
+    <dd class="tag-see">
+        <ul>
+            <li><a href="https://en.wikipedia.org/wiki/Union_(set_theory)#Arbitrary_unions">https://en.wikipedia.org/wiki/Union_(set_theory)#Arbitrary_unions</a></li>
+        </ul>
+    </dd>
+    
+
+    
+</dl>
+
+
 
 
 
@@ -2322,6 +2403,18 @@ The union S of any number of sets M<sub>i</sub> is the set that consists of all 
 
 
 
+
+
+
+
+    <h5>Example</h5>
+    
+    <pre class="prettyprint"><code>const A = Set.from(0, 4)
+const B = Set.from(1)
+const C = Set.from(9)
+Set.union(A, B, C) // Set { 0, 1, 4, 9 }
+const M = [A, B, C]
+Set.union(...M) // Set { 0, 1, 4, 9 }</code></pre>
 
 
 
@@ -2391,55 +2484,6 @@ The union S of any number of sets M<sub>i</sub> is the set that consists of all 
 
 
 
-<dl class="details">
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-    <dt class="tag-source">Source:</dt>
-    <dd class="tag-source"><ul class="dummy"><li>
-        <a href="index.js.html">index.js</a>, <a href="index.js.html#line564">line 564</a>
-    </li></ul></dd>
-    
-
-    
-
-    
-    <dt class="tag-see">See:</dt>
-    <dd class="tag-see">
-        <ul>
-            <li><a href="https://en.wikipedia.org/wiki/Union_(set_theory)#Arbitrary_unions">https://en.wikipedia.org/wiki/Union_(set_theory)#Arbitrary_unions</a></li>
-        </ul>
-    </dd>
-    
-
-    
-</dl>
-
-
-
 
 
 
@@ -2471,7 +2515,7 @@ The union S of any number of sets M<sub>i</sub> is the set that consists of all 
 
 
 
-<dl>
+<dl class="param-type">
     <dt>
         Type
     </dt>
@@ -2487,28 +2531,66 @@ The union S of any number of sets M<sub>i</sub> is the set that consists of all 
 
 
 
-
-    <h5>Example</h5>
-    
-    <pre class="prettyprint"><code>const A = Set.from(0, 4)
-const B = Set.from(1)
-const C = Set.from(9)
-Set.union(A, B, C) // Set { 0, 1, 4, 9 }
-const M = [A, B, C]
-Set.union(...M) // Set { 0, 1, 4, 9 }</code></pre>
-
-
-
         
             
 
     
 
-    
     <h4 class="name" id="add"><span class="type-signature"></span>add<span class="signature">(value)</span><span class="type-signature"> &rarr; {<a href="Set.html">Set</a>}</span></h4>
+
+    
+
+
+
+
+<dl class="details">
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="index.js.html">index.js</a>, <a href="index.js.html#line107">line 107</a>
+    </li></ul></dd>
     
 
     
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-see">See:</dt>
+    <dd class="tag-see">
+        <ul>
+            <li><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Set/add">https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Set/add</a></li>
+        </ul>
+    </dd>
+    
+
+    
+</dl>
+
+
 
 
 
@@ -2516,6 +2598,8 @@ Set.union(...M) // Set { 0, 1, 4, 9 }</code></pre>
     Adds a value to the set. If the set already contains the value, nothing happens.
 Overrides Set.prototype.add.
 </div>
+
+
 
 
 
@@ -2578,55 +2662,6 @@ Overrides Set.prototype.add.
 
 
 
-<dl class="details">
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-    <dt class="tag-source">Source:</dt>
-    <dd class="tag-source"><ul class="dummy"><li>
-        <a href="index.js.html">index.js</a>, <a href="index.js.html#line105">line 105</a>
-    </li></ul></dd>
-    
-
-    
-
-    
-    <dt class="tag-see">See:</dt>
-    <dd class="tag-see">
-        <ul>
-            <li><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Set/add">https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Set/add</a></li>
-        </ul>
-    </dd>
-    
-
-    
-</dl>
-
-
-
 
 
 
@@ -2647,7 +2682,7 @@ Overrides Set.prototype.add.
     </dt>
     <dd></dd>
     <dt>
-        <dl>
+        <dl class="param-type">
             <dt>
                 Type
             </dt>
@@ -2675,7 +2710,7 @@ Overrides Set.prototype.add.
 
 
 
-<dl>
+<dl class="param-type">
     <dt>
         Type
     </dt>
@@ -2691,23 +2726,64 @@ Overrides Set.prototype.add.
 
 
 
-
-
         
             
 
     
 
-    
     <h4 class="name" id="any"><span class="type-signature"></span>any<span class="signature">()</span><span class="type-signature"> &rarr; {*}</span></h4>
+
+    
+
+
+
+
+<dl class="details">
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="index.js.html">index.js</a>, <a href="index.js.html#line315">line 315</a>
+    </li></ul></dd>
     
 
     
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+</dl>
+
+
 
 
 
 <div class="description">
-    Returns an arbitrary element of this collection.
+    Returns an arbitrary element of this set.
 Basically the first element, retrieved by iterator.next().value will be used.
 </div>
 
@@ -2722,46 +2798,6 @@ Basically the first element, retrieved by iterator.next().value will be used.
 
 
 
-
-<dl class="details">
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-    <dt class="tag-source">Source:</dt>
-    <dd class="tag-source"><ul class="dummy"><li>
-        <a href="index.js.html">index.js</a>, <a href="index.js.html#line313">line 313</a>
-    </li></ul></dd>
-    
-
-    
-
-    
-
-    
-</dl>
 
 
 
@@ -2784,7 +2820,7 @@ Basically the first element, retrieved by iterator.next().value will be used.
 
 
 
-<dl>
+<dl class="param-type">
     <dt>
         Type
     </dt>
@@ -2800,18 +2836,66 @@ Basically the first element, retrieved by iterator.next().value will be used.
 
 
 
-
-
         
             
 
     
 
-    
     <h4 class="name" id="cartesianProduct"><span class="type-signature"></span>cartesianProduct<span class="signature">(set)</span><span class="type-signature"> &rarr; {<a href="Set.html">Set</a>}</span></h4>
+
+    
+
+
+
+
+<dl class="details">
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="index.js.html">index.js</a>, <a href="index.js.html#line894">line 894</a>
+    </li></ul></dd>
     
 
     
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-see">See:</dt>
+    <dd class="tag-see">
+        <ul>
+            <li><a href="https://en.wikipedia.org/wiki/Cartesian_product">https://en.wikipedia.org/wiki/Cartesian_product</a></li>
+        </ul>
+    </dd>
+    
+
+    
+</dl>
+
+
 
 
 
@@ -2828,6 +2912,16 @@ The cartesian product of two sets A and B is the set of all ordered pairs (a, b)
 
 
 
+
+
+
+
+    <h5>Example</h5>
+    
+    <pre class="prettyprint"><code>const A = Set.from(1,2)
+const B = Set.from(3,4)
+A.cartesianProduct(B) // Set { [1, 3], [1, 4], [2, 3], [2, 4] }
+B.cartesianProduct(A) // Set { [3, 1], [4, 1], [3, 2], [4, 2] }</code></pre>
 
 
 
@@ -2885,55 +2979,6 @@ The cartesian product of two sets A and B is the set of all ordered pairs (a, b)
 
 
 
-<dl class="details">
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-    <dt class="tag-source">Source:</dt>
-    <dd class="tag-source"><ul class="dummy"><li>
-        <a href="index.js.html">index.js</a>, <a href="index.js.html#line861">line 861</a>
-    </li></ul></dd>
-    
-
-    
-
-    
-    <dt class="tag-see">See:</dt>
-    <dd class="tag-see">
-        <ul>
-            <li><a href="https://en.wikipedia.org/wiki/Cartesian_product">https://en.wikipedia.org/wiki/Cartesian_product</a></li>
-        </ul>
-    </dd>
-    
-
-    
-</dl>
-
-
-
 
 
 
@@ -2965,7 +3010,7 @@ The cartesian product of two sets A and B is the set of all ordered pairs (a, b)
 
 
 
-<dl>
+<dl class="param-type">
     <dt>
         Type
     </dt>
@@ -2981,26 +3026,68 @@ The cartesian product of two sets A and B is the set of all ordered pairs (a, b)
 
 
 
-
-    <h5>Example</h5>
-    
-    <pre class="prettyprint"><code>const A = Set.from(1,2)
-const B = Set.from(3,4)
-A.cartesianProduct(B) // Set { [1, 3], [1, 4], [2, 3], [2, 4] }
-B.cartesianProduct(A) // Set { [3, 1], [4, 1], [3, 2], [4, 2] }</code></pre>
-
-
-
         
             
 
     
 
-    
     <h4 class="name" id="equals"><span class="type-signature"></span>equals<span class="signature">(set)</span><span class="type-signature"> &rarr; {boolean}</span></h4>
+
+    
+
+
+
+
+<dl class="details">
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="index.js.html">index.js</a>, <a href="index.js.html#line454">line 454</a>
+    </li></ul></dd>
     
 
     
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-see">See:</dt>
+    <dd class="tag-see">
+        <ul>
+            <li><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Equality_comparisons_and_sameness">https://developer.mozilla.org/en-US/docs/Web/JavaScript/Equality_comparisons_and_sameness</a></li>
+        
+            <li>Set.prototype.isSubset</li>
+        </ul>
+    </dd>
+    
+
+    
+</dl>
+
+
 
 
 
@@ -3015,6 +3102,20 @@ This allows also to check equality for more complex / nested structures without 
 
 
 
+
+
+
+
+    <h5>Examples</h5>
+    
+    <pre class="prettyprint"><code>const a = Set.from(1,2,3)
+const b = Set.from(1,2,3.0) // note that 3.0 will evaluate to 3 here!
+a === b    // false
+a.equals(b) // true</code></pre>
+
+    <pre class="prettyprint"><code>const a = Set.from({ a:true, b:false })
+const b = Set.from({ b:false, a:true })
+a.equals(b) // true</code></pre>
 
 
 
@@ -3072,57 +3173,6 @@ This allows also to check equality for more complex / nested structures without 
 
 
 
-<dl class="details">
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-    <dt class="tag-source">Source:</dt>
-    <dd class="tag-source"><ul class="dummy"><li>
-        <a href="index.js.html">index.js</a>, <a href="index.js.html#line438">line 438</a>
-    </li></ul></dd>
-    
-
-    
-
-    
-    <dt class="tag-see">See:</dt>
-    <dd class="tag-see">
-        <ul>
-            <li><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Equality_comparisons_and_sameness">https://developer.mozilla.org/en-US/docs/Web/JavaScript/Equality_comparisons_and_sameness</a></li>
-        
-            <li>Set.prototype.isSubset</li>
-        </ul>
-    </dd>
-    
-
-    
-</dl>
-
-
-
 
 
 
@@ -3154,7 +3204,7 @@ This allows also to check equality for more complex / nested structures without 
 
 
 
-<dl>
+<dl class="param-type">
     <dt>
         Type
     </dt>
@@ -3170,30 +3220,66 @@ This allows also to check equality for more complex / nested structures without 
 
 
 
-
-    <h5>Examples</h5>
-    
-    <pre class="prettyprint"><code>const a = Set.from(1,2,3)
-const b = Set.from(1,2,3.0) // note that 3.0 will evaluate to 3 here!
-a === b    // false
-a.equals(b) // true</code></pre>
-
-    <pre class="prettyprint"><code>const a = Set.from({ a:true, b:false })
-const b = Set.from({ b:false, a:true })
-a.equals(b) // true</code></pre>
-
-
-
         
             
 
     
 
-    
     <h4 class="name" id="has"><span class="type-signature"></span>has<span class="signature">(value)</span><span class="type-signature"> &rarr; {boolean}</span></h4>
+
+    
+
+
+
+
+<dl class="details">
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="index.js.html">index.js</a>, <a href="index.js.html#line174">line 174</a>
+    </li></ul></dd>
     
 
     
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-see">See:</dt>
+    <dd class="tag-see">
+        <ul>
+            <li><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Set/has">https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Set/has</a></li>
+        </ul>
+    </dd>
+    
+
+    
+</dl>
+
+
 
 
 
@@ -3218,6 +3304,15 @@ if for example a comment is added to the compare function that not exists in the
 
 
 
+
+
+
+
+    <h5>Example</h5>
+    
+    <pre class="prettyprint"><code>const a = Set.from({ a:true, b:false })
+a.has({ b:false, a:true })  // true
+a.has({ b:false, a:false }) // false</code></pre>
 
 
 
@@ -3275,55 +3370,6 @@ if for example a comment is added to the compare function that not exists in the
 
 
 
-<dl class="details">
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-    <dt class="tag-source">Source:</dt>
-    <dd class="tag-source"><ul class="dummy"><li>
-        <a href="index.js.html">index.js</a>, <a href="index.js.html#line172">line 172</a>
-    </li></ul></dd>
-    
-
-    
-
-    
-    <dt class="tag-see">See:</dt>
-    <dd class="tag-see">
-        <ul>
-            <li><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Set/has">https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Set/has</a></li>
-        </ul>
-    </dd>
-    
-
-    
-</dl>
-
-
-
 
 
 
@@ -3343,7 +3389,7 @@ if for example a comment is added to the compare function that not exists in the
 
 
 
-<dl>
+<dl class="param-type">
     <dt>
         Type
     </dt>
@@ -3359,25 +3405,66 @@ if for example a comment is added to the compare function that not exists in the
 
 
 
-
-    <h5>Example</h5>
-    
-    <pre class="prettyprint"><code>const a = Set.from({ a:true, b:false })
-a.has({ b:false, a:true })  // true
-a.has({ b:false, a:false }) // false</code></pre>
-
-
-
         
             
 
     
 
-    
     <h4 class="name" id="intersect"><span class="type-signature"></span>intersect<span class="signature">(args)</span><span class="type-signature"> &rarr; {<a href="Set.html">Set</a>}</span></h4>
+
+    
+
+
+
+
+<dl class="details">
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="index.js.html">index.js</a>, <a href="index.js.html#line683">line 683</a>
+    </li></ul></dd>
     
 
     
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-see">See:</dt>
+    <dd class="tag-see">
+        <ul>
+            <li><a href="https://en.wikipedia.org/wiki/Intersection_(set_theory)#Definition">https://en.wikipedia.org/wiki/Intersection_(set_theory)#Definition</a></li>
+        </ul>
+    </dd>
+    
+
+    
+</dl>
+
+
 
 
 
@@ -3392,6 +3479,15 @@ The intersection S of sets A and B is the set whose elements consist of the elem
 
 
 
+
+
+
+
+    <h5>Example</h5>
+    
+    <pre class="prettyprint"><code>const A = Set.from(0, 1, 2, 4)
+const B = Set.from(1, 2, 9)
+A.intersect(B) // Set { 1, 2 }</code></pre>
 
 
 
@@ -3449,55 +3545,6 @@ The intersection S of sets A and B is the set whose elements consist of the elem
 
 
 
-<dl class="details">
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-    <dt class="tag-source">Source:</dt>
-    <dd class="tag-source"><ul class="dummy"><li>
-        <a href="index.js.html">index.js</a>, <a href="index.js.html#line650">line 650</a>
-    </li></ul></dd>
-    
-
-    
-
-    
-    <dt class="tag-see">See:</dt>
-    <dd class="tag-see">
-        <ul>
-            <li><a href="https://en.wikipedia.org/wiki/Intersection_(set_theory)#Definition">https://en.wikipedia.org/wiki/Intersection_(set_theory)#Definition</a></li>
-        </ul>
-    </dd>
-    
-
-    
-</dl>
-
-
-
 
 
 
@@ -3539,7 +3586,7 @@ The intersection S of sets A and B is the set whose elements consist of the elem
 
 
 
-<dl>
+<dl class="param-type">
     <dt>
         Type
     </dt>
@@ -3555,12 +3602,140 @@ The intersection S of sets A and B is the set whose elements consist of the elem
 
 
 
+        
+            
+
+    
+
+    <h4 class="name" id="isEmpty"><span class="type-signature"></span>isEmpty<span class="signature">()</span><span class="type-signature"> &rarr; {boolean}</span></h4>
+
+    
+
+
+
+
+<dl class="details">
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="index.js.html">index.js</a>, <a href="index.js.html#line485">line 485</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-see">See:</dt>
+    <dd class="tag-see">
+        <ul>
+            <li><a href="https://en.wikipedia.org/wiki/Empty_set">https://en.wikipedia.org/wiki/Empty_set</a></li>
+        </ul>
+    </dd>
+    
+
+    
+</dl>
+
+
+
+
+
+<div class="description">
+    Checks whether this set is the empty set.
+A Set is empty if and only if it has no elements.  This is the same thing as having size (cardinality) 0.  The empty set is often denoted ∅ or {}.
+</div>
+
+
+
+
+
+
+
+
 
     <h5>Example</h5>
     
-    <pre class="prettyprint"><code>const A = Set.from(0, 1, 2, 4)
-const B = Set.from(1, 2, 9)
-A.intersect(B) // Set { 1, 2 }</code></pre>
+    <pre class="prettyprint"><code>const A = new Set()
+const B = new Set([])
+const C = Set.from()
+const D = Set.from(7)
+A.isEmpty() // true
+B.isEmpty() // true
+C.isEmpty() // true
+D.isEmpty() // false</code></pre>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<h5>Throws:</h5>
+
+        
+
+    <div class="param-desc">
+    
+        Throws an error if any arguments are given.
+    
+    </div>
+
+
+    
+
+
+<h5>Returns:</h5>
+
+        
+
+
+<dl class="param-type">
+    <dt>
+        Type
+    </dt>
+    <dd>
+        
+<span class="param-type">boolean</span>
+
+
+    </dd>
+</dl>
+
+    
 
 
 
@@ -3569,11 +3744,61 @@ A.intersect(B) // Set { 1, 2 }</code></pre>
 
     
 
-    
     <h4 class="name" id="isProperSubset"><span class="type-signature"></span>isProperSubset<span class="signature">(set)</span><span class="type-signature"> &rarr; {boolean}</span></h4>
+
+    
+
+
+
+
+<dl class="details">
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="index.js.html">index.js</a>, <a href="index.js.html#line429">line 429</a>
+    </li></ul></dd>
     
 
     
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-see">See:</dt>
+    <dd class="tag-see">
+        <ul>
+            <li><a href="https://en.wikipedia.org/wiki/Subset#Definitions">https://en.wikipedia.org/wiki/Subset#Definitions</a></li>
+        </ul>
+    </dd>
+    
+
+    
+</dl>
+
+
 
 
 
@@ -3588,6 +3813,20 @@ Set A is a proper subset of set B if and only if A is a subset of B and B contai
 
 
 
+
+
+
+
+    <h5>Example</h5>
+    
+    <pre class="prettyprint"><code>const A = Set.from(1,8)
+const B = Set.from(1,6,8)
+const C = Set.from(8)
+const D = Set.from(7)
+A.isProperSubset(A) // false
+A.isProperSubset(B) // true
+A.isProperSubset(C) // false
+A.isProperSubset(D) // false</code></pre>
 
 
 
@@ -3645,37 +3884,80 @@ Set A is a proper subset of set B if and only if A is a subset of B and B contai
 
 
 
+
+
+
+
+
+
+
+
+
+
+<h5>Returns:</h5>
+
+        
+
+
+<dl class="param-type">
+    <dt>
+        Type
+    </dt>
+    <dd>
+        
+<span class="param-type">boolean</span>
+
+
+    </dd>
+</dl>
+
+    
+
+
+
+        
+            
+
+    
+
+    <h4 class="name" id="isProperSuperset"><span class="type-signature"></span>isProperSuperset<span class="signature">(set)</span><span class="type-signature"> &rarr; {boolean}</span></h4>
+
+    
+
+
+
+
 <dl class="details">
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
 
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="index.js.html">index.js</a>, <a href="index.js.html#line413">line 413</a>
+        <a href="index.js.html">index.js</a>, <a href="index.js.html#line403">line 403</a>
     </li></ul></dd>
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
     
 
     
@@ -3696,62 +3978,6 @@ Set A is a proper subset of set B if and only if A is a subset of B and B contai
 
 
 
-
-
-
-
-
-
-
-
-<h5>Returns:</h5>
-
-        
-
-
-<dl>
-    <dt>
-        Type
-    </dt>
-    <dd>
-        
-<span class="param-type">boolean</span>
-
-
-    </dd>
-</dl>
-
-    
-
-
-
-
-    <h5>Example</h5>
-    
-    <pre class="prettyprint"><code>const A = Set.from(1,8)
-const B = Set.from(1,6,8)
-const C = Set.from(8)
-const D = Set.from(7)
-A.isProperSubset(A) // false
-A.isProperSubset(B) // true
-A.isProperSubset(C) // false
-A.isProperSubset(D) // false</code></pre>
-
-
-
-        
-            
-
-    
-
-    
-    <h4 class="name" id="isProperSuperset"><span class="type-signature"></span>isProperSuperset<span class="signature">(set)</span><span class="type-signature"> &rarr; {boolean}</span></h4>
-    
-
-    
-
-
-
 <div class="description">
     Checks whether the current set (this) is a proper superset of the given set.
 Set A is a proper superset of set B if and only if A is a superset of B and A contains an element that is not in B.
@@ -3763,6 +3989,20 @@ Set A is a proper superset of set B if and only if A is a superset of B and A co
 
 
 
+
+
+
+
+    <h5>Example</h5>
+    
+    <pre class="prettyprint"><code>const A = Set.from(1,6,8)
+const B = Set.from(1,8)
+const C = Set.from(8)
+const D = Set.from(7)
+A.isProperSuperset(A) // false
+A.isProperSuperset(B) // true
+A.isProperSuperset(C) // true
+A.isProperSuperset(D) // false</code></pre>
 
 
 
@@ -3820,55 +4060,6 @@ Set A is a proper superset of set B if and only if A is a superset of B and A co
 
 
 
-<dl class="details">
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-    <dt class="tag-source">Source:</dt>
-    <dd class="tag-source"><ul class="dummy"><li>
-        <a href="index.js.html">index.js</a>, <a href="index.js.html#line387">line 387</a>
-    </li></ul></dd>
-    
-
-    
-
-    
-    <dt class="tag-see">See:</dt>
-    <dd class="tag-see">
-        <ul>
-            <li><a href="https://en.wikipedia.org/wiki/Subset#Definitions">https://en.wikipedia.org/wiki/Subset#Definitions</a></li>
-        </ul>
-    </dd>
-    
-
-    
-</dl>
-
-
-
 
 
 
@@ -3884,7 +4075,7 @@ Set A is a proper superset of set B if and only if A is a superset of B and A co
         
 
 
-<dl>
+<dl class="param-type">
     <dt>
         Type
     </dt>
@@ -3900,30 +4091,70 @@ Set A is a proper superset of set B if and only if A is a superset of B and A co
 
 
 
-
-    <h5>Example</h5>
-    
-    <pre class="prettyprint"><code>const A = Set.from(1,6,8)
-const B = Set.from(1,8)
-const C = Set.from(8)
-const D = Set.from(7)
-A.isProperSuperset(A) // false
-A.isProperSuperset(B) // true
-A.isProperSuperset(C) // true
-A.isProperSuperset(D) // false</code></pre>
-
-
-
         
             
 
     
 
-    
     <h4 class="name" id="isSubset"><span class="type-signature"></span>isSubset<span class="signature">(set)</span><span class="type-signature"> &rarr; {boolean}</span></h4>
+
+    
+
+
+
+
+<dl class="details">
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="index.js.html">index.js</a>, <a href="index.js.html#line374">line 374</a>
+    </li></ul></dd>
     
 
     
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-see">See:</dt>
+    <dd class="tag-see">
+        <ul>
+            <li><a href="https://en.wikipedia.org/wiki/Subset">https://en.wikipedia.org/wiki/Subset</a></li>
+        
+            <li>Set.prototype.equals</li>
+        
+            <li>Set.prototype.isProperSubset</li>
+        </ul>
+    </dd>
+    
+
+    
+</dl>
+
+
 
 
 
@@ -3938,6 +4169,21 @@ Set A is a subset of set B if and only if every element of A is also an element 
 
 
 
+
+
+
+
+    <h5>Example</h5>
+    
+    <pre class="prettyprint"><code>const A = Set.from(1,3)
+const B = Set.from(1,2,3,4)
+const C = Set.from(1,3,5)
+A.isSubset(B) // true
+A.isSubset(C) // true
+B.isSubset(A) // false
+B.isSubset(C) // false
+C.isSubset(B) // false
+C.isSubset(A) // false</code></pre>
 
 
 
@@ -3995,59 +4241,6 @@ Set A is a subset of set B if and only if every element of A is also an element 
 
 
 
-<dl class="details">
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-    <dt class="tag-source">Source:</dt>
-    <dd class="tag-source"><ul class="dummy"><li>
-        <a href="index.js.html">index.js</a>, <a href="index.js.html#line358">line 358</a>
-    </li></ul></dd>
-    
-
-    
-
-    
-    <dt class="tag-see">See:</dt>
-    <dd class="tag-see">
-        <ul>
-            <li><a href="https://en.wikipedia.org/wiki/Subset">https://en.wikipedia.org/wiki/Subset</a></li>
-        
-            <li>Set.prototype.equals</li>
-        
-            <li>Set.prototype.isProperSubset</li>
-        </ul>
-    </dd>
-    
-
-    
-</dl>
-
-
-
 
 
 
@@ -4079,7 +4272,7 @@ Set A is a subset of set B if and only if every element of A is also an element 
 
 
 
-<dl>
+<dl class="param-type">
     <dt>
         Type
     </dt>
@@ -4095,31 +4288,66 @@ Set A is a subset of set B if and only if every element of A is also an element 
 
 
 
-
-    <h5>Example</h5>
-    
-    <pre class="prettyprint"><code>const A = Set.from(1,3)
-const B = Set.from(1,2,3,4)
-const C = Set.from(1,3,5)
-A.isSubset(B) // true
-A.isSubset(C) // true
-B.isSubset(A) // false
-B.isSubset(C) // false
-C.isSubset(B) // false
-C.isSubset(A) // false</code></pre>
-
-
-
         
             
 
     
 
-    
     <h4 class="name" id="isSuperset"><span class="type-signature"></span>isSuperset<span class="signature">(set)</span><span class="type-signature"> &rarr; {boolean}</span></h4>
+
+    
+
+
+
+
+<dl class="details">
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="index.js.html">index.js</a>, <a href="index.js.html#line344">line 344</a>
+    </li></ul></dd>
     
 
     
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-see">See:</dt>
+    <dd class="tag-see">
+        <ul>
+            <li><a href="https://en.wikipedia.org/wiki/Subset">https://en.wikipedia.org/wiki/Subset</a></li>
+        </ul>
+    </dd>
+    
+
+    
+</dl>
+
+
 
 
 
@@ -4134,6 +4362,18 @@ Set A is a superset of set B if and only if every element of B is also an elemen
 
 
 
+
+
+
+
+    <h5>Example</h5>
+    
+    <pre class="prettyprint"><code>const A = Set.from(1,2,3,4)
+const B = Set.from(1,3)
+const C = Set.from(1,3,5)
+A.isSuperset(B) // true
+A.isSuperset(C) // false
+C.isSuperset(B) // true</code></pre>
 
 
 
@@ -4191,55 +4431,6 @@ Set A is a superset of set B if and only if every element of B is also an elemen
 
 
 
-<dl class="details">
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-    <dt class="tag-source">Source:</dt>
-    <dd class="tag-source"><ul class="dummy"><li>
-        <a href="index.js.html">index.js</a>, <a href="index.js.html#line328">line 328</a>
-    </li></ul></dd>
-    
-
-    
-
-    
-    <dt class="tag-see">See:</dt>
-    <dd class="tag-see">
-        <ul>
-            <li><a href="https://en.wikipedia.org/wiki/Subset">https://en.wikipedia.org/wiki/Subset</a></li>
-        </ul>
-    </dd>
-    
-
-    
-</dl>
-
-
-
 
 
 
@@ -4271,7 +4462,7 @@ Set A is a superset of set B if and only if every element of B is also an elemen
 
 
 
-<dl>
+<dl class="param-type">
     <dt>
         Type
     </dt>
@@ -4287,28 +4478,59 @@ Set A is a superset of set B if and only if every element of B is also an elemen
 
 
 
-
-    <h5>Example</h5>
-    
-    <pre class="prettyprint"><code>const A = Set.from(1,2,3,4)
-const B = Set.from(1,3)
-const C = Set.from(1,3,5)
-A.isSuperset(B) // true
-A.isSuperset(C) // false
-C.isSuperset(B) // true</code></pre>
-
-
-
         
             
 
     
 
-    
     <h4 class="name" id="minus"><span class="type-signature"></span>minus<span class="signature">(set)</span><span class="type-signature"> &rarr; {ExtendedSet|*}</span></h4>
+
+    
+
+
+
+
+<dl class="details">
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="index.js.html">index.js</a>, <a href="index.js.html#line730">line 730</a>
+    </li></ul></dd>
     
 
     
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+</dl>
+
+
 
 
 
@@ -4322,6 +4544,15 @@ C.isSuperset(B) // true</code></pre>
 
 
 
+
+
+
+
+    <h5>Example</h5>
+    
+    <pre class="prettyprint"><code>const A = Set.from(1, 2, 3)
+const B = Set.from(1, 3, 5)
+A.minus(B) // Set { 2 }</code></pre>
 
 
 
@@ -4374,48 +4605,6 @@ C.isSuperset(B) // true</code></pre>
 
 
 
-<dl class="details">
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-    <dt class="tag-source">Source:</dt>
-    <dd class="tag-source"><ul class="dummy"><li>
-        <a href="index.js.html">index.js</a>, <a href="index.js.html#line697">line 697</a>
-    </li></ul></dd>
-    
-
-    
-
-    
-
-    
-</dl>
-
-
-
 
 
 
@@ -4457,7 +4646,7 @@ C.isSuperset(B) // true</code></pre>
 
 
 
-<dl>
+<dl class="param-type">
     <dt>
         Type
     </dt>
@@ -4476,12 +4665,113 @@ C.isSuperset(B) // true</code></pre>
 
 
 
+        
+            
 
-    <h5>Example</h5>
     
-    <pre class="prettyprint"><code>const A = Set.from(1, 2, 3)
-const B = Set.from(1, 3, 5)
-A.minus(B) // Set { 2 }</code></pre>
+
+    <h4 class="name" id="randomElement"><span class="type-signature"></span>randomElement<span class="signature">()</span><span class="type-signature"> &rarr; {*}</span></h4>
+
+    
+
+
+
+
+<dl class="details">
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="index.js.html">index.js</a>, <a href="index.js.html#line329">line 329</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+<div class="description">
+    Returns a random element of this set.
+One element of this set is chosen at random and returned.  The probability distribution is uniform.  Math.random() is used internally for this purpose.
+</div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<h5>Returns:</h5>
+
+        
+<div class="param-desc">
+    An element chosen randomly from the current set that could be of any type, depending on the elements of the set.
+</div>
+
+
+
+<dl class="param-type">
+    <dt>
+        Type
+    </dt>
+    <dd>
+        
+<span class="param-type">*</span>
+
+
+    </dd>
+</dl>
+
+    
 
 
 
@@ -4490,11 +4780,54 @@ A.minus(B) // Set { 2 }</code></pre>
 
     
 
-    
     <h4 class="name" id="rules"><span class="type-signature"></span>rules<span class="signature">(value)</span><span class="type-signature"> &rarr; {function|undefined}</span></h4>
+
+    
+
+
+
+
+<dl class="details">
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="index.js.html">index.js</a>, <a href="index.js.html#line259">line 259</a>
+    </li></ul></dd>
     
 
     
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+</dl>
+
+
 
 
 
@@ -4518,6 +4851,18 @@ if it passes the rules check.
 
 
 
+
+
+
+
+    <h5>Example</h5>
+    
+    <pre class="prettyprint"><code>const isInt = n => Number.isInteger(n)
+const integers = Set.from()
+integers.rules(isInt)
+integers.add(1)   // OK, no error
+integers.add(1.5) // throws error!
+integers.add(1.0) // OK, because 1.0 === 1 in JS Number</code></pre>
 
 
 
@@ -4575,48 +4920,6 @@ if it passes the rules check.
 
 
 
-<dl class="details">
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-    <dt class="tag-source">Source:</dt>
-    <dd class="tag-source"><ul class="dummy"><li>
-        <a href="index.js.html">index.js</a>, <a href="index.js.html#line257">line 257</a>
-    </li></ul></dd>
-    
-
-    
-
-    
-
-    
-</dl>
-
-
-
 
 
 
@@ -4636,7 +4939,7 @@ if it passes the rules check.
 
 
 
-<dl>
+<dl class="param-type">
     <dt>
         Type
     </dt>
@@ -4655,28 +4958,66 @@ if it passes the rules check.
 
 
 
-
-    <h5>Example</h5>
-    
-    <pre class="prettyprint"><code>const isInt = n => Number.isInteger(n)
-const integers = Set.from()
-integers.rules(isInt)
-integers.add(1)   // OK, no error
-integers.add(1.5) // throws error!
-integers.add(1.0) // OK, because 1.0 === 1 in JS Number</code></pre>
-
-
-
         
             
 
     
 
-    
     <h4 class="name" id="symmetricDifference"><span class="type-signature"></span>symmetricDifference<span class="signature">(&hellip;args, set)</span><span class="type-signature"> &rarr; {<a href="Set.html">Set</a>}</span></h4>
+
+    
+
+
+
+
+<dl class="details">
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="index.js.html">index.js</a>, <a href="index.js.html#line825">line 825</a>
+    </li></ul></dd>
     
 
     
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-see">See:</dt>
+    <dd class="tag-see">
+        <ul>
+            <li><a href="https://en.wikipedia.org/wiki/Symmetric_difference">https://en.wikipedia.org/wiki/Symmetric_difference</a></li>
+        </ul>
+    </dd>
+    
+
+    
+</dl>
+
+
 
 
 
@@ -4693,6 +5034,19 @@ The symmetric difference is commutative and associative.
 
 
 
+
+
+
+
+    <h5>Examples</h5>
+    
+    <pre class="prettyprint"><code>const A = Set.from(0, 1)
+const B = Set.from(1, 3, 5)
+A.symmetricDifference(B) // Set { 0, 3, 5 }</code></pre>
+
+    <pre class="prettyprint"><code>const a = Set.from(1,2,3)
+const b = Set.from(3,4)
+Set.symmetricDifference(a, b) // Set { 1, 2, 4 }</code></pre>
 
 
 
@@ -4788,55 +5142,6 @@ The symmetric difference is commutative and associative.
 
 
 
-<dl class="details">
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-    <dt class="tag-source">Source:</dt>
-    <dd class="tag-source"><ul class="dummy"><li>
-        <a href="index.js.html">index.js</a>, <a href="index.js.html#line792">line 792</a>
-    </li></ul></dd>
-    
-
-    
-
-    
-    <dt class="tag-see">See:</dt>
-    <dd class="tag-see">
-        <ul>
-            <li><a href="https://en.wikipedia.org/wiki/Symmetric_difference">https://en.wikipedia.org/wiki/Symmetric_difference</a></li>
-        </ul>
-    </dd>
-    
-
-    
-</dl>
-
-
-
 
 
 
@@ -4878,7 +5183,7 @@ The symmetric difference is commutative and associative.
 
 
 
-<dl>
+<dl class="param-type">
     <dt>
         Type
     </dt>
@@ -4894,29 +5199,59 @@ The symmetric difference is commutative and associative.
 
 
 
-
-    <h5>Examples</h5>
-    
-    <pre class="prettyprint"><code>const A = Set.from(0, 1)
-const B = Set.from(1, 3, 5)
-A.symmetricDifference(B) // Set { 0, 3, 5 }</code></pre>
-
-    <pre class="prettyprint"><code>const a = Set.from(1,2,3)
-const b = Set.from(3,4)
-Set.symmetricDifference(a, b) // Set { 1, 2, 4 }</code></pre>
-
-
-
         
             
 
     
 
-    
     <h4 class="name" id="toArray"><span class="type-signature"></span>toArray<span class="signature">()</span><span class="type-signature"> &rarr; {Array}</span></h4>
+
+    
+
+
+
+
+<dl class="details">
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="index.js.html">index.js</a>, <a href="index.js.html#line295">line 295</a>
+    </li></ul></dd>
     
 
     
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+</dl>
+
+
 
 
 
@@ -4932,49 +5267,14 @@ Set.symmetricDifference(a, b) // Set { 1, 2, 4 }</code></pre>
 
 
 
-
-
-
-
-<dl class="details">
-
+    <h5>Example</h5>
     
+    <pre class="prettyprint"><code>new Set([1, 2, 3, 4]).toArray() // [ 1, 2, 3, 4 ]</code></pre>
 
-    
 
-    
 
-    
 
-    
 
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-    <dt class="tag-source">Source:</dt>
-    <dd class="tag-source"><ul class="dummy"><li>
-        <a href="index.js.html">index.js</a>, <a href="index.js.html#line293">line 293</a>
-    </li></ul></dd>
-    
-
-    
-
-    
-
-    
-</dl>
 
 
 
@@ -4997,7 +5297,7 @@ Set.symmetricDifference(a, b) // Set { 1, 2, 4 }</code></pre>
 
 
 
-<dl>
+<dl class="param-type">
     <dt>
         Type
     </dt>
@@ -5013,23 +5313,66 @@ Set.symmetricDifference(a, b) // Set { 1, 2, 4 }</code></pre>
 
 
 
-
-    <h5>Example</h5>
-    
-    <pre class="prettyprint"><code>new Set([1, 2, 3, 4]).toArray() // [ 1, 2, 3, 4 ]</code></pre>
-
-
-
         
             
 
     
 
-    
     <h4 class="name" id="union"><span class="type-signature"></span>union<span class="signature">(args)</span><span class="type-signature"> &rarr; {<a href="Set.html">Set</a>}</span></h4>
+
+    
+
+
+
+
+<dl class="details">
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="index.js.html">index.js</a>, <a href="index.js.html#line626">line 626</a>
+    </li></ul></dd>
     
 
     
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-see">See:</dt>
+    <dd class="tag-see">
+        <ul>
+            <li><a href="https://en.wikipedia.org/wiki/Union_(set_theory)#Union_of_two_sets">https://en.wikipedia.org/wiki/Union_(set_theory)#Union_of_two_sets</a></li>
+        </ul>
+    </dd>
+    
+
+    
+</dl>
+
+
 
 
 
@@ -5044,6 +5387,15 @@ The union of A and B is the set C that consists of all elements of A and B.
 
 
 
+
+
+
+
+    <h5>Example</h5>
+    
+    <pre class="prettyprint"><code>const A = Set.from(1, 2)
+const B = Set.from(1, 7, 8, 9)
+A.union(B) // Set { 1, 2, 7, 8, 9 }</code></pre>
 
 
 
@@ -5101,55 +5453,6 @@ The union of A and B is the set C that consists of all elements of A and B.
 
 
 
-<dl class="details">
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-    <dt class="tag-source">Source:</dt>
-    <dd class="tag-source"><ul class="dummy"><li>
-        <a href="index.js.html">index.js</a>, <a href="index.js.html#line593">line 593</a>
-    </li></ul></dd>
-    
-
-    
-
-    
-    <dt class="tag-see">See:</dt>
-    <dd class="tag-see">
-        <ul>
-            <li><a href="https://en.wikipedia.org/wiki/Union_(set_theory)#Union_of_two_sets">https://en.wikipedia.org/wiki/Union_(set_theory)#Union_of_two_sets</a></li>
-        </ul>
-    </dd>
-    
-
-    
-</dl>
-
-
-
 
 
 
@@ -5191,7 +5494,7 @@ The union of A and B is the set C that consists of all elements of A and B.
 
 
 
-<dl>
+<dl class="param-type">
     <dt>
         Type
     </dt>
@@ -5204,15 +5507,6 @@ The union of A and B is the set C that consists of all elements of A and B.
 </dl>
 
     
-
-
-
-
-    <h5>Example</h5>
-    
-    <pre class="prettyprint"><code>const A = Set.from(1, 2)
-const B = Set.from(1, 7, 8, 9)
-A.union(B) // Set { 1, 2, 7, 8, 9 }</code></pre>
 
 
 
@@ -5229,19 +5523,21 @@ A.union(B) // Set { 1, 2, 7, 8, 9 }</code></pre>
 
 
 
+    
+    
 </div>
-
-<nav>
-    <h2><a href="index.html">Home</a></h2><h3>Classes</h3><ul><li><a href="Set.html">Set</a></li></ul>
-</nav>
 
 <br class="clear">
 
 <footer>
-    Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.5.5</a> on Wed Apr 10 2019 22:21:03 GMT-0400 (Eastern Daylight Time)
+    Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.5.5</a> on Sat Jun 08 2019 15:54:33 GMT-0400 (Eastern Daylight Time) using the <a href="https://github.com/clenemt/docdash">docdash</a> theme.
 </footer>
 
-<script> prettyPrint(); </script>
-<script src="scripts/linenumber.js"> </script>
+<script>prettyPrint();</script>
+<script src="scripts/polyfill.js"></script>
+<script src="scripts/linenumber.js"></script>
+
+
+
 </body>
 </html>

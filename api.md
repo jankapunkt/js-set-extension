@@ -1,3 +1,20 @@
+## Classes
+
+<dl>
+<dt><a href="#Set">Set</a></dt>
+<dd><p>Extended version of <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Set">Set (MDN link)</a></p>
+</dd>
+</dl>
+
+## Constants
+
+<dl>
+<dt><a href="#correctSetNameToIncorrectNames">correctSetNameToIncorrectNames</a></dt>
+<dd><p>Suggest function names when user guesses a name that doesn&#39;t exist but is nonetheless unambiguous.
+Note: We should consider removing the suggest feature once migration to 2.x.x has been completed and the package has been in use for a while.</p>
+</dd>
+</dl>
+
 <a name="Set"></a>
 
 ## Set
@@ -18,11 +35,13 @@ Extended version of <a href="https://developer.mozilla.org/en-US/docs/Web/JavaSc
         * [.rules(value)](#Set+rules) ⇒ <code>function</code> \| <code>undefined</code>
         * [.toArray()](#Set+toArray) ⇒ <code>Array</code>
         * [.any()](#Set+any) ⇒ <code>\*</code>
+        * [.randomElement()](#Set+randomElement) ⇒ <code>\*</code>
         * [.isSuperset(set)](#Set+isSuperset) ⇒ <code>boolean</code>
         * [.isSubset(set)](#Set+isSubset) ⇒ <code>boolean</code>
         * [.isProperSuperset(set)](#Set+isProperSuperset) ⇒ <code>boolean</code>
         * [.isProperSubset(set)](#Set+isProperSubset) ⇒ <code>boolean</code>
         * [.equals(set)](#Set+equals) ⇒ <code>boolean</code>
+        * [.isEmpty()](#Set+isEmpty) ⇒ <code>boolean</code>
         * [.union(args)](#Set+union) ⇒ [<code>Set</code>](#Set)
         * [.intersect(args)](#Set+intersect) ⇒ [<code>Set</code>](#Set)
         * [.minus(set)](#Set+minus) ⇒ <code>ExtendedSet</code> \| <code>\*</code>
@@ -151,11 +170,19 @@ new Set([1, 2, 3, 4]).toArray() // [ 1, 2, 3, 4 ]
 <a name="Set+any"></a>
 
 ### set.any() ⇒ <code>\*</code>
-Returns an arbitrary element of this collection.
+Returns an arbitrary element of this set.
 Basically the first element, retrieved by iterator.next().value will be used.
 
 **Kind**: instance method of [<code>Set</code>](#Set)  
 **Returns**: <code>\*</code> - An arbitrary element of the current set that could by of any type, depending on the elements of the set.  
+<a name="Set+randomElement"></a>
+
+### set.randomElement() ⇒ <code>\*</code>
+Returns a random element of this set.
+One element of this set is chosen at random and returned.  The probability distribution is uniform.  Math.random() is used internally for this purpose.
+
+**Kind**: instance method of [<code>Set</code>](#Set)  
+**Returns**: <code>\*</code> - An element chosen randomly from the current set that could be of any type, depending on the elements of the set.  
 <a name="Set+isSuperset"></a>
 
 ### set.isSuperset(set) ⇒ <code>boolean</code>
@@ -310,6 +337,29 @@ a.equals(b) // true
 const a = Set.from({ a:true, b:false })
 const b = Set.from({ b:false, a:true })
 a.equals(b) // true
+```
+<a name="Set+isEmpty"></a>
+
+### set.isEmpty() ⇒ <code>boolean</code>
+Checks whether this set is the empty set.
+A Set is empty if and only if it has no elements.  This is the same thing as having size (cardinality) 0.  The empty set is often denoted ∅ or {}.
+
+**Kind**: instance method of [<code>Set</code>](#Set)  
+**Throws**:
+
+- Throws an error if any arguments are given.
+
+**See**: https://en.wikipedia.org/wiki/Empty_set  
+**Example**  
+```js
+const A = new Set()
+const B = new Set([])
+const C = Set.from()
+const D = Set.from(7)
+A.isEmpty() // true
+B.isEmpty() // true
+C.isEmpty() // true
+D.isEmpty() // false
 ```
 <a name="Set+union"></a>
 
@@ -725,3 +775,10 @@ Thus, if the element fails one, it fails all.
 | --- | --- | --- |
 | ...rules | <code>function</code> | An arbitrary amount of (rules-) functions. See [Set.prototype.rules](Set.prototype.rules) for requirements of a rules function. |
 
+<a name="correctSetNameToIncorrectNames"></a>
+
+## correctSetNameToIncorrectNames
+Suggest function names when user guesses a name that doesn't exist but is nonetheless unambiguous.
+Note: We should consider removing the suggest feature once migration to 2.x.x has been completed and the package has been in use for a while.
+
+**Kind**: global constant  

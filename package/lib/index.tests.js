@@ -138,6 +138,45 @@ describe('Relations', function () {
     })
   })
 
+  describe(Set.prototype.isEmpty.name, function () {
+    it('returns true if the set has no elements', function () {
+      assert.isTrue((new Set()).isEmpty())
+      assert.isTrue((new Set([])).isEmpty())
+      assert.isTrue((Set.from()).isEmpty())
+
+      const A = new Set([1])
+      A.delete(1)
+      assert.isTrue(A.isEmpty())
+    })
+
+    it('returns false if the set has at least 1 element', function () {
+      const A = new Set([1, 2])
+      A.delete(1)
+      assert.isFalse(A.isEmpty())
+
+      const B = new Set()
+      B.add('thing')
+      assert.isFalse(B.isEmpty())
+
+      const C = new Set([7])
+      assert.isFalse(C.isEmpty())
+
+      const D = Set.from(8, 8, 8, 8)
+      assert.isFalse(D.isEmpty())
+    })
+  })
+
+  describe(Set.prototype.randomElement.name, function () {
+    // TODO: test for actual 'randomness' and for a uniform distribution, too.
+    it('chooses an element in the set', function () {
+      const A = new Set([2, 6, 8, 3, 'z'])
+      for (let i = 0; i < 10; i++) {
+        let el = A.randomElement()
+        assert.isTrue(A.has(el))
+      }
+    })
+  })
+
   describe(Set.prototype.isSubset.name, function () {
     // used with https://en.wikipedia.org/wiki/Subset
 

@@ -1,4 +1,4 @@
-<img src="./logo.svg" width="50%"/>
+<img src="https://github.com/jankapunkt/js-set-extension/raw/master/logo.svg?sanitize=true" width="50%"/>
 <h1>Javascript Set Extensions</h1>
 
 Polyfill for extending the Javascript [Set](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Set) class in order to support properties and operations from basic set theory.

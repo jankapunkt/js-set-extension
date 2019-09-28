@@ -642,13 +642,16 @@ function intersectionArbitrary (...args) {
     throw new Error(`The intersection operator currently does not support 0 arguments.`)
   }
   const set3 = new Set()
-  args.forEach(set => {
-    set.forEach(value => {
-      if (args.every(compare => compare.has(value))) {
-        set3.add(value)
-      }
-    })
-  })
+
+  const minimumSet = args.reduce((prev, curr) => {
+    return (prev.size < curr.size) ? prev : curr
+  }, args[0])
+
+  for (let value of minimumSet) {
+    if (args.every(compare => compare.has(value))) {
+      set3.add(value)
+    }
+  }
   return set3
 }
 global.Set.intersection = intersectionArbitrary

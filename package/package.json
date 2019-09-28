@@ -27,7 +27,7 @@
     "babel-minify": "^0.5.0-alpha.3cc09dcf",
     "babel-plugin-istanbul": "^5.0.1",
     "chai": "^4.1.2",
-    "jsdoc": "^3.5.5",
+    "jsdoc": "^3.6.3",
     "jsdoc-to-markdown": "^4.0.1",
     "mocha": "^5.2.0",
     "nyc": "^13.3.0",
@@ -86,5 +86,6 @@
   "bugs": {
     "url": "https://github.com/jankapunkt/js-set-extension/issues"
   },
-  "homepage": "https://github.com/jankapunkt/js-set-extension#readme"
+  "homepage": "https://github.com/jankapunkt/js-set-extension#readme",
+  "dependencies": {}
 }

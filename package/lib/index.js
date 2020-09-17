@@ -842,17 +842,30 @@ function addToSubset (e, T) {
  * https://en.wikipedia.org/wiki/Power_set
  * @private
  */
-function subsets (S) {
+function subsets (S, output = new Set()) {
   checkSet(S)
   if (S.size === 0) {
     return Set.from(S)
   }
 
-  const e = S.any()
-  let T = Set.difference(S, Set.from(e))
-  const PT = subsets(T)
-  const PTe = addToSubset(e, subsets(T))
-  return Set.union(PT, PTe)
+  const it = S.values()
+
+  let result = it.next()
+  while (!result.done) {
+    const e = result.value
+    const eSet = Set.from(e)
+
+    // get difference between first element and the rest
+    const diff = Set.difference(S, eSet)
+    output.add(diff)
+
+    // recursion: get subsets for the difference, too
+    const subs = subsets(diff)
+    subs.forEach(entry => output.add(entry))
+
+    result = it.next()
+  }
+  return output
 }
 
 /**
@@ -873,6 +886,7 @@ function powerSet (set) {
 
   const subs = subsets(set)
   subs.add(new Set())
+  subs.add(set)
   set.forEach(value => subs.add(Set.from(value)))
   return subs
 }

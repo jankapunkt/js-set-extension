@@ -117,6 +117,14 @@ describe('Relations', function () {
         return Number.isInteger(n)
       })))
       assert.isFalse(set(set(isInt)).has(set(n => Number.isInteger(n))))
+
+      const s1 = set(3)
+      const s2 = set(3)
+      const s3 = set()
+      s3.add(s1)
+
+      assert.isTrue(s3.has(s1))
+      assert.isTrue(s3.has(s2))
     })
   })
 
@@ -404,6 +412,11 @@ describe('Relations', function () {
       const set2 = new Set([1, 1, 2, 2, 3, 3, 4, 4])
       areEqual(set1, set2)
       assert.isFalse(set1 === set2)
+
+      areEqual(
+        set(3),
+        set(3)
+      )
     })
 
     it('returns false, if a set is not equal to another set', function () {
@@ -535,6 +548,15 @@ describe('Operations (instances)', function () {
         compare.push(i)
       }
       assert.deepEqual(set.toArray(), compare)
+    })
+
+    it ('skips to add sets, which are already contained', function () {
+      const set1 = set(3)
+      const set2 = set(3)
+      const set3 = set()
+      set3.add(set1)
+      set3.add(set2)
+      assert.equal(set3.size, 1)
     })
 
     it('passes on elements, that obey the ruleset', function () {
@@ -1051,32 +1073,61 @@ describe('Operations (static)', function () {
     it('creates a power set including the set, empty and all subsets of S', function () {
       // the power set of the set {1, 2, 3} is {{1, 2, 3}, {1, 2}, {1, 3}, {2, 3}, {1}, {2}, {3}, ∅}
 
-      const pwr = Set.power(new Set([1, 2, 3]))
+      const pwr = Set.power(new Set([1, 2, 3, 4]))
       const cmp = set(
-        new Set([1, 2, 3]),
+        new Set([1, 2, 3, 4]),
+
+        new Set([1, 2, 3   ]),
+        new Set([1, 2,    4]),
+        new Set([1,    3, 4]),
+        new Set([   2, 3, 4]),
+
         new Set([1, 2]),
         new Set([1, 3]),
+        new Set([1, 4]),
+
         new Set([2, 3]),
+        new Set([2, 4]),
+
+        new Set([3, 4]),
+
         new Set([1]),
         new Set([2]),
         new Set([3]),
+        new Set([4]),
         new Set([])
       )
+      
       areEqual(pwr, cmp)
     })
 
     it('recursively respects nested sets', function () {
-      const pwr = Set.power(set(set(1), set(2), set(3)))
+      const pwr = Set.power(set(set(1), set(2), set(3), set(4)))
+
       const cmp = set(
-        new Set([set(1), set(2), set(3)]),
+        new Set([set(1), set(2), set(3), set(4)]),
+
+        new Set([set(1), set(2), set(3)        ]),
+        new Set([set(1), set(2),         set(4)]),
+        new Set([set(1),         set(3), set(4)]),
+        new Set([        set(2), set(3), set(4)]),
+
         new Set([set(1), set(2)]),
         new Set([set(1), set(3)]),
+        new Set([set(1), set(4)]),
+
         new Set([set(2), set(3)]),
+        new Set([set(2), set(4)]),
+
+        new Set([set(3), set(4)]),
+
         new Set([set(1)]),
         new Set([set(2)]),
         new Set([set(3)]),
+        new Set([set(4)]),
         new Set([])
       )
+
       areEqual(pwr, cmp)
     })
 

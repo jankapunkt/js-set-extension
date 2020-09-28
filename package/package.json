@@ -19,17 +19,17 @@
     "report": "nyc report --reporter=text-lcov | coveralls"
   },
   "devDependencies": {
-    "@babel/cli": "^7.10.5",
-    "@babel/core": "^7.11.1",
-    "@babel/preset-env": "^7.11.0",
-    "@babel/register": "^7.10.5",
+    "@babel/cli": "^7.11.6",
+    "@babel/core": "^7.11.6",
+    "@babel/preset-env": "^7.11.5",
+    "@babel/register": "^7.11.5",
     "@mareoraft/docdash": "^1.1.1",
     "babel-minify": "^0.5.1",
     "babel-plugin-istanbul": "^6.0.0",
     "chai": "^4.2.0",
     "jsdoc": "^3.6.5",
     "jsdoc-to-markdown": "^6.0.1",
-    "mocha": "^8.1.1",
+    "mocha": "^8.1.3",
     "nyc": "^15.1.0",
     "standard": "^14.3.4"
   },

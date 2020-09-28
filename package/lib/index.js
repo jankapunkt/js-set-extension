@@ -81,6 +81,11 @@ function arbitraryToBinary (arbitraryFunc) {
   }
 }
 
+/**
+ * @private checks, whether an Object is a Set
+ */
+const isSet = s => Object.prototype.toString.call(s) === '[object Set]'
+
 // //////////////////////////////////////////////////////////////////////////////// //
 //                                                                                  //
 // OVERRIDES                                                                        //
@@ -107,6 +112,14 @@ function add (value) {
   if (this.rulesFct && !this.rulesFct.call(null, value)) {
     throw new Error(`Value [${value}] does not match ruleset.`)
   }
+
+  // in case we add another set, we actually need to (recursively) check
+  // whether the set is already included, since the original add function
+  // only checks for uniqueness on a reference level
+  if (isSet(value) && this.has(value)) {
+    return this
+  }
+
   return _originalAdd.call(this, value)
 }
 
@@ -129,6 +142,11 @@ function resolve (obj, circ = new _originalSet([obj])) {
     typeof obj === 'boolean' ||
     obj === null) {
     return obj
+  }
+
+  // if we have a set we convert it to an Array and continue treating it as such
+  if (isSet(obj)) {
+    obj = Array.from(obj)
   }
 
   if (typeof obj === 'function') {
@@ -201,7 +219,7 @@ global.Set.prototype.has = function has (value) {
       return false
     }
 
-    const setCompare = (element instanceof Set && value instanceof Set)
+    const setCompare = isSet(element) && isSet(value)
 
     // if both point to the same reference
     if (element === value) {
@@ -313,6 +331,7 @@ function any () {
   const iterator = self.values()
   return iterator.next().value
 }
+
 global.Set.prototype.any = any
 
 /**
@@ -327,6 +346,7 @@ function randomElementUnary () {
   const randomIndex = Math.floor(Math.random() * array.length)
   return array[randomIndex]
 }
+
 global.Set.prototype.randomElement = randomElementUnary
 
 /**
@@ -476,6 +496,7 @@ global.Set.prototype.equal = equal
 function isEmptyUnary () {
   return this.size === 0
 }
+
 global.Set.prototype.isEmpty = isEmptyUnary
 
 // //////////////////////////////////////////////////////////////////////////////// //
@@ -509,6 +530,7 @@ function Set (elements, rulesFct) {
   if (elements) { elements.forEach(element => original.add(element)) }
   return original
 }
+
 global.Set = Set
 global.Set.prototype = _originalSet.prototype
 
@@ -594,6 +616,7 @@ function unionArbitrary (...args) {
   args.forEach(set => set.forEach(value => set3.add(value)))
   return set3
 }
+
 global.Set.union = unionArbitrary
 
 /**
@@ -654,6 +677,7 @@ function intersectionArbitrary (...args) {
   }
   return set3
 }
+
 global.Set.intersection = intersectionArbitrary
 
 /**
@@ -818,17 +842,30 @@ function addToSubset (e, T) {
  * https://en.wikipedia.org/wiki/Power_set
  * @private
  */
-function subsets (S) {
+function subsets (S, output = new Set()) {
   checkSet(S)
   if (S.size === 0) {
     return Set.from(S)
   }
 
-  const e = S.any()
-  let T = Set.difference(S, Set.from(e))
-  const PT = subsets(T)
-  const PTe = addToSubset(e, subsets(T))
-  return Set.union(PT, PTe)
+  const it = S.values()
+
+  let result = it.next()
+  while (!result.done) {
+    const e = result.value
+    const eSet = Set.from(e)
+
+    // get difference between first element and the rest
+    const diff = Set.difference(S, eSet)
+    output.add(diff)
+
+    // recursion: get subsets for the difference, too
+    const subs = subsets(diff)
+    subs.forEach(entry => output.add(entry))
+
+    result = it.next()
+  }
+  return output
 }
 
 /**
@@ -849,6 +886,7 @@ function powerSet (set) {
 
   const subs = subsets(set)
   subs.add(new Set())
+  subs.add(set)
   set.forEach(value => subs.add(Set.from(value)))
   return subs
 }

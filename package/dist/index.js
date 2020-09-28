@@ -1,6 +1,12 @@
 "use strict";
 
-function _typeof(obj) { if (typeof Symbol === "function" && typeof Symbol.iterator === "symbol") { _typeof = function _typeof(obj) { return typeof obj; }; } else { _typeof = function _typeof(obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; }; } return _typeof(obj); }
+function _createForOfIteratorHelper(o, allowArrayLike) { var it; if (typeof Symbol === "undefined" || o[Symbol.iterator] == null) { if (Array.isArray(o) || (it = _unsupportedIterableToArray(o)) || allowArrayLike && o && typeof o.length === "number") { if (it) o = it; var i = 0; var F = function F() {}; return { s: F, n: function n() { if (i >= o.length) return { done: true }; return { done: false, value: o[i++] }; }, e: function e(_e) { throw _e; }, f: F }; } throw new TypeError("Invalid attempt to iterate non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method."); } var normalCompletion = true, didErr = false, err; return { s: function s() { it = o[Symbol.iterator](); }, n: function n() { var step = it.next(); normalCompletion = step.done; return step; }, e: function e(_e2) { didErr = true; err = _e2; }, f: function f() { try { if (!normalCompletion && it["return"] != null) it["return"](); } finally { if (didErr) throw err; } } }; }
+
+function _unsupportedIterableToArray(o, minLen) { if (!o) return; if (typeof o === "string") return _arrayLikeToArray(o, minLen); var n = Object.prototype.toString.call(o).slice(8, -1); if (n === "Object" && o.constructor) n = o.constructor.name; if (n === "Map" || n === "Set") return Array.from(o); if (n === "Arguments" || /^(?:Ui|I)nt(?:8|16|32)(?:Clamped)?Array$/.test(n)) return _arrayLikeToArray(o, minLen); }
+
+function _arrayLikeToArray(arr, len) { if (len == null || len > arr.length) len = arr.length; for (var i = 0, arr2 = new Array(len); i < len; i++) { arr2[i] = arr[i]; } return arr2; }
+
+function _typeof(obj) { "@babel/helpers - typeof"; if (typeof Symbol === "function" && typeof Symbol.iterator === "symbol") { _typeof = function _typeof(obj) { return typeof obj; }; } else { _typeof = function _typeof(obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; }; } return _typeof(obj); }
 
 // //////////////////////////////////////////////////////////////////////////////// //
 // MIT License
@@ -94,7 +100,15 @@ function arbitraryToBinary(arbitraryFunc) {
     var set = args[0];
     return arbitraryFunc(this, set);
   };
-} // //////////////////////////////////////////////////////////////////////////////// //
+}
+/**
+ * @private checks, whether an Object is a Set
+ */
+
+
+var isSet = function isSet(s) {
+  return Object.prototype.toString.call(s) === '[object Set]';
+}; // //////////////////////////////////////////////////////////////////////////////// //
 //                                                                                  //
 // OVERRIDES                                                                        //
 //                                                                                  //
@@ -121,6 +135,13 @@ var _originalAdd = global.Set.prototype.add;
 function add(value) {
   if (this.rulesFct && !this.rulesFct.call(null, value)) {
     throw new Error("Value [".concat(value, "] does not match ruleset."));
+  } // in case we add another set, we actually need to (recursively) check
+  // whether the set is already included, since the original add function
+  // only checks for uniqueness on a reference level
+
+
+  if (isSet(value) && this.has(value)) {
+    return this;
   }
 
   return _originalAdd.call(this, value);
@@ -143,14 +164,19 @@ function resolve(obj) {
 
   if (typeof obj === 'undefined' || typeof obj === 'string' || typeof obj === 'number' || typeof obj === 'boolean' || obj === null) {
     return obj;
+  } // if we have a set we convert it to an Array and continue treating it as such
+
+
+  if (isSet(obj)) {
+    obj = Array.from(obj);
   }
 
   if (typeof obj === 'function') {
     var fctObj = {
-      fctStr: String(obj).replace(/\s+/g, '') // function body to string
-      // resolve all function properties / attached references
+      fctStr: String(obj).replace(/\s+/g, '')
+    }; // function body to string
+    // resolve all function properties / attached references
 
-    };
     fctObj.refs = Object.getOwnPropertyNames(obj).map(function (key) {
       return originalHas.call(circ, obj[key]) ? 'circular' : resolve(obj[key], circ);
     });
@@ -226,7 +252,7 @@ global.Set.prototype.has = function has(value) {
       return false;
     }
 
-    var setCompare = element instanceof Set && value instanceof Set; // if both point to the same reference
+    var setCompare = isSet(element) && isSet(value); // if both point to the same reference
 
     if (element === value) {
       return true;
@@ -320,7 +346,7 @@ function toArray() {
 
 global.Set.prototype.toArray = toArray;
 /**
- * Returns an arbitrary element of this collection.
+ * Returns an arbitrary element of this set.
  * Basically the first element, retrieved by iterator.next().value will be used.
  * @function
  * @name Set.prototype.any
@@ -334,6 +360,21 @@ function any() {
 }
 
 global.Set.prototype.any = any;
+/**
+ * Returns a random element of this set.
+ * One element of this set is chosen at random and returned.  The probability distribution is uniform.  Math.random() is used internally for this purpose.
+ * @function
+ * @name Set.prototype.randomElement
+ * @returns {*} An element chosen randomly from the current set that could be of any type, depending on the elements of the set.
+ */
+
+function randomElementUnary() {
+  var array = this.toArray();
+  var randomIndex = Math.floor(Math.random() * array.length);
+  return array[randomIndex];
+}
+
+global.Set.prototype.randomElement = randomElementUnary;
 /**
  * Checks, whether the current set (this) is a superset of the given set.
  * A set A is superset of set B, if A contains all elements of B.
@@ -552,7 +593,7 @@ function from() {
     args[_key2] = arguments[_key2];
   }
 
-  return new Set(args.concat());
+  return new Set([].concat(args));
 }
 
 global.Set.from = from;
@@ -680,15 +721,33 @@ function intersectionArbitrary() {
   }
 
   var set3 = new Set();
-  args.forEach(function (set) {
-    set.forEach(function (value) {
+  var minimumSet = args.reduce(function (prev, curr) {
+    return prev.size < curr.size ? prev : curr;
+  }, args[0]);
+
+  var _iterator = _createForOfIteratorHelper(minimumSet),
+      _step;
+
+  try {
+    var _loop = function _loop() {
+      var value = _step.value;
+
       if (args.every(function (compare) {
         return compare.has(value);
       })) {
         set3.add(value);
       }
-    });
-  });
+    };
+
+    for (_iterator.s(); !(_step = _iterator.n()).done;) {
+      _loop();
+    }
+  } catch (err) {
+    _iterator.e(err);
+  } finally {
+    _iterator.f();
+  }
+
   return set3;
 }
 
@@ -876,17 +935,31 @@ function addToSubset(e, T) {
 
 
 function subsets(S) {
+  var output = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : new Set();
   checkSet(S);
 
   if (S.size === 0) {
     return Set.from(S);
   }
 
-  var e = S.any();
-  var T = Set.difference(S, Set.from(e));
-  var PT = subsets(T);
-  var PTe = addToSubset(e, subsets(T));
-  return Set.union(PT, PTe);
+  var it = S.values();
+  var result = it.next();
+
+  while (!result.done) {
+    var e = result.value;
+    var eSet = Set.from(e); // get difference between first element and the rest
+
+    var diff = Set.difference(S, eSet);
+    output.add(diff); // recursion: get subsets for the difference, too
+
+    var subs = subsets(diff);
+    subs.forEach(function (entry) {
+      return output.add(entry);
+    });
+    result = it.next();
+  }
+
+  return output;
 }
 /**
  * Creates the powerset of a given set instance by using a recursive algorithm (see <a href="https://en.wikipedia.org/wiki/Power_set">Wikipedia</a>, section Algorithms).
@@ -907,6 +980,7 @@ function powerSet(set) {
   checkSet(set);
   var subs = subsets(set);
   subs.add(new Set());
+  subs.add(set);
   set.forEach(function (value) {
     return subs.add(Set.from(value));
   });

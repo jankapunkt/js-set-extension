@@ -4,12 +4,10 @@ os:
   - linux
 
 node_js:
-  - "6"
-  - "8"
   - "stable"
 
 before_script:
-  - cd package && npm install
+  - cd package && npm ci
 
 script:
   - npm run build-ci

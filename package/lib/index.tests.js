@@ -161,7 +161,7 @@ describe('Relations', function () {
     it('chooses an element in the set', function () {
       const A = new Set([2, 6, 8, 3, 'z'])
       for (let i = 0; i < 10; i++) {
-        let el = A.randomElement()
+        const el = A.randomElement()
         assert.isTrue(A.has(el))
       }
     })
@@ -505,7 +505,7 @@ describe('Operations (instances)', function () {
   describe('binary operation args', function () {
     const a = new Set([1, 2])
     const binaryOpNames = ['union', 'intersect']
-    for (let binaryOpName of binaryOpNames) {
+    for (const binaryOpName of binaryOpNames) {
       it('throws an error if you give it no argument', function () {
         assert.throws(function () {
           a[binaryOpName]()
@@ -550,7 +550,7 @@ describe('Operations (instances)', function () {
       assert.deepEqual(set.toArray(), compare)
     })
 
-    it ('skips to add sets, which are already contained', function () {
+    it('skips to add sets, which are already contained', function () {
       const set1 = set(3)
       const set2 = set(3)
       const set3 = set()
@@ -1077,10 +1077,10 @@ describe('Operations (static)', function () {
       const cmp = set(
         new Set([1, 2, 3, 4]),
 
-        new Set([1, 2, 3   ]),
-        new Set([1, 2,    4]),
-        new Set([1,    3, 4]),
-        new Set([   2, 3, 4]),
+        new Set([1, 2, 3]),
+        new Set([1, 2, 4]),
+        new Set([1, 3, 4]),
+        new Set([2, 3, 4]),
 
         new Set([1, 2]),
         new Set([1, 3]),
@@ -1097,7 +1097,7 @@ describe('Operations (static)', function () {
         new Set([4]),
         new Set([])
       )
-      
+
       areEqual(pwr, cmp)
     })
 
@@ -1107,10 +1107,10 @@ describe('Operations (static)', function () {
       const cmp = set(
         new Set([set(1), set(2), set(3), set(4)]),
 
-        new Set([set(1), set(2), set(3)        ]),
-        new Set([set(1), set(2),         set(4)]),
-        new Set([set(1),         set(3), set(4)]),
-        new Set([        set(2), set(3), set(4)]),
+        new Set([set(1), set(2), set(3)]),
+        new Set([set(1), set(2), set(4)]),
+        new Set([set(1), set(3), set(4)]),
+        new Set([set(2), set(3), set(4)]),
 
         new Set([set(1), set(2)]),
         new Set([set(1), set(3)]),

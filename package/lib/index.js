@@ -64,7 +64,7 @@ function checkSets (sets) {
  */
 function checkArgsSingle (args) {
   if (!args || args.length !== 1) {
-    throw new Error(`The function must be given exactly 1 argument.`)
+    throw new Error('The function must be given exactly 1 argument.')
   }
   return true
 }
@@ -212,7 +212,7 @@ global.Set.prototype.has = function has (value) {
 
   const iterator = this.values()
   let element
-  while ((element = iterator.next().value) !== void 0) {
+  while ((element = iterator.next().value) !== undefined) {
     const elType = typeof element
 
     if (elType !== valType) {
@@ -371,7 +371,7 @@ global.Set.prototype.randomElement = randomElementUnary
 function isSupersetOf (set) {
   const iterator = set.values()
   let value
-  while ((value = iterator.next().value) !== void 0) {
+  while ((value = iterator.next().value) !== undefined) {
     if (!this.has(value)) return false
   }
   return true
@@ -662,7 +662,7 @@ global.Set.prototype.union = arbitraryToBinary(unionArbitrary)
 function intersectionArbitrary (...args) {
   checkSets(args)
   if (!args || args.length === 0) {
-    throw new Error(`The intersection operator currently does not support 0 arguments.`)
+    throw new Error('The intersection operator currently does not support 0 arguments.')
   }
   const set3 = new Set()
 
@@ -670,7 +670,7 @@ function intersectionArbitrary (...args) {
     return (prev.size < curr.size) ? prev : curr
   }, args[0])
 
-  for (let value of minimumSet) {
+  for (const value of minimumSet) {
     if (args.every(compare => compare.has(value))) {
       set3.add(value)
     }
@@ -738,7 +738,7 @@ function complement (set1, set2) {
   checkSet(set1)
   checkSet(set2)
   if (!set1.isSupersetOf(set2)) {
-    throw new Error(`[set2] has an element which is not in the universe [set1].`)
+    throw new Error('[set2] has an element which is not in the universe [set1].')
   }
   return Set.difference(set1, set2)
 }
@@ -833,15 +833,6 @@ global.Set.cartesian = function cartesianProduct (set1, set2) {
  * https://en.wikipedia.org/wiki/Power_set
  * @private
  */
-function addToSubset (e, T) {
-  T.forEach(X => X.add(e))
-  return T
-}
-
-/**
- * https://en.wikipedia.org/wiki/Power_set
- * @private
- */
 function subsets (S, output = new Set()) {
   checkSet(S)
   if (S.size === 0) {
@@ -907,7 +898,7 @@ global.Set.power = powerSet
 function mergeRules (...rules) {
   checkRules(rules)
   return value => {
-    let passed = rules.some(rule => rule.call(value))
+    const passed = rules.some(rule => rule.call(value))
     if (!passed) {
       throw new Error(`Value [${value}] does not match any rule of the ruleset.`)
     }
@@ -932,7 +923,7 @@ global.Set.mergeRules = mergeRules
 function mergeRulesStrict (...rules) {
   checkRules(rules)
   return value => {
-    let passed = rules.every(rule => rule.call(value))
+    const passed = rules.every(rule => rule.call(value))
     if (!passed) {
       throw new Error(`Value [${value}] does not match any rule of the ruleset.`)
     }

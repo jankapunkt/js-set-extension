@@ -79,7 +79,7 @@ function checkSets(sets) {
 
 function checkArgsSingle(args) {
   if (!args || args.length !== 1) {
-    throw new Error("The function must be given exactly 1 argument.");
+    throw new Error('The function must be given exactly 1 argument.');
   }
 
   return true;
@@ -245,7 +245,7 @@ global.Set.prototype.has = function has(value) {
   var iterator = this.values();
   var element;
 
-  while ((element = iterator.next().value) !== void 0) {
+  while ((element = iterator.next().value) !== undefined) {
     var elType = _typeof(element);
 
     if (elType !== valType) {
@@ -399,7 +399,7 @@ function isSupersetOf(set) {
   var iterator = set.values();
   var value;
 
-  while ((value = iterator.next().value) !== void 0) {
+  while ((value = iterator.next().value) !== undefined) {
     if (!this.has(value)) return false;
   }
 
@@ -717,7 +717,7 @@ function intersectionArbitrary() {
   checkSets(args);
 
   if (!args || args.length === 0) {
-    throw new Error("The intersection operator currently does not support 0 arguments.");
+    throw new Error('The intersection operator currently does not support 0 arguments.');
   }
 
   var set3 = new Set();
@@ -812,7 +812,7 @@ function complement(set1, set2) {
   checkSet(set2);
 
   if (!set1.isSupersetOf(set2)) {
-    throw new Error("[set2] has an element which is not in the universe [set1].");
+    throw new Error('[set2] has an element which is not in the universe [set1].');
   }
 
   return Set.difference(set1, set2);
@@ -916,18 +916,6 @@ global.Set.cartesian = function cartesianProduct(set1, set2) {
   });
   return set3;
 };
-/**
- * https://en.wikipedia.org/wiki/Power_set
- * @private
- */
-
-
-function addToSubset(e, T) {
-  T.forEach(function (X) {
-    return X.add(e);
-  });
-  return T;
-}
 /**
  * https://en.wikipedia.org/wiki/Power_set
  * @private

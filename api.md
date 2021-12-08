@@ -33,8 +33,8 @@ Extended version of <a href="https://developer.mozilla.org/en-US/docs/Web/JavaSc
         * [.copy(set)](#Set.copy) ⇒ [<code>Set</code>](#Set)
         * [.union(...args)](#Set.union) ⇒ [<code>Set</code>](#Set)
         * [.intersection(...args)](#Set.intersection) ⇒ [<code>Set</code>](#Set)
-        * [.difference(set1, set2)](#Set.difference) ⇒ <code>ExtendedSet</code> \| <code>\*</code>
-        * [.complement(set1, set2)](#Set.complement) ⇒ <code>ExtendedSet</code> \| <code>\*</code>
+        * [.difference(set1, set2)](#Set.difference) ⇒ [<code>Set</code>](#Set) \| <code>\*</code>
+        * [.complement(set1, set2)](#Set.complement) ⇒ [<code>Set</code>](#Set) \| <code>\*</code>
         * [.symDiff(...args)](#Set.symDiff) ⇒ [<code>Set</code>](#Set)
         * [.cartesian(set1, set2)](#Set.cartesian) ⇒ [<code>Set</code>](#Set)
         * [.power(set)](#Set.power) ⇒ [<code>Set</code>](#Set)
@@ -488,11 +488,11 @@ Set.intersection(...M) // Set { 1, 2 }
 ```
 <a name="Set.difference"></a>
 
-### Set.difference(set1, set2) ⇒ <code>ExtendedSet</code> \| <code>\*</code>
+### Set.difference(set1, set2) ⇒ [<code>Set</code>](#Set) \| <code>\*</code>
 Computes the set difference of two sets (subtracts B from A): <code>C = A \ B</code>.  This is also known as the "relative complement".
 
 **Kind**: static method of [<code>Set</code>](#Set)  
-**Returns**: <code>ExtendedSet</code> \| <code>\*</code> - A new Set with all elements of A minus the elements of B  
+**Returns**: [<code>Set</code>](#Set) \| <code>\*</code> - A new Set with all elements of A minus the elements of B  
 **Throws**:
 
 - Throws an error if any of the arguments is not a Set instance.
@@ -505,11 +505,11 @@ Computes the set difference of two sets (subtracts B from A): <code>C = A \ B</c
 
 <a name="Set.complement"></a>
 
-### Set.complement(set1, set2) ⇒ <code>ExtendedSet</code> \| <code>\*</code>
+### Set.complement(set1, set2) ⇒ [<code>Set</code>](#Set) \| <code>\*</code>
 Computes the complement of set B where U is the universe: <code>C = U \ B</code>.  This is also known as the "absolute complement".
 
 **Kind**: static method of [<code>Set</code>](#Set)  
-**Returns**: <code>ExtendedSet</code> \| <code>\*</code> - A new Set with all elements of U minus the elements of B  
+**Returns**: [<code>Set</code>](#Set) \| <code>\*</code> - A new Set with all elements of U minus the elements of B  
 **Throws**:
 
 - Throws an error if any of the arguments is not a Set instance.

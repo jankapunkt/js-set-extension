@@ -1,6 +1,6 @@
 "use strict";
 
-function _createForOfIteratorHelper(o, allowArrayLike) { var it; if (typeof Symbol === "undefined" || o[Symbol.iterator] == null) { if (Array.isArray(o) || (it = _unsupportedIterableToArray(o)) || allowArrayLike && o && typeof o.length === "number") { if (it) o = it; var i = 0; var F = function F() {}; return { s: F, n: function n() { if (i >= o.length) return { done: true }; return { done: false, value: o[i++] }; }, e: function e(_e) { throw _e; }, f: F }; } throw new TypeError("Invalid attempt to iterate non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method."); } var normalCompletion = true, didErr = false, err; return { s: function s() { it = o[Symbol.iterator](); }, n: function n() { var step = it.next(); normalCompletion = step.done; return step; }, e: function e(_e2) { didErr = true; err = _e2; }, f: function f() { try { if (!normalCompletion && it["return"] != null) it["return"](); } finally { if (didErr) throw err; } } }; }
+function _createForOfIteratorHelper(o, allowArrayLike) { var it = typeof Symbol !== "undefined" && o[Symbol.iterator] || o["@@iterator"]; if (!it) { if (Array.isArray(o) || (it = _unsupportedIterableToArray(o)) || allowArrayLike && o && typeof o.length === "number") { if (it) o = it; var i = 0; var F = function F() {}; return { s: F, n: function n() { if (i >= o.length) return { done: true }; return { done: false, value: o[i++] }; }, e: function e(_e) { throw _e; }, f: F }; } throw new TypeError("Invalid attempt to iterate non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method."); } var normalCompletion = true, didErr = false, err; return { s: function s() { it = it.call(o); }, n: function n() { var step = it.next(); normalCompletion = step.done; return step; }, e: function e(_e2) { didErr = true; err = _e2; }, f: function f() { try { if (!normalCompletion && it["return"] != null) it["return"](); } finally { if (didErr) throw err; } } }; }
 
 function _unsupportedIterableToArray(o, minLen) { if (!o) return; if (typeof o === "string") return _arrayLikeToArray(o, minLen); var n = Object.prototype.toString.call(o).slice(8, -1); if (n === "Object" && o.constructor) n = o.constructor.name; if (n === "Map" || n === "Set") return Array.from(o); if (n === "Arguments" || /^(?:Ui|I)nt(?:8|16|32)(?:Clamped)?Array$/.test(n)) return _arrayLikeToArray(o, minLen); }
 
@@ -32,6 +32,8 @@ function _typeof(obj) { "@babel/helpers - typeof"; if (typeof Symbol === "functi
 // SOFTWARE.
 //
 // //////////////////////////////////////////////////////////////////////////////// //
+
+/* global self */
 // //////////////////////////////////////////////////////////////////////////////// //
 //                                                                                  //
 // INTERNAL                                                                         //
@@ -39,88 +41,126 @@ function _typeof(obj) { "@babel/helpers - typeof"; if (typeof Symbol === "functi
 // //////////////////////////////////////////////////////////////////////////////// //
 
 /**
- * @private
+ * @private detect current environment's globalThis to enable cross-env usage
  */
-function checkRules(rules) {
+var scope = function () {
+  if (typeof self !== 'undefined') {
+    return self;
+  }
+
+  if (typeof window !== 'undefined') {
+    return window;
+  }
+
+  if (typeof global !== 'undefined') {
+    return global;
+  }
+
+  throw new Error('unable to locate global object');
+}();
+/**
+ * @private checks all rules in list tro be a function @private
+ */
+
+
+var checkRules = function checkRules(rules) {
   rules.forEach(function (rule) {
     if (typeof rule !== 'function') {
       throw new Error("Expected [rule] to be typeof [function], got [".concat(typeof value === "undefined" ? "undefined" : _typeof(value), "]"));
     }
   });
   return true;
-}
-/**
- * @private
- */
-
-
-function checkSet(set) {
-  if (!set || !set.constructor || !(set instanceof global.Set)) {
-    throw new Error("Expected [set] to be instanceof [Set], got [".concat(set && set.constructor, "]"));
-  }
-
-  return true;
-}
-/**
- * @private
- */
-
-
-function checkSets(sets) {
-  sets.forEach(function (set) {
-    return checkSet(set);
-  });
-  return true;
-}
-/**
- * @private
- */
-
-
-function checkArgsSingle(args) {
-  if (!args || args.length !== 1) {
-    throw new Error('The function must be given exactly 1 argument.');
-  }
-
-  return true;
-}
-/**
- * A decorator which, given an arbitrary set function, produces the corresponding binary operation.
- * @private
- */
-
-
-function arbitraryToBinary(arbitraryFunc) {
-  return function binaryFunc() {
-    for (var _len = arguments.length, args = new Array(_len), _key = 0; _key < _len; _key++) {
-      args[_key] = arguments[_key];
-    }
-
-    checkArgsSingle(args);
-    var set = args[0];
-    return arbitraryFunc(this, set);
-  };
-}
+};
 /**
  * @private checks, whether an Object is a Set
+ * @return {boolean}
  */
 
 
 var isSet = function isSet(s) {
   return Object.prototype.toString.call(s) === '[object Set]';
+};
+/**
+ * @private checks, whether a given value is a Set instance @private
+ */
+
+
+var checkSet = function checkSet(set) {
+  if (!set || !set.constructor || !isSet(set) || !(set instanceof scope.Set)) {
+    throw new Error("Expected [set] to be instanceof [".concat(scope.Set.name, "], got [").concat(set && set.constructor, "]"));
+  }
+
+  return true;
+};
+/**
+ * @private checks all values to be a Set-instance @private
+ */
+
+
+var checkSets = function checkSets(sets) {
+  return sets.every(function (s) {
+    return checkSet(s);
+  });
+};
+/**
+ * @private checks arguments length and raises error if not given length
+ */
+
+
+var checkArgsLength = function checkArgsLength(args) {
+  var length = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : 1;
+
+  if (!args || args.length !== length) {
+    throw new Error("The function must be given exactly ".concat(length, " argument."));
+  }
+
+  return true;
+};
+/**
+ * A decorator which, given an arbitrary set function,
+ * produces the corresponding binary operation.
+ * @private
+ */
+
+
+var arbitraryToBinary = function arbitraryToBinary(arbitraryFunc) {
+  return function binaryFunc() {
+    for (var _len = arguments.length, args = new Array(_len), _key = 0; _key < _len; _key++) {
+      args[_key] = arguments[_key];
+    }
+
+    checkArgsLength(args, 1);
+    var set = args[0];
+    return arbitraryFunc(this, set);
+  };
+};
+/**
+ * @private contains references to the original Set functions
+ */
+
+
+var originals = {
+  /**
+   * @private The original Set reference.
+   */
+  constructor: scope.Set,
+
+  /**
+   * @private The original add function.
+   */
+  add: scope.Set.prototype.add,
+
+  /**
+   * @private The original has function reference.
+   */
+  has: scope.Set.prototype.has
 }; // //////////////////////////////////////////////////////////////////////////////// //
 //                                                                                  //
 // OVERRIDES                                                                        //
 //                                                                                  //
 // //////////////////////////////////////////////////////////////////////////////// //
 
-/**
- * The original add function.
- * @private
- */
-
-
-var _originalAdd = global.Set.prototype.add;
+scope.Set.prototype.add =
 /**
  * Adds a value to the set. If the set already contains the value, nothing happens.
  * Overrides Set.prototype.add.
@@ -131,7 +171,6 @@ var _originalAdd = global.Set.prototype.add;
  * @returns {Set} the Set object
  * @see https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Set/add
  */
-
 function add(value) {
   if (this.rulesFct && !this.rulesFct.call(null, value)) {
     throw new Error("Value [".concat(value, "] does not match ruleset."));
@@ -144,23 +183,16 @@ function add(value) {
     return this;
   }
 
-  return _originalAdd.call(this, value);
-}
-
-global.Set.prototype.add = add;
-/**
- * The original has function reference.
- * @private
- */
-
-var originalHas = global.Set.prototype.has;
+  return originals.add.call(this, value);
+};
 /**
  * Resolves an element's inner structure to make it comparable by JSON.stringify.
  * @private
  */
 
+
 function resolve(obj) {
-  var circ = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : new _originalSet([obj]);
+  var circ = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : new originals.constructor([obj]);
 
   if (typeof obj === 'undefined' || typeof obj === 'string' || typeof obj === 'number' || typeof obj === 'boolean' || obj === null) {
     return obj;
@@ -178,7 +210,7 @@ function resolve(obj) {
     // resolve all function properties / attached references
 
     fctObj.refs = Object.getOwnPropertyNames(obj).map(function (key) {
-      return originalHas.call(circ, obj[key]) ? 'circular' : resolve(obj[key], circ);
+      return originals.has.call(circ, obj[key]) ? 'circular' : resolve(obj[key], circ);
     });
     return fctObj;
   }
@@ -195,7 +227,7 @@ function resolve(obj) {
 
   if (isArray) {
     return obj.map(function (el) {
-      return originalHas.call(circ, el) ? 'circular' : resolve(el, circ);
+      return originals.has.call(circ, el) ? 'circular' : resolve(el, circ);
     });
   }
 
@@ -203,7 +235,7 @@ function resolve(obj) {
   Object.getOwnPropertyNames(obj).sort(function (a, b) {
     return a.localeCompare(b);
   }).forEach(function (key) {
-    copy[key] = originalHas.call(circ, obj[key]) ? 'circular' : resolve(obj[key], circ);
+    copy[key] = originals.has.call(circ, obj[key]) ? 'circular' : resolve(obj[key], circ);
   });
   return copy;
 }
@@ -235,11 +267,11 @@ function resolve(obj) {
  */
 
 
-global.Set.prototype.has = function has(value) {
+scope.Set.prototype.has = function has(value) {
   var valType = _typeof(value);
 
   if (valType === 'string' || valType === 'number' || valType === 'boolean') {
-    return originalHas.call(this, value);
+    return originals.has.call(this, value);
   }
 
   var iterator = this.values();
@@ -287,6 +319,8 @@ global.Set.prototype.has = function has(value) {
 //                                                                                  //
 // //////////////////////////////////////////////////////////////////////////////// //
 
+
+scope.Set.prototype.rules =
 /**
  * Pass a function that dictates the rules for elements to be part of this set.
  * Use without args to get the current rules function.
@@ -313,8 +347,6 @@ global.Set.prototype.has = function has(value) {
  * @param value {Function} (Optional) a Function that obtains a single argument and returns either a truthy or falsey value.
  * @returns {Function|undefined} Returns the current rules Function or undefined if there is on rules function assigned.
  */
-
-
 function rules(value) {
   if (value) {
     checkRules([value]);
@@ -322,9 +354,9 @@ function rules(value) {
   }
 
   return this.rulesFct;
-}
+};
 
-global.Set.prototype.rules = rules;
+scope.Set.prototype.toArray =
 /**
  * Creates an (unsorted) array from all elements of this set.
  * @function
@@ -332,7 +364,6 @@ global.Set.prototype.rules = rules;
  * @example new Set([1, 2, 3, 4]).toArray() // [ 1, 2, 3, 4 ]
  * @returns {Array} Array containing all elements of this set in unsorted order.
  */
-
 function toArray() {
   var self = this;
   var out = [];
@@ -342,9 +373,9 @@ function toArray() {
     out[count++] = value;
   });
   return out;
-}
+};
 
-global.Set.prototype.toArray = toArray;
+scope.Set.prototype.any =
 /**
  * Returns an arbitrary element of this set.
  * Basically the first element, retrieved by iterator.next().value will be used.
@@ -352,14 +383,13 @@ global.Set.prototype.toArray = toArray;
  * @name Set.prototype.any
  * @returns {*} An arbitrary element of the current set that could by of any type, depending on the elements of the set.
  */
-
 function any() {
   var self = this;
   var iterator = self.values();
   return iterator.next().value;
-}
+};
 
-global.Set.prototype.any = any;
+scope.Set.prototype.randomElement =
 /**
  * Returns a random element of this set.
  * One element of this set is chosen at random and returned.  The probability distribution is uniform.  Math.random() is used internally for this purpose.
@@ -367,14 +397,13 @@ global.Set.prototype.any = any;
  * @name Set.prototype.randomElement
  * @returns {*} An element chosen randomly from the current set that could be of any type, depending on the elements of the set.
  */
-
 function randomElementUnary() {
   var array = this.toArray();
   var randomIndex = Math.floor(Math.random() * array.length);
   return array[randomIndex];
-}
+};
 
-global.Set.prototype.randomElement = randomElementUnary;
+scope.Set.prototype.isSupersetOf =
 /**
  * Checks, whether the current set (this) is a superset of the given set.
  * A set A is superset of set B, if A contains all elements of B.
@@ -394,7 +423,6 @@ global.Set.prototype.randomElement = randomElementUnary;
  * @returns {boolean} true if this set is the superset of the given set, otherwise false.
  * @see https://en.wikipedia.org/wiki/Subset
  */
-
 function isSupersetOf(set) {
   var iterator = set.values();
   var value;
@@ -404,9 +432,9 @@ function isSupersetOf(set) {
   }
 
   return true;
-}
+};
 
-global.Set.prototype.isSupersetOf = isSupersetOf;
+scope.Set.prototype.isSubsetOf =
 /**
  * Checks, whether the current set (this) is a subset of the given set.
  * A set A is subset of set B, if B contains all elements of A.
@@ -431,12 +459,11 @@ global.Set.prototype.isSupersetOf = isSupersetOf;
  * @see Set.prototype.equal
  * @see Set.prototype.isProperSubsetOf
  */
-
 function isSubsetOf(set) {
   return set.isSupersetOf(this);
-}
+};
 
-global.Set.prototype.isSubsetOf = isSubsetOf;
+scope.Set.prototype.properSupersetOf =
 /**
  * Checks, whether the current set (this) is a proper superset of the given set.
  * A set A is a proper subset of set B, if A contains all elements of B and their sizes are not equal.
@@ -448,12 +475,11 @@ global.Set.prototype.isSubsetOf = isSubsetOf;
  * @returns {boolean}
  * @see https://en.wikipedia.org/wiki/Subset
  */
-
 function isProperSupersetOf(set) {
   return this.size !== set.size && this.isSupersetOf(set);
-}
+};
 
-global.Set.prototype.properSupersetOf = isProperSupersetOf;
+scope.Set.prototype.properSubsetOf =
 /**
  * Checks, whether the current set (this) is a proper subset of the given set.
  * A set A is a proper subset of set B, if B contains all elements of A and their sizes are not equal.
@@ -465,12 +491,11 @@ global.Set.prototype.properSupersetOf = isProperSupersetOf;
  * @returns {boolean}
  * @see https://en.wikipedia.org/wiki/Subset
  */
-
 function isProperSubsetOf(set) {
   return this.size !== set.size && this.isSubsetOf(set);
-}
+};
 
-global.Set.prototype.properSubsetOf = isProperSubsetOf;
+scope.Set.prototype.equal =
 /**
  * Checks, whether two sets are equal in terms of their contained elements.
  * Note: This implementation uses a deep object comparison in order to check for "sameness".
@@ -493,7 +518,6 @@ global.Set.prototype.properSubsetOf = isProperSubsetOf;
  * @see https://developer.mozilla.org/en-US/docs/Web/JavaScript/Equality_comparisons_and_sameness
  * @see Set.prototype.isSubsetOf
  */
-
 function equal(set) {
   checkSet(set);
 
@@ -502,9 +526,9 @@ function equal(set) {
   }
 
   return this.isSubsetOf(set);
-}
+};
 
-global.Set.prototype.equal = equal;
+scope.Set.prototype.isEmpty =
 /**
  * Checks whether this set is the empty set.
  * A Set is empty if and only if it has no elements.  This is the same thing as having size (cardinality) 0.  The empty set is often denoted ∅ or {}.
@@ -523,23 +547,16 @@ global.Set.prototype.equal = equal;
  * @returns {boolean}
  * @see https://en.wikipedia.org/wiki/Empty_set
  */
-
 function isEmptyUnary() {
   return this.size === 0;
-}
-
-global.Set.prototype.isEmpty = isEmptyUnary; // //////////////////////////////////////////////////////////////////////////////// //
+}; // //////////////////////////////////////////////////////////////////////////////// //
 //                                                                                  //
 // CONSTRUCTOR                                                                      //
 //                                                                                  //
 // //////////////////////////////////////////////////////////////////////////////// //
 
-/**
- * The original Set reference.
- * @private
- */
 
-var _originalSet = global.Set;
+scope.Set =
 /**
  * Use <code>new Set(elements, rulesFct)</code> to create new sets. Alternatively you can use <code>Set.from</code>
  * @class
@@ -551,9 +568,8 @@ var _originalSet = global.Set;
  * @see https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Set
  * @returns {Set} An instance of the extended version of <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Set">Set (MDN link)</a>
  */
-
 function Set(elements, rulesFct) {
-  var original = new _originalSet();
+  var original = new originals.constructor();
 
   if (rulesFct) {
     original.rules(rulesFct);
@@ -566,15 +582,20 @@ function Set(elements, rulesFct) {
   }
 
   return original;
-}
+};
+/**
+ * The prototype is the original Set constructor
+ * @type {contains}
+ */
 
-global.Set = Set;
-global.Set.prototype = _originalSet.prototype; // //////////////////////////////////////////////////////////////////////////////// //
+
+scope.Set.prototype = originals.constructor.prototype; // //////////////////////////////////////////////////////////////////////////////// //
 //                                                                                  //
 // STATICS                                                                          //
 //                                                                                  //
 // //////////////////////////////////////////////////////////////////////////////// //
 
+scope.Set.from =
 /**
  * Creates a new Set from arbitrary arguments without the need of "new" and the array notation.
  * @function
@@ -587,16 +608,15 @@ global.Set.prototype = _originalSet.prototype; // //////////////////////////////
  * @param args {...*} - values of any types / length (using comma notation or spread operator)
  * @returns {Set} A set containing the given argument values.
  */
-
 function from() {
   for (var _len2 = arguments.length, args = new Array(_len2), _key2 = 0; _key2 < _len2; _key2++) {
     args[_key2] = arguments[_key2];
   }
 
   return new Set([].concat(args));
-}
+};
 
-global.Set.from = from;
+scope.Set.toSet =
 /**
  * Autowraps a value to a Set, unless it is already a Set.
  * @function
@@ -604,12 +624,11 @@ global.Set.from = from;
  * @param value  {*} - Any arbitrary value
  * @returns {Set} A Set containing the value or the value if it is already a Set.
  */
-
 function toSet(value) {
   return value instanceof Set ? value : Set.from(value);
-}
+};
 
-global.Set.toSet = toSet;
+scope.Set.copy =
 /**
  * Copies all elements of a given Set instance into a new Set and returns it.
  * <strong>It does not deep-clone the elements of the set.</strong>
@@ -619,7 +638,6 @@ global.Set.toSet = toSet;
  * @param set {Set} a set instance from which to copy from
  * @returns {Set} a new Set instance containing all elements of the source.
  */
-
 function copy(set) {
   checkSet(set);
   var c = new Set();
@@ -627,9 +645,9 @@ function copy(set) {
     return c.add(el);
   });
   return c;
-}
+};
 
-global.Set.copy = copy;
+scope.Set.union =
 /**
  * Creates the set union of an arbitrary number of sets.
  * The union S of any number of sets M<sub>i</sub> is the set that consists of all elements of each M<sub>i</sub>.
@@ -651,7 +669,6 @@ global.Set.copy = copy;
  * @returns {Set} a Set instance with the unified elements of the given args.
  * @see https://en.wikipedia.org/wiki/Union_(set_theory)#Arbitrary_unions
  */
-
 function unionArbitrary() {
   for (var _len3 = arguments.length, args = new Array(_len3), _key3 = 0; _key3 < _len3; _key3++) {
     args[_key3] = arguments[_key3];
@@ -665,9 +682,7 @@ function unionArbitrary() {
     });
   });
   return set3;
-}
-
-global.Set.union = unionArbitrary;
+};
 /**
  * Creates the set union of two sets.
  * The union of A and B is the set C that consists of all elements of A and B.
@@ -686,7 +701,10 @@ global.Set.union = unionArbitrary;
  * @see https://en.wikipedia.org/wiki/Union_(set_theory)#Union_of_two_sets
  */
 
-global.Set.prototype.union = arbitraryToBinary(unionArbitrary);
+
+scope.Set.prototype.union = arbitraryToBinary(scope.Set.union);
+
+scope.Set.intersection =
 /**
  * Creates the set intersection of an arbitrary number of sets.
  * The intersection S of any number of sets M<sub>i</sub> is the set whose elements consist of the elements that occur in every single set M<sub>i</sub>.
@@ -708,7 +726,6 @@ global.Set.prototype.union = arbitraryToBinary(unionArbitrary);
  * @returns {Set} a Set instance with the shared elements of the given args.
  * @see https://en.wikipedia.org/wiki/Intersection_(set_theory)#Arbitrary_intersections
  */
-
 function intersectionArbitrary() {
   for (var _len4 = arguments.length, args = new Array(_len4), _key4 = 0; _key4 < _len4; _key4++) {
     args[_key4] = arguments[_key4];
@@ -749,9 +766,7 @@ function intersectionArbitrary() {
   }
 
   return set3;
-}
-
-global.Set.intersection = intersectionArbitrary;
+};
 /**
  * Creates the set intersection of two sets.
  * The intersection S of sets A and B is the set whose elements consist of the elements that occur in both A and B.
@@ -770,7 +785,10 @@ global.Set.intersection = intersectionArbitrary;
  * @see https://en.wikipedia.org/wiki/Intersection_(set_theory)#Definition
  */
 
-global.Set.prototype.intersect = arbitraryToBinary(intersectionArbitrary);
+
+scope.Set.prototype.intersect = arbitraryToBinary(scope.Set.intersection);
+
+scope.Set.difference =
 /**
  * Computes the set difference of two sets (subtracts B from A): <code>C = A \ B</code>.  This is also known as the "relative complement".
  *
@@ -779,9 +797,8 @@ global.Set.prototype.intersect = arbitraryToBinary(intersectionArbitrary);
  * @throws Throws an error if any of the arguments is not a Set instance.
  * @param set1 - A the set to be subtracted from
  * @param set2 - B the set whose elements will be subtracted from A
- * @returns {ExtendedSet|*} A new Set with all elements of A minus the elements of B
+ * @returns {Set|*} A new Set with all elements of A minus the elements of B
  */
-
 function difference(set1, set2) {
   checkSet(set1);
   checkSet(set2);
@@ -792,9 +809,9 @@ function difference(set1, set2) {
     }
   });
   return set3;
-}
+};
 
-global.Set.difference = difference;
+scope.Set.complement =
 /**
  * Computes the complement of set B where U is the universe: <code>C = U \ B</code>.  This is also known as the "absolute complement".
  *
@@ -804,9 +821,8 @@ global.Set.difference = difference;
  * @throws Throws an error if any element in B does not occur in U.
  * @param set1 - U the set to be subtracted from
  * @param set2 - B the set whose elements will be subtracted from A
- * @returns {ExtendedSet|*} A new Set with all elements of U minus the elements of B
+ * @returns {Set|*} A new Set with all elements of U minus the elements of B
  */
-
 function complement(set1, set2) {
   checkSet(set1);
   checkSet(set2);
@@ -816,13 +832,12 @@ function complement(set1, set2) {
   }
 
   return Set.difference(set1, set2);
-}
-
-global.Set.complement = complement;
+};
 /**
  *
  * @private
  */
+
 
 function symDiff(set1, set2) {
   var set3 = new Set();
@@ -839,6 +854,8 @@ function symDiff(set1, set2) {
   addToSet(set2, set1, set3);
   return set3;
 }
+
+scope.Set.symDiff =
 /**
  * Creates the symmetric difference (disjunctive union) of an arbitrary number (2 .. n) of sets.
  * The symmetric difference of two sets A and B is a set, that contains only those elements,
@@ -859,8 +876,6 @@ function symDiff(set1, set2) {
  * @returns {Set} Returns a new Set, that contains only elements.
  * @see https://en.wikipedia.org/wiki/Symmetric_difference
  */
-
-
 function symmetricDifference() {
   for (var _len5 = arguments.length, args = new Array(_len5), _key5 = 0; _key5 < _len5; _key5++) {
     args[_key5] = arguments[_key5];
@@ -881,9 +896,9 @@ function symmetricDifference() {
   }
 
   return set3;
-}
+};
 
-global.Set.symDiff = symmetricDifference;
+scope.Set.cartesian =
 /**
  * Creates the cartesian product of two given sets.
  * The cartesian product of two sets A and B is the set of all ordered pairs (a, b) where a ∈ A and b ∈ B.
@@ -904,8 +919,7 @@ global.Set.symDiff = symmetricDifference;
  * @return {Set} a new set instance, that contains the ordered element pairs.
  * @see https://en.wikipedia.org/wiki/Cartesian_product
  */
-
-global.Set.cartesian = function cartesianProduct(set1, set2) {
+function cartesianProduct(set1, set2) {
   checkSet(set1);
   checkSet(set2);
   var set3 = new Set();
@@ -949,6 +963,8 @@ function subsets(S) {
 
   return output;
 }
+
+scope.Set.power =
 /**
  * Creates the powerset of a given set instance by using a recursive algorithm (see <a href="https://en.wikipedia.org/wiki/Power_set">Wikipedia</a>, section Algorithms).
  * The powerset of a set contains all possible subsets of the set, plus itself and the empty set.
@@ -962,8 +978,6 @@ function subsets(S) {
  * @returns {Set} a new set instance with all subsets of the given set, plus the given set itself and the empty set.
  * @see https://en.wikipedia.org/wiki/Power_set
  */
-
-
 function powerSet(set) {
   checkSet(set);
   var subs = subsets(set);
@@ -973,9 +987,26 @@ function powerSet(set) {
     return subs.add(Set.from(value));
   });
   return subs;
-}
+};
+/** @private **/
 
-global.Set.power = powerSet;
+
+var mergeRulesAny = function mergeRulesAny(strict, rules) {
+  var targetFn = strict ? rules.every : rules.some;
+  return function (value) {
+    var passed = targetFn.call(rules, function (rule) {
+      return rule.call(value);
+    });
+
+    if (!passed) {
+      throw new Error("Value [".concat(value, "] does not match any rule of the ruleset."));
+    }
+
+    return true;
+  };
+};
+
+scope.Set.mergeRules =
 /**
  * Merges two rules functions with a strict pass concept.
  * The resulting function requires the given element to pass at least one of the given functions (logical OR).
@@ -987,27 +1018,16 @@ global.Set.power = powerSet;
  * @see Set.prototype.rules
  *
  */
-
 function mergeRules() {
   for (var _len6 = arguments.length, rules = new Array(_len6), _key6 = 0; _key6 < _len6; _key6++) {
     rules[_key6] = arguments[_key6];
   }
 
   checkRules(rules);
-  return function (value) {
-    var passed = rules.some(function (rule) {
-      return rule.call(value);
-    });
+  return mergeRulesAny(false, rules);
+};
 
-    if (!passed) {
-      throw new Error("Value [".concat(value, "] does not match any rule of the ruleset."));
-    }
-
-    return true;
-  };
-}
-
-global.Set.mergeRules = mergeRules;
+scope.Set.mergeRulesStrict =
 /**
  * Merges two rules functions with a strict pass concept.
  * The resulting function requires the given element to pass all of the given functions (logical AND).
@@ -1020,32 +1040,20 @@ global.Set.mergeRules = mergeRules;
  * @returns {function(*=): boolean} The resulting rules function that can be attached to a set instance.
  * @see Set.prototype.rules
  */
-
 function mergeRulesStrict() {
   for (var _len7 = arguments.length, rules = new Array(_len7), _key7 = 0; _key7 < _len7; _key7++) {
     rules[_key7] = arguments[_key7];
   }
 
   checkRules(rules);
-  return function (value) {
-    var passed = rules.every(function (rule) {
-      return rule.call(value);
-    });
-
-    if (!passed) {
-      throw new Error("Value [".concat(value, "] does not match any rule of the ruleset."));
-    }
-
-    return true;
-  };
-}
-
-global.Set.mergeRulesStrict = mergeRulesStrict;
+  return mergeRulesAny(true, rules);
+};
 /**
  * Flag to indicate the presence of this polyfill
  * @type {boolean}
  * @private
  */
 
-global.Set.__isExtended__ = true;
+
+scope.Set.__isExtended__ = true;
 //# sourceMappingURL=index.js.map

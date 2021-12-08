@@ -3,11 +3,12 @@
 
 Polyfill for extending the Javascript [Set](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Set) class in order to support properties and operations from basic set theory.
 
+[![Test suite](https://github.com/jankapunkt/js-set-extension/actions/workflows/tests.yml/badge.svg)](https://github.com/jankapunkt/js-set-extension/actions/workflows/tests.yml)
+[![CodeQL Semantic Analysis](https://github.com/jankapunkt/js-set-extension/actions/workflows/codeql-analysis.yml/badge.svg)](https://github.com/jankapunkt/js-set-extension/actions/workflows/codeql-analysis.yml)
 [![Project Status: Active – The project has reached a stable, usable state and is being actively developed.](https://www.repostatus.org/badges/latest/active.svg)](https://www.repostatus.org/#active)
-[![Build Status](https://travis-ci.org/jankapunkt/js-set-extension.svg?branch=master)](https://travis-ci.org/jankapunkt/js-set-extension)
 [![JavaScript Style Guide](https://img.shields.io/badge/code_style-standard-brightgreen.svg)](https://standardjs.com)
-![GitHub](https://img.shields.io/github/license/jankapunkt/js-set-extension.svg)
 ![npm bundle size](https://img.shields.io/bundlephobia/min/set-extensions.svg)
+![GitHub](https://img.shields.io/github/license/jankapunkt/js-set-extension.svg)
 
 
 ## Scope

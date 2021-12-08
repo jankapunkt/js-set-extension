@@ -22,6 +22,7 @@
 // SOFTWARE.
 //
 // //////////////////////////////////////////////////////////////////////////////// //
+/* global self */
 
 // //////////////////////////////////////////////////////////////////////////////// //
 //                                                                                  //
@@ -30,9 +31,19 @@
 // //////////////////////////////////////////////////////////////////////////////// //
 
 /**
- * @private
+ * @private detect current environment's globalThis to enable cross-env usage
  */
-function checkRules (rules) {
+const scope = (() => {
+  if (typeof self !== 'undefined') { return self }
+  if (typeof window !== 'undefined') { return window }
+  if (typeof global !== 'undefined') { return global }
+  throw new Error('unable to locate global object')
+})()
+
+/**
+ * @private checks all rules in list tro be a function @private
+ */
+const checkRules = (rules) => {
   rules.forEach(rule => {
     if (typeof rule !== 'function') {
       throw new Error(`Expected [rule] to be typeof [function], got [${typeof value}]`)
@@ -42,49 +53,67 @@ function checkRules (rules) {
 }
 
 /**
- * @private
+ * @private checks, whether an Object is a Set
+ * @return {boolean}
  */
-function checkSet (set) {
-  if (!set || !set.constructor || !(set instanceof global.Set)) {
-    throw new Error(`Expected [set] to be instanceof [Set], got [${set && set.constructor}]`)
+const isSet = s => Object.prototype.toString.call(s) === '[object Set]'
+
+/**
+ * @private checks, whether a given value is a Set instance @private
+ */
+const checkSet = (set) => {
+  if (!set || !set.constructor || !isSet(set) || !(set instanceof scope.Set)) {
+    throw new Error(`Expected [set] to be instanceof [${scope.Set.name}], got [${set && set.constructor}]`)
   }
   return true
 }
 
 /**
- * @private
+ * @private checks all values to be a Set-instance @private
  */
-function checkSets (sets) {
-  sets.forEach(set => checkSet(set))
-  return true
-}
+const checkSets = (sets) => sets.every(s => checkSet(s))
 
 /**
- * @private
+ * @private checks arguments length and raises error if not given length
  */
-function checkArgsSingle (args) {
-  if (!args || args.length !== 1) {
-    throw new Error('The function must be given exactly 1 argument.')
+const checkArgsLength = (args, length = 1) => {
+  if (!args || args.length !== length) {
+    throw new Error(`The function must be given exactly ${length} argument.`)
   }
   return true
 }
 
 /**
- * A decorator which, given an arbitrary set function, produces the corresponding binary operation.
+ * A decorator which, given an arbitrary set function,
+ * produces the corresponding binary operation.
  * @private
  */
-function arbitraryToBinary (arbitraryFunc) {
+const arbitraryToBinary = (arbitraryFunc) => {
   return function binaryFunc (...args) {
-    checkArgsSingle(args)
+    checkArgsLength(args, 1)
     const set = args[0]
     return arbitraryFunc(this, set)
   }
 }
 
 /**
- * @private checks, whether an Object is a Set
+ * @private contains references to the original Set functions
  */
-const isSet = s => Object.prototype.toString.call(s) === '[object Set]'
+const originals = {
+  /**
+   * @private The original Set reference.
+   */
+  constructor: scope.Set,
+  /**
+   * @private The original add function.
+   */
+  add: scope.Set.prototype.add,
+
+  /**
+   * @private The original has function reference.
+   */
+  has: scope.Set.prototype.has
+}
 
 // //////////////////////////////////////////////////////////////////////////////// //
 //                                                                                  //
@@ -92,50 +121,39 @@ const isSet = s => Object.prototype.toString.call(s) === '[object Set]'
 //                                                                                  //
 // //////////////////////////////////////////////////////////////////////////////// //
 
-/**
- * The original add function.
- * @private
- */
-const _originalAdd = global.Set.prototype.add
+scope.Set.prototype.add =
 
-/**
- * Adds a value to the set. If the set already contains the value, nothing happens.
- * Overrides Set.prototype.add.
- * @name Set.prototype.add
- * @function
- * @throws Error if rules function exists and {value} failed the rules check.
- * @param value {*}- Required. Any arbitrary value to be added to the set.
- * @returns {Set} the Set object
- * @see https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Set/add
- */
-function add (value) {
-  if (this.rulesFct && !this.rulesFct.call(null, value)) {
-    throw new Error(`Value [${value}] does not match ruleset.`)
+  /**
+   * Adds a value to the set. If the set already contains the value, nothing happens.
+   * Overrides Set.prototype.add.
+   * @name Set.prototype.add
+   * @function
+   * @throws Error if rules function exists and {value} failed the rules check.
+   * @param value {*}- Required. Any arbitrary value to be added to the set.
+   * @returns {Set} the Set object
+   * @see https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Set/add
+   */
+
+  function add (value) {
+    if (this.rulesFct && !this.rulesFct.call(null, value)) {
+      throw new Error(`Value [${value}] does not match ruleset.`)
+    }
+
+    // in case we add another set, we actually need to (recursively) check
+    // whether the set is already included, since the original add function
+    // only checks for uniqueness on a reference level
+    if (isSet(value) && this.has(value)) {
+      return this
+    }
+
+    return originals.add.call(this, value)
   }
-
-  // in case we add another set, we actually need to (recursively) check
-  // whether the set is already included, since the original add function
-  // only checks for uniqueness on a reference level
-  if (isSet(value) && this.has(value)) {
-    return this
-  }
-
-  return _originalAdd.call(this, value)
-}
-
-global.Set.prototype.add = add
-
-/**
- * The original has function reference.
- * @private
- */
-const originalHas = global.Set.prototype.has
 
 /**
  * Resolves an element's inner structure to make it comparable by JSON.stringify.
  * @private
  */
-function resolve (obj, circ = new _originalSet([obj])) {
+function resolve (obj, circ = new originals.constructor([obj])) {
   if (typeof obj === 'undefined' ||
     typeof obj === 'string' ||
     typeof obj === 'number' ||
@@ -152,7 +170,7 @@ function resolve (obj, circ = new _originalSet([obj])) {
   if (typeof obj === 'function') {
     const fctObj = { fctStr: String(obj).replace(/\s+/g, '') } // function body to string
     // resolve all function properties / attached references
-    fctObj.refs = Object.getOwnPropertyNames(obj).map(key => originalHas.call(circ, obj[key]) ? 'circular' : resolve(obj[key], circ))
+    fctObj.refs = Object.getOwnPropertyNames(obj).map(key => originals.has.call(circ, obj[key]) ? 'circular' : resolve(obj[key], circ))
     return fctObj
   }
 
@@ -166,14 +184,14 @@ function resolve (obj, circ = new _originalSet([obj])) {
   circ.add(obj)
 
   if (isArray) {
-    return obj.map(el => originalHas.call(circ, el) ? 'circular' : resolve(el, circ))
+    return obj.map(el => originals.has.call(circ, el) ? 'circular' : resolve(el, circ))
   }
 
   const copy = {}
   Object.getOwnPropertyNames(obj)
     .sort((a, b) => a.localeCompare(b))
     .forEach(key => {
-      copy[key] = originalHas.call(circ, obj[key]) ? 'circular' : resolve(obj[key], circ)
+      copy[key] = originals.has.call(circ, obj[key]) ? 'circular' : resolve(obj[key], circ)
     })
   return copy
 }
@@ -204,10 +222,10 @@ function resolve (obj, circ = new _originalSet([obj])) {
  * @returns {boolean} - True, if the value is contained by the set. False, if otherwise.
  * @see https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Set/has
  */
-global.Set.prototype.has = function has (value) {
+scope.Set.prototype.has = function has (value) {
   const valType = typeof value
   if (valType === 'string' || valType === 'number' || valType === 'boolean') {
-    return originalHas.call(this, value)
+    return originals.has.call(this, value)
   }
 
   const iterator = this.values()
@@ -263,241 +281,232 @@ global.Set.prototype.has = function has (value) {
 //                                                                                  //
 // //////////////////////////////////////////////////////////////////////////////// //
 
-/**
- * Pass a function that dictates the rules for elements to be part of this set.
- * Use without args to get the current rules function.
- * <br>
- * A rules function needs to fulfill the following requirements:
- * <ul>
- *   <li>Obtain a single element as argument</li>
- *   <li>Check, if that element passes certain conditions</li>
- *   <li>Return false if the element fails any condition</li>
- *   <li>Otherwise return true</li>
- * </ul>
- * <br>
- * If a set contains a rules function (or a merge of many rules functions), the element will only be added to the set,
- * if it passes the rules check.
- * @function
- * @name Set.prototype.rules
- * @example
- * const isInt = n => Number.isInteger(n)
- * const integers = Set.from()
- * integers.rules(isInt)
- * integers.add(1)   // OK, no error
- * integers.add(1.5) // throws error!
- * integers.add(1.0) // OK, because 1.0 === 1 in JS Number
- * @param value {Function} (Optional) a Function that obtains a single argument and returns either a truthy or falsey value.
- * @returns {Function|undefined} Returns the current rules Function or undefined if there is on rules function assigned.
- */
-function rules (value) {
-  if (value) {
-    checkRules([value])
-    this.rulesFct = value
+scope.Set.prototype.rules =
+  /**
+   * Pass a function that dictates the rules for elements to be part of this set.
+   * Use without args to get the current rules function.
+   * <br>
+   * A rules function needs to fulfill the following requirements:
+   * <ul>
+   *   <li>Obtain a single element as argument</li>
+   *   <li>Check, if that element passes certain conditions</li>
+   *   <li>Return false if the element fails any condition</li>
+   *   <li>Otherwise return true</li>
+   * </ul>
+   * <br>
+   * If a set contains a rules function (or a merge of many rules functions), the element will only be added to the set,
+   * if it passes the rules check.
+   * @function
+   * @name Set.prototype.rules
+   * @example
+   * const isInt = n => Number.isInteger(n)
+   * const integers = Set.from()
+   * integers.rules(isInt)
+   * integers.add(1)   // OK, no error
+   * integers.add(1.5) // throws error!
+   * integers.add(1.0) // OK, because 1.0 === 1 in JS Number
+   * @param value {Function} (Optional) a Function that obtains a single argument and returns either a truthy or falsey value.
+   * @returns {Function|undefined} Returns the current rules Function or undefined if there is on rules function assigned.
+   */
+  function rules (value) {
+    if (value) {
+      checkRules([value])
+      this.rulesFct = value
+    }
+    return this.rulesFct
   }
-  return this.rulesFct
-}
 
-global.Set.prototype.rules = rules
+scope.Set.prototype.toArray =
 
-/**
- * Creates an (unsorted) array from all elements of this set.
- * @function
- * @name Set.prototype.toArray
- * @example new Set([1, 2, 3, 4]).toArray() // [ 1, 2, 3, 4 ]
- * @returns {Array} Array containing all elements of this set in unsorted order.
- */
-function toArray () {
-  const self = this
-  const out = []
-  out.length = self.size
-  let count = 0
-  self.forEach(value => {
-    out[count++] = value
-  })
-  return out
-}
-
-global.Set.prototype.toArray = toArray
-
-/**
- * Returns an arbitrary element of this set.
- * Basically the first element, retrieved by iterator.next().value will be used.
- * @function
- * @name Set.prototype.any
- * @returns {*} An arbitrary element of the current set that could by of any type, depending on the elements of the set.
- */
-function any () {
-  const self = this
-  const iterator = self.values()
-  return iterator.next().value
-}
-
-global.Set.prototype.any = any
-
-/**
- * Returns a random element of this set.
- * One element of this set is chosen at random and returned.  The probability distribution is uniform.  Math.random() is used internally for this purpose.
- * @function
- * @name Set.prototype.randomElement
- * @returns {*} An element chosen randomly from the current set that could be of any type, depending on the elements of the set.
- */
-function randomElementUnary () {
-  const array = this.toArray()
-  const randomIndex = Math.floor(Math.random() * array.length)
-  return array[randomIndex]
-}
-
-global.Set.prototype.randomElement = randomElementUnary
-
-/**
- * Checks, whether the current set (this) is a superset of the given set.
- * A set A is superset of set B, if A contains all elements of B.
- * <br>
- * Expression: <code>A ⊇ B</code>
- * @function
- * @name Set.prototype.isSupersetOf
- * @example
- * const a = Set.from(1,2,3,4)
- * const b = Set.from(1,2,3)
- * const c = Set.from(1,2,3,4,5)
- * a.isSupersetOf(b) // true
- * a.isSupersetOf(c) // false
- * c.isSupersetOf(b) // true
- * @param set {Set} - A set instance of which this set is checked to be the superset.
- * @throws Throws an error, if the given set is not a set instance.
- * @returns {boolean} true if this set is the superset of the given set, otherwise false.
- * @see https://en.wikipedia.org/wiki/Subset
- */
-function isSupersetOf (set) {
-  const iterator = set.values()
-  let value
-  while ((value = iterator.next().value) !== undefined) {
-    if (!this.has(value)) return false
+  /**
+   * Creates an (unsorted) array from all elements of this set.
+   * @function
+   * @name Set.prototype.toArray
+   * @example new Set([1, 2, 3, 4]).toArray() // [ 1, 2, 3, 4 ]
+   * @returns {Array} Array containing all elements of this set in unsorted order.
+   */
+  function toArray () {
+    const self = this
+    const out = []
+    out.length = self.size
+    let count = 0
+    self.forEach(value => {
+      out[count++] = value
+    })
+    return out
   }
-  return true
-}
 
-global.Set.prototype.isSupersetOf = isSupersetOf
-
-/**
- * Checks, whether the current set (this) is a subset of the given set.
- * A set A is subset of set B, if B contains all elements of A.
- * <br>
- * Expression: <code>A ⊆ B</code>
- * <br>
- * If their sizes are also equal, they can be assumed as equal.
- * If their sizes are not equal, then A is called a proper subset of B.
- * @function
- * @name Set.prototype.isSubsetOf
- * @example
- * const a = Set.from(1,2,3,4)
- * const b = Set.from(1,2,3)
- * const c = Set.from(1,2,3,4,5)
- * a.isSubsetOf(b) // false
- * b.isSubsetOf(c) // true
- * c.isSubsetOf(a) // false
- * @param set {Set} - A set instance of which this set is checked to be the subset.
- * @throws Throws an error, if the given set is not a set instance.
- * @returns {boolean} - true if this set is the subset of the given set, false otherwise
- * @see https://en.wikipedia.org/wiki/Subset
- * @see Set.prototype.equal
- * @see Set.prototype.isProperSubsetOf
- */
-function isSubsetOf (set) {
-  return set.isSupersetOf(this)
-}
-
-global.Set.prototype.isSubsetOf = isSubsetOf
-
-/**
- * Checks, whether the current set (this) is a proper superset of the given set.
- * A set A is a proper subset of set B, if A contains all elements of B and their sizes are not equal.
- * <br>
- * Expression: <code>A ⊃ B</code>
- * @function
- * @name Set.prototype.properSupersetOf
- * @param set {Set} - A set instance of which this set is checked to be the proper superset.
- * @returns {boolean}
- * @see https://en.wikipedia.org/wiki/Subset
- */
-function isProperSupersetOf (set) {
-  return this.size !== set.size && this.isSupersetOf(set)
-}
-
-global.Set.prototype.properSupersetOf = isProperSupersetOf
-
-/**
- * Checks, whether the current set (this) is a proper subset of the given set.
- * A set A is a proper subset of set B, if B contains all elements of A and their sizes are not equal.
- * <br>
- * Expression: <code>A ⊂ B</code>
- * @function
- * @name Set.prototype.properSupersetOf
- * @param set {Set} - A set instance of which this set is checked to be the proper subset.
- * @returns {boolean}
- * @see https://en.wikipedia.org/wiki/Subset
- */
-function isProperSubsetOf (set) {
-  return this.size !== set.size && this.isSubsetOf(set)
-}
-
-global.Set.prototype.properSubsetOf = isProperSubsetOf
-
-/**
- * Checks, whether two sets are equal in terms of their contained elements.
- * Note: This implementation uses a deep object comparison in order to check for "sameness".
- * This allows also to check equality for more complex / nested structures without the restriction of interpreting
- * "sameness" as "being the exact same instance". If such an equality is desired, please use Set.prototype.equalSrict
- * @function
- * @name Set.prototype.equal
- * @example
- * const a = Set.from(1,2,3)
- * const b = Set.from(1,2,3.0) // note that 3.0 will evaluate to 3 here!
- * a === b    // false
- * a.equal(b) // true
- * @example
- * const a = Set.from({ a:true, b:false })
- * const b = Set.from({ b:false, a:true })
- * a.equal(b) // true
- * @param set {Set} - A set instance, which this set is to be compared with.
- * @throws Throws an error if the given paramter is not a Set instance.
- * @returns {boolean} true, if all elements of this set equal to the elements of the given set.
- * @see https://developer.mozilla.org/en-US/docs/Web/JavaScript/Equality_comparisons_and_sameness
- * @see Set.prototype.isSubsetOf
- */
-function equal (set) {
-  checkSet(set)
-  if (this.size !== set.size) {
-    return false
+scope.Set.prototype.any =
+  /**
+   * Returns an arbitrary element of this set.
+   * Basically the first element, retrieved by iterator.next().value will be used.
+   * @function
+   * @name Set.prototype.any
+   * @returns {*} An arbitrary element of the current set that could by of any type, depending on the elements of the set.
+   */
+  function any () {
+    const self = this
+    const iterator = self.values()
+    return iterator.next().value
   }
-  return this.isSubsetOf(set)
-}
 
-global.Set.prototype.equal = equal
+scope.Set.prototype.randomElement =
+  /**
+   * Returns a random element of this set.
+   * One element of this set is chosen at random and returned.  The probability distribution is uniform.  Math.random() is used internally for this purpose.
+   * @function
+   * @name Set.prototype.randomElement
+   * @returns {*} An element chosen randomly from the current set that could be of any type, depending on the elements of the set.
+   */
+  function randomElementUnary () {
+    const array = this.toArray()
+    const randomIndex = Math.floor(Math.random() * array.length)
+    return array[randomIndex]
+  }
 
-/**
- * Checks whether this set is the empty set.
- * A Set is empty if and only if it has no elements.  This is the same thing as having size (cardinality) 0.  The empty set is often denoted ∅ or {}.
- * @example
- * const A = new Set()
- * const B = new Set([])
- * const C = Set.from()
- * const D = Set.from(7)
- * A.isEmpty() // true
- * B.isEmpty() // true
- * C.isEmpty() // true
- * D.isEmpty() // false
- * @function
- * @name Set.prototype.isEmpty
- * @throws Throws an error if any arguments are given.
- * @returns {boolean}
- * @see https://en.wikipedia.org/wiki/Empty_set
- */
-function isEmptyUnary () {
-  return this.size === 0
-}
+scope.Set.prototype.isSupersetOf =
+  /**
+   * Checks, whether the current set (this) is a superset of the given set.
+   * A set A is superset of set B, if A contains all elements of B.
+   * <br>
+   * Expression: <code>A ⊇ B</code>
+   * @function
+   * @name Set.prototype.isSupersetOf
+   * @example
+   * const a = Set.from(1,2,3,4)
+   * const b = Set.from(1,2,3)
+   * const c = Set.from(1,2,3,4,5)
+   * a.isSupersetOf(b) // true
+   * a.isSupersetOf(c) // false
+   * c.isSupersetOf(b) // true
+   * @param set {Set} - A set instance of which this set is checked to be the superset.
+   * @throws Throws an error, if the given set is not a set instance.
+   * @returns {boolean} true if this set is the superset of the given set, otherwise false.
+   * @see https://en.wikipedia.org/wiki/Subset
+   */
+  function isSupersetOf (set) {
+    const iterator = set.values()
+    let value
+    while ((value = iterator.next().value) !== undefined) {
+      if (!this.has(value)) return false
+    }
+    return true
+  }
 
-global.Set.prototype.isEmpty = isEmptyUnary
+scope.Set.prototype.isSubsetOf =
+  /**
+   * Checks, whether the current set (this) is a subset of the given set.
+   * A set A is subset of set B, if B contains all elements of A.
+   * <br>
+   * Expression: <code>A ⊆ B</code>
+   * <br>
+   * If their sizes are also equal, they can be assumed as equal.
+   * If their sizes are not equal, then A is called a proper subset of B.
+   * @function
+   * @name Set.prototype.isSubsetOf
+   * @example
+   * const a = Set.from(1,2,3,4)
+   * const b = Set.from(1,2,3)
+   * const c = Set.from(1,2,3,4,5)
+   * a.isSubsetOf(b) // false
+   * b.isSubsetOf(c) // true
+   * c.isSubsetOf(a) // false
+   * @param set {Set} - A set instance of which this set is checked to be the subset.
+   * @throws Throws an error, if the given set is not a set instance.
+   * @returns {boolean} - true if this set is the subset of the given set, false otherwise
+   * @see https://en.wikipedia.org/wiki/Subset
+   * @see Set.prototype.equal
+   * @see Set.prototype.isProperSubsetOf
+   */
+  function isSubsetOf (set) {
+    return set.isSupersetOf(this)
+  }
+
+scope.Set.prototype.properSupersetOf =
+  /**
+   * Checks, whether the current set (this) is a proper superset of the given set.
+   * A set A is a proper subset of set B, if A contains all elements of B and their sizes are not equal.
+   * <br>
+   * Expression: <code>A ⊃ B</code>
+   * @function
+   * @name Set.prototype.properSupersetOf
+   * @param set {Set} - A set instance of which this set is checked to be the proper superset.
+   * @returns {boolean}
+   * @see https://en.wikipedia.org/wiki/Subset
+   */
+  function isProperSupersetOf (set) {
+    return this.size !== set.size && this.isSupersetOf(set)
+  }
+
+scope.Set.prototype.properSubsetOf =
+  /**
+   * Checks, whether the current set (this) is a proper subset of the given set.
+   * A set A is a proper subset of set B, if B contains all elements of A and their sizes are not equal.
+   * <br>
+   * Expression: <code>A ⊂ B</code>
+   * @function
+   * @name Set.prototype.properSupersetOf
+   * @param set {Set} - A set instance of which this set is checked to be the proper subset.
+   * @returns {boolean}
+   * @see https://en.wikipedia.org/wiki/Subset
+   */
+  function isProperSubsetOf (set) {
+    return this.size !== set.size && this.isSubsetOf(set)
+  }
+
+scope.Set.prototype.equal =
+  /**
+   * Checks, whether two sets are equal in terms of their contained elements.
+   * Note: This implementation uses a deep object comparison in order to check for "sameness".
+   * This allows also to check equality for more complex / nested structures without the restriction of interpreting
+   * "sameness" as "being the exact same instance". If such an equality is desired, please use Set.prototype.equalSrict
+   * @function
+   * @name Set.prototype.equal
+   * @example
+   * const a = Set.from(1,2,3)
+   * const b = Set.from(1,2,3.0) // note that 3.0 will evaluate to 3 here!
+   * a === b    // false
+   * a.equal(b) // true
+   * @example
+   * const a = Set.from({ a:true, b:false })
+   * const b = Set.from({ b:false, a:true })
+   * a.equal(b) // true
+   * @param set {Set} - A set instance, which this set is to be compared with.
+   * @throws Throws an error if the given paramter is not a Set instance.
+   * @returns {boolean} true, if all elements of this set equal to the elements of the given set.
+   * @see https://developer.mozilla.org/en-US/docs/Web/JavaScript/Equality_comparisons_and_sameness
+   * @see Set.prototype.isSubsetOf
+   */
+  function equal (set) {
+    checkSet(set)
+    if (this.size !== set.size) {
+      return false
+    }
+    return this.isSubsetOf(set)
+  }
+
+scope.Set.prototype.isEmpty =
+  /**
+   * Checks whether this set is the empty set.
+   * A Set is empty if and only if it has no elements.  This is the same thing as having size (cardinality) 0.  The empty set is often denoted ∅ or {}.
+   * @example
+   * const A = new Set()
+   * const B = new Set([])
+   * const C = Set.from()
+   * const D = Set.from(7)
+   * A.isEmpty() // true
+   * B.isEmpty() // true
+   * C.isEmpty() // true
+   * D.isEmpty() // false
+   * @function
+   * @name Set.prototype.isEmpty
+   * @throws Throws an error if any arguments are given.
+   * @returns {boolean}
+   * @see https://en.wikipedia.org/wiki/Empty_set
+   */
+  function isEmptyUnary () {
+    return this.size === 0
+  }
 
 // //////////////////////////////////////////////////////////////////////////////// //
 //                                                                                  //
@@ -505,34 +514,33 @@ global.Set.prototype.isEmpty = isEmptyUnary
 //                                                                                  //
 // //////////////////////////////////////////////////////////////////////////////// //
 
-/**
- * The original Set reference.
- * @private
- */
-const _originalSet = global.Set
+scope.Set =
 
-/**
- * Use <code>new Set(elements, rulesFct)</code> to create new sets. Alternatively you can use <code>Set.from</code>
- * @class
- * @name Set
- * @classdesc Extended version of <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Set">Set (MDN link)</a>
- * @param elements {array} - an Array of element.
- * @param rulesFct {function} - a function which every element added to the set needs to pass.
- * @see Set.from
- * @see https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Set
- * @returns {Set} An instance of the extended version of <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Set">Set (MDN link)</a>
- */
-function Set (elements, rulesFct) {
-  const original = new _originalSet()
-  if (rulesFct) {
-    original.rules(rulesFct)
+  /**
+   * Use <code>new Set(elements, rulesFct)</code> to create new sets. Alternatively you can use <code>Set.from</code>
+   * @class
+   * @name Set
+   * @classdesc Extended version of <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Set">Set (MDN link)</a>
+   * @param elements {array} - an Array of element.
+   * @param rulesFct {function} - a function which every element added to the set needs to pass.
+   * @see Set.from
+   * @see https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Set
+   * @returns {Set} An instance of the extended version of <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Set">Set (MDN link)</a>
+   */
+  function Set (elements, rulesFct) {
+    const original = new originals.constructor()
+    if (rulesFct) {
+      original.rules(rulesFct)
+    }
+    if (elements) { elements.forEach(element => original.add(element)) }
+    return original
   }
-  if (elements) { elements.forEach(element => original.add(element)) }
-  return original
-}
 
-global.Set = Set
-global.Set.prototype = _originalSet.prototype
+/**
+ * The prototype is the original Set constructor
+ * @type {contains}
+ */
+scope.Set.prototype = originals.constructor.prototype
 
 // //////////////////////////////////////////////////////////////////////////////// //
 //                                                                                  //
@@ -540,84 +548,81 @@ global.Set.prototype = _originalSet.prototype
 //                                                                                  //
 // //////////////////////////////////////////////////////////////////////////////// //
 
-/**
- * Creates a new Set from arbitrary arguments without the need of "new" and the array notation.
- * @function
- * @name Set.from
- * @example Set.from(1,2,3,4,5) // returns Set { 1, 2, 3, 4, 5 }
- * @example
- * const ints = Set.from(1,2,3)
- * const flts = Set.from(4.5, 5.6, 6.7)
- * Set.from(ints, flts) // returns Set { Set {1, 2, 3}, Set { 4.5, 5.6, 6.7 } }
- * @param args {...*} - values of any types / length (using comma notation or spread operator)
- * @returns {Set} A set containing the given argument values.
- */
-function from (...args) {
-  return new Set([...args])
-}
+scope.Set.from =
 
-global.Set.from = from
+  /**
+   * Creates a new Set from arbitrary arguments without the need of "new" and the array notation.
+   * @function
+   * @name Set.from
+   * @example Set.from(1,2,3,4,5) // returns Set { 1, 2, 3, 4, 5 }
+   * @example
+   * const ints = Set.from(1,2,3)
+   * const flts = Set.from(4.5, 5.6, 6.7)
+   * Set.from(ints, flts) // returns Set { Set {1, 2, 3}, Set { 4.5, 5.6, 6.7 } }
+   * @param args {...*} - values of any types / length (using comma notation or spread operator)
+   * @returns {Set} A set containing the given argument values.
+   */
+  function from (...args) {
+    return new Set([...args])
+  }
 
-/**
- * Autowraps a value to a Set, unless it is already a Set.
- * @function
- * @name Set.toSet
- * @param value  {*} - Any arbitrary value
- * @returns {Set} A Set containing the value or the value if it is already a Set.
- */
-function toSet (value) {
-  return value instanceof Set ? value : Set.from(value)
-}
+scope.Set.toSet =
+  /**
+   * Autowraps a value to a Set, unless it is already a Set.
+   * @function
+   * @name Set.toSet
+   * @param value  {*} - Any arbitrary value
+   * @returns {Set} A Set containing the value or the value if it is already a Set.
+   */
+  function toSet (value) {
+    return value instanceof Set ? value : Set.from(value)
+  }
 
-global.Set.toSet = toSet
+scope.Set.copy =
+  /**
+   * Copies all elements of a given Set instance into a new Set and returns it.
+   * <strong>It does not deep-clone the elements of the set.</strong>
+   * @function
+   * @name Set.copy
+   * @throws Throws an error if the argument is not a Set instance.
+   * @param set {Set} a set instance from which to copy from
+   * @returns {Set} a new Set instance containing all elements of the source.
+   */
+  function copy (set) {
+    checkSet(set)
+    const c = new Set()
+    set.forEach(el => c.add(el))
+    return c
+  }
 
-/**
- * Copies all elements of a given Set instance into a new Set and returns it.
- * <strong>It does not deep-clone the elements of the set.</strong>
- * @function
- * @name Set.copy
- * @throws Throws an error if the argument is not a Set instance.
- * @param set {Set} a set instance from which to copy from
- * @returns {Set} a new Set instance containing all elements of the source.
- */
-function copy (set) {
-  checkSet(set)
-  const c = new Set()
-  set.forEach(el => c.add(el))
-  return c
-}
-
-global.Set.copy = copy
-
-/**
- * Creates the set union of an arbitrary number of sets.
- * The union S of any number of sets M<sub>i</sub> is the set that consists of all elements of each M<sub>i</sub>.
- * <br>Expression: <code>∪ M = S</code>
- * <br>Example: <code>∪ {M_1, M_2, M_3} = S</code>
- * <br>Example: <code>∪ {A, B, C} = S</code>
- * <br>Example: <code>∪ {{0,4}, {1}, {9}} = {0,1,4,9}</code>
- * @example
- * const A = Set.from(0, 4)
- * const B = Set.from(1)
- * const C = Set.from(9)
- * Set.union(A, B, C) // Set { 0, 1, 4, 9 }
- * const M = [A, B, C]
- * Set.union(...M) // Set { 0, 1, 4, 9 }
- * @name Set.union
- * @function
- * @param args {...Set} - an arbitrary list of Set instances
- * @throws Throws an error if any of the arguments is not a Set instance.
- * @returns {Set} a Set instance with the unified elements of the given args.
- * @see https://en.wikipedia.org/wiki/Union_(set_theory)#Arbitrary_unions
- */
-function unionArbitrary (...args) {
-  checkSets(args)
-  const set3 = new Set()
-  args.forEach(set => set.forEach(value => set3.add(value)))
-  return set3
-}
-
-global.Set.union = unionArbitrary
+scope.Set.union =
+  /**
+   * Creates the set union of an arbitrary number of sets.
+   * The union S of any number of sets M<sub>i</sub> is the set that consists of all elements of each M<sub>i</sub>.
+   * <br>Expression: <code>∪ M = S</code>
+   * <br>Example: <code>∪ {M_1, M_2, M_3} = S</code>
+   * <br>Example: <code>∪ {A, B, C} = S</code>
+   * <br>Example: <code>∪ {{0,4}, {1}, {9}} = {0,1,4,9}</code>
+   * @example
+   * const A = Set.from(0, 4)
+   * const B = Set.from(1)
+   * const C = Set.from(9)
+   * Set.union(A, B, C) // Set { 0, 1, 4, 9 }
+   * const M = [A, B, C]
+   * Set.union(...M) // Set { 0, 1, 4, 9 }
+   * @name Set.union
+   * @function
+   * @param args {...Set} - an arbitrary list of Set instances
+   * @throws Throws an error if any of the arguments is not a Set instance.
+   * @returns {Set} a Set instance with the unified elements of the given args.
+   * @see https://en.wikipedia.org/wiki/Union_(set_theory)#Arbitrary_unions
+   */
+  function unionArbitrary (...args) {
+    checkSets(args)
+    const set3 = new Set()
+    args.forEach(set => set.forEach(value => set3.add(value)))
+    return set3
+  }
 
 /**
  * Creates the set union of two sets.
@@ -636,49 +641,48 @@ global.Set.union = unionArbitrary
  * @returns {Set} a Set instance with the unified elements of the given args.
  * @see https://en.wikipedia.org/wiki/Union_(set_theory)#Union_of_two_sets
  */
-global.Set.prototype.union = arbitraryToBinary(unionArbitrary)
+scope.Set.prototype.union = arbitraryToBinary(scope.Set.union)
 
-/**
- * Creates the set intersection of an arbitrary number of sets.
- * The intersection S of any number of sets M<sub>i</sub> is the set whose elements consist of the elements that occur in every single set M<sub>i</sub>.
- * <br>Expression: <code>∩ M = S</code>
- * <br>Example: <code>∩ {M_1, M_2, M_3} = S</code>
- * <br>Example: <code>∩ {A, B, C} = S</code>
- * <br>Example: <code>∩ {{0,1,2,4}, {1,2,9}, {0,1,2}} = {1,2}</code>
- * @example
- * const A = Set.from(0, 1, 2, 4)
- * const B = Set.from(1, 2, 9)
- * const C = Set.from(0, 1, 2)
- * Set.intersection(A, B, C) // Set { 1, 2 }
- * const M = [A, B, C]
- * Set.intersection(...M) // Set { 1, 2 }
- * @name Set.intersection
- * @function
- * @param args {...Set}- an arbitrary list of Set instances
- * @throws Throws an error if any of the arguments is not a Set instance.
- * @returns {Set} a Set instance with the shared elements of the given args.
- * @see https://en.wikipedia.org/wiki/Intersection_(set_theory)#Arbitrary_intersections
- */
-function intersectionArbitrary (...args) {
-  checkSets(args)
-  if (!args || args.length === 0) {
-    throw new Error('The intersection operator currently does not support 0 arguments.')
-  }
-  const set3 = new Set()
-
-  const minimumSet = args.reduce((prev, curr) => {
-    return (prev.size < curr.size) ? prev : curr
-  }, args[0])
-
-  for (const value of minimumSet) {
-    if (args.every(compare => compare.has(value))) {
-      set3.add(value)
+scope.Set.intersection =
+  /**
+   * Creates the set intersection of an arbitrary number of sets.
+   * The intersection S of any number of sets M<sub>i</sub> is the set whose elements consist of the elements that occur in every single set M<sub>i</sub>.
+   * <br>Expression: <code>∩ M = S</code>
+   * <br>Example: <code>∩ {M_1, M_2, M_3} = S</code>
+   * <br>Example: <code>∩ {A, B, C} = S</code>
+   * <br>Example: <code>∩ {{0,1,2,4}, {1,2,9}, {0,1,2}} = {1,2}</code>
+   * @example
+   * const A = Set.from(0, 1, 2, 4)
+   * const B = Set.from(1, 2, 9)
+   * const C = Set.from(0, 1, 2)
+   * Set.intersection(A, B, C) // Set { 1, 2 }
+   * const M = [A, B, C]
+   * Set.intersection(...M) // Set { 1, 2 }
+   * @name Set.intersection
+   * @function
+   * @param args {...Set}- an arbitrary list of Set instances
+   * @throws Throws an error if any of the arguments is not a Set instance.
+   * @returns {Set} a Set instance with the shared elements of the given args.
+   * @see https://en.wikipedia.org/wiki/Intersection_(set_theory)#Arbitrary_intersections
+   */
+  function intersectionArbitrary (...args) {
+    checkSets(args)
+    if (!args || args.length === 0) {
+      throw new Error('The intersection operator currently does not support 0 arguments.')
     }
-  }
-  return set3
-}
+    const set3 = new Set()
 
-global.Set.intersection = intersectionArbitrary
+    const minimumSet = args.reduce((prev, curr) => {
+      return (prev.size < curr.size) ? prev : curr
+    }, args[0])
+
+    for (const value of minimumSet) {
+      if (args.every(compare => compare.has(value))) {
+        set3.add(value)
+      }
+    }
+    return set3
+  }
 
 /**
  * Creates the set intersection of two sets.
@@ -697,53 +701,52 @@ global.Set.intersection = intersectionArbitrary
  * @returns {Set} a Set instance with the shared elements of this set and the other set.
  * @see https://en.wikipedia.org/wiki/Intersection_(set_theory)#Definition
  */
-global.Set.prototype.intersect = arbitraryToBinary(intersectionArbitrary)
+scope.Set.prototype.intersect = arbitraryToBinary(scope.Set.intersection)
 
-/**
- * Computes the set difference of two sets (subtracts B from A): <code>C = A \ B</code>.  This is also known as the "relative complement".
- *
- * @name Set.difference
- * @function
- * @throws Throws an error if any of the arguments is not a Set instance.
- * @param set1 - A the set to be subtracted from
- * @param set2 - B the set whose elements will be subtracted from A
- * @returns {ExtendedSet|*} A new Set with all elements of A minus the elements of B
- */
-function difference (set1, set2) {
-  checkSet(set1)
-  checkSet(set2)
-  const set3 = new Set([])
-  set1.forEach(value => {
-    if (!set2.has(value)) {
-      set3.add(value)
-    }
-  })
-  return set3
-}
-
-global.Set.difference = difference
-
-/**
- * Computes the complement of set B where U is the universe: <code>C = U \ B</code>.  This is also known as the "absolute complement".
- *
- * @name Set.complement
- * @function
- * @throws Throws an error if any of the arguments is not a Set instance.
- * @throws Throws an error if any element in B does not occur in U.
- * @param set1 - U the set to be subtracted from
- * @param set2 - B the set whose elements will be subtracted from A
- * @returns {ExtendedSet|*} A new Set with all elements of U minus the elements of B
- */
-function complement (set1, set2) {
-  checkSet(set1)
-  checkSet(set2)
-  if (!set1.isSupersetOf(set2)) {
-    throw new Error('[set2] has an element which is not in the universe [set1].')
+scope.Set.difference =
+  /**
+   * Computes the set difference of two sets (subtracts B from A): <code>C = A \ B</code>.  This is also known as the "relative complement".
+   *
+   * @name Set.difference
+   * @function
+   * @throws Throws an error if any of the arguments is not a Set instance.
+   * @param set1 - A the set to be subtracted from
+   * @param set2 - B the set whose elements will be subtracted from A
+   * @returns {Set|*} A new Set with all elements of A minus the elements of B
+   */
+  function difference (set1, set2) {
+    checkSet(set1)
+    checkSet(set2)
+    const set3 = new Set([])
+    set1.forEach(value => {
+      if (!set2.has(value)) {
+        set3.add(value)
+      }
+    })
+    return set3
   }
-  return Set.difference(set1, set2)
-}
 
-global.Set.complement = complement
+scope.Set.complement =
+
+  /**
+   * Computes the complement of set B where U is the universe: <code>C = U \ B</code>.  This is also known as the "absolute complement".
+   *
+   * @name Set.complement
+   * @function
+   * @throws Throws an error if any of the arguments is not a Set instance.
+   * @throws Throws an error if any element in B does not occur in U.
+   * @param set1 - U the set to be subtracted from
+   * @param set2 - B the set whose elements will be subtracted from A
+   * @returns {Set|*} A new Set with all elements of U minus the elements of B
+   */
+  function complement (set1, set2) {
+    checkSet(set1)
+    checkSet(set2)
+    if (!set1.isSupersetOf(set2)) {
+      throw new Error('[set2] has an element which is not in the universe [set1].')
+    }
+    return Set.difference(set1, set2)
+  }
 
 /**
  *
@@ -765,69 +768,72 @@ function symDiff (set1, set2) {
   return set3
 }
 
-/**
- * Creates the symmetric difference (disjunctive union) of an arbitrary number (2 .. n) of sets.
- * The symmetric difference of two sets A and B is a set, that contains only those elements,
- * which are in either of the sets and not in their intersection.
- * The symmetric difference is commutative and associative, which is why arbitrary number of sets can be used as input
- * for a sequencial-computed symmetric difference.
- * <br>
- * Expression: <code>C = A Δ B</code>
- *
- * @function
- * @name Set.symDiff
- * @param args {...Set}- An arbitrary amount of Set instances
- * @example
- * const a = Set.from(1,2,3)
- * const b = Set.from(3,4)
- * Set.symDiff(a, b) // Set { 1, 2, 4 }
- * @throws Throws an error if any of the given arguments is not a set instance.
- * @returns {Set} Returns a new Set, that contains only elements.
- * @see https://en.wikipedia.org/wiki/Symmetric_difference
- */
-function symmetricDifference (...args) {
-  args.forEach(arg => checkSet(arg))
+scope.Set.symDiff =
 
-  if (args.length === 2) {
-    return symDiff(...args)
+  /**
+   * Creates the symmetric difference (disjunctive union) of an arbitrary number (2 .. n) of sets.
+   * The symmetric difference of two sets A and B is a set, that contains only those elements,
+   * which are in either of the sets and not in their intersection.
+   * The symmetric difference is commutative and associative, which is why arbitrary number of sets can be used as input
+   * for a sequencial-computed symmetric difference.
+   * <br>
+   * Expression: <code>C = A Δ B</code>
+   *
+   * @function
+   * @name Set.symDiff
+   * @param args {...Set}- An arbitrary amount of Set instances
+   * @example
+   * const a = Set.from(1,2,3)
+   * const b = Set.from(3,4)
+   * Set.symDiff(a, b) // Set { 1, 2, 4 }
+   * @throws Throws an error if any of the given arguments is not a set instance.
+   * @returns {Set} Returns a new Set, that contains only elements.
+   * @see https://en.wikipedia.org/wiki/Symmetric_difference
+   */
+  function symmetricDifference (...args) {
+    args.forEach(arg => checkSet(arg))
+
+    if (args.length === 2) {
+      return symDiff(...args)
+    }
+
+    let set3 = symDiff(args.shift(), args.shift())
+    while (args.length > 0) {
+      set3 = symDiff(set3, args.shift())
+    }
+    return set3
   }
 
-  let set3 = symDiff(args.shift(), args.shift())
-  while (args.length > 0) {
-    set3 = symDiff(set3, args.shift())
+scope.Set.cartesian =
+
+  /**
+   * Creates the cartesian product of two given sets.
+   * The cartesian product of two sets A and B is the set of all ordered pairs (a, b) where a ∈ A and b ∈ B.
+   * <br>
+   * Expression: <code>C = A x B = { (a, b) | a ∈ A and b ∈ B}</code>
+   * <br>
+   * Note, that <code>A x B ≠ B x A</code> (not commutative)
+   * @function
+   * @name Set.cartesian
+   * @param set1 {Set} - A set instance
+   * @param set2 {Set} - A set instance
+   * @example
+   * const a = Set.from(1,2)
+   * const b = Set.from(3,4)
+   * Set.cartesian(a, b) // Set { [1, 3], [1, 4], [2, 3], [2, 4] }
+   * Set.cartesian(b, a) // Set { [3, 1], [3, 2], [4, 1], [4, 2] }
+   * @throws Throws an error unless both arguments are set instances.
+   * @return {Set} a new set instance, that contains the ordered element pairs.
+   * @see https://en.wikipedia.org/wiki/Cartesian_product
+   */
+
+  function cartesianProduct (set1, set2) {
+    checkSet(set1)
+    checkSet(set2)
+    const set3 = new Set()
+    set1.forEach(value1 => set2.forEach(value2 => set3.add([value1, value2])))
+    return set3
   }
-  return set3
-}
-
-global.Set.symDiff = symmetricDifference
-
-/**
- * Creates the cartesian product of two given sets.
- * The cartesian product of two sets A and B is the set of all ordered pairs (a, b) where a ∈ A and b ∈ B.
- * <br>
- * Expression: <code>C = A x B = { (a, b) | a ∈ A and b ∈ B}</code>
- * <br>
- * Note, that <code>A x B ≠ B x A</code> (not commutative)
- * @function
- * @name Set.cartesian
- * @param set1 {Set} - A set instance
- * @param set2 {Set} - A set instance
- * @example
- * const a = Set.from(1,2)
- * const b = Set.from(3,4)
- * Set.cartesian(a, b) // Set { [1, 3], [1, 4], [2, 3], [2, 4] }
- * Set.cartesian(b, a) // Set { [3, 1], [3, 2], [4, 1], [4, 2] }
- * @throws Throws an error unless both arguments are set instances.
- * @return {Set} a new set instance, that contains the ordered element pairs.
- * @see https://en.wikipedia.org/wiki/Cartesian_product
- */
-global.Set.cartesian = function cartesianProduct (set1, set2) {
-  checkSet(set1)
-  checkSet(set2)
-  const set3 = new Set()
-  set1.forEach(value1 => set2.forEach(value2 => set3.add([value1, value2])))
-  return set3
-}
 
 /**
  * https://en.wikipedia.org/wiki/Power_set
@@ -859,46 +865,39 @@ function subsets (S, output = new Set()) {
   return output
 }
 
-/**
- * Creates the powerset of a given set instance by using a recursive algorithm (see <a href="https://en.wikipedia.org/wiki/Power_set">Wikipedia</a>, section Algorithms).
- * The powerset of a set contains all possible subsets of the set, plus itself and the empty set.
- * <br>
- * <strong>Attention:</strong> This method grows exponentially with the size of the given set.
- * @name Set.power
- * @function
- * @param set {Set} - A Set instance.
- * @throws
- * Throws an error if the given set is not a set instance.
- * @returns {Set} a new set instance with all subsets of the given set, plus the given set itself and the empty set.
- * @see https://en.wikipedia.org/wiki/Power_set
- */
-function powerSet (set) {
-  checkSet(set)
+scope.Set.power =
 
-  const subs = subsets(set)
-  subs.add(new Set())
-  subs.add(set)
-  set.forEach(value => subs.add(Set.from(value)))
-  return subs
-}
+  /**
+   * Creates the powerset of a given set instance by using a recursive algorithm (see <a href="https://en.wikipedia.org/wiki/Power_set">Wikipedia</a>, section Algorithms).
+   * The powerset of a set contains all possible subsets of the set, plus itself and the empty set.
+   * <br>
+   * <strong>Attention:</strong> This method grows exponentially with the size of the given set.
+   * @name Set.power
+   * @function
+   * @param set {Set} - A Set instance.
+   * @throws
+   * Throws an error if the given set is not a set instance.
+   * @returns {Set} a new set instance with all subsets of the given set, plus the given set itself and the empty set.
+   * @see https://en.wikipedia.org/wiki/Power_set
+   */
+  function powerSet (set) {
+    checkSet(set)
 
-global.Set.power = powerSet
+    const subs = subsets(set)
+    subs.add(new Set())
+    subs.add(set)
+    set.forEach(value => subs.add(Set.from(value)))
+    return subs
+  }
 
-/**
- * Merges two rules functions with a strict pass concept.
- * The resulting function requires the given element to pass at least one of the given functions (logical OR).
- * @function
- * @name Set.mergeRules
- * @throws Throws an error if any of the given parameters is not a Function
- * @param rules {...Function} - An arbitrary amount of (rules-) functions. See {@link Set.prototype.rules} for requirements of a rules function.
- * @returns {function(*=): boolean} The resulting rules function that can be attached to a set instance.
- * @see Set.prototype.rules
- *
- */
-function mergeRules (...rules) {
-  checkRules(rules)
+/** @private **/
+const mergeRulesAny = (strict, rules) => {
+  const targetFn = strict
+    ? rules.every
+    : rules.some
+
   return value => {
-    const passed = rules.some(rule => rule.call(value))
+    const passed = targetFn.call(rules, rule => rule.call(value))
     if (!passed) {
       throw new Error(`Value [${value}] does not match any rule of the ruleset.`)
     }
@@ -906,36 +905,44 @@ function mergeRules (...rules) {
   }
 }
 
-global.Set.mergeRules = mergeRules
-
-/**
- * Merges two rules functions with a strict pass concept.
- * The resulting function requires the given element to pass all of the given functions (logical AND).
- * Thus, if the element fails one, it fails all.
- * <strong>Attention:</strong> If passed rules are mutually exclusive, none given element will pass the test in any circumstance.
- * @function
- * @name Set.mergeRulesStrict
- * @throws Throws an error if any of the given parameters is not a Function
- * @param rules {...Function} - An arbitrary amount of (rules-) functions. See {@link Set.prototype.rules} for requirements of a rules function.
- * @returns {function(*=): boolean} The resulting rules function that can be attached to a set instance.
- * @see Set.prototype.rules
- */
-function mergeRulesStrict (...rules) {
-  checkRules(rules)
-  return value => {
-    const passed = rules.every(rule => rule.call(value))
-    if (!passed) {
-      throw new Error(`Value [${value}] does not match any rule of the ruleset.`)
-    }
-    return true
+scope.Set.mergeRules =
+  /**
+   * Merges two rules functions with a strict pass concept.
+   * The resulting function requires the given element to pass at least one of the given functions (logical OR).
+   * @function
+   * @name Set.mergeRules
+   * @throws Throws an error if any of the given parameters is not a Function
+   * @param rules {...Function} - An arbitrary amount of (rules-) functions. See {@link Set.prototype.rules} for requirements of a rules function.
+   * @returns {function(*=): boolean} The resulting rules function that can be attached to a set instance.
+   * @see Set.prototype.rules
+   *
+   */
+  function mergeRules (...rules) {
+    checkRules(rules)
+    return mergeRulesAny(false, rules)
   }
-}
 
-global.Set.mergeRulesStrict = mergeRulesStrict
+scope.Set.mergeRulesStrict =
+  /**
+   * Merges two rules functions with a strict pass concept.
+   * The resulting function requires the given element to pass all of the given functions (logical AND).
+   * Thus, if the element fails one, it fails all.
+   * <strong>Attention:</strong> If passed rules are mutually exclusive, none given element will pass the test in any circumstance.
+   * @function
+   * @name Set.mergeRulesStrict
+   * @throws Throws an error if any of the given parameters is not a Function
+   * @param rules {...Function} - An arbitrary amount of (rules-) functions. See {@link Set.prototype.rules} for requirements of a rules function.
+   * @returns {function(*=): boolean} The resulting rules function that can be attached to a set instance.
+   * @see Set.prototype.rules
+   */
+  function mergeRulesStrict (...rules) {
+    checkRules(rules)
+    return mergeRulesAny(true, rules)
+  }
 
 /**
  * Flag to indicate the presence of this polyfill
  * @type {boolean}
  * @private
  */
-global.Set.__isExtended__ = true
+scope.Set.__isExtended__ = true

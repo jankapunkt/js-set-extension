@@ -502,6 +502,28 @@ describe('Relations', function () {
 })
 
 describe('Operations (instances)', function () {
+  describe(Set.toSet.name, function () {
+    it('Autowraps a value to a Set, unless it is already a Set', function () {
+      const a = Set.toSet(2)
+      assert.equal(a.size, 1)
+      assert.equal(a.any(), 2)
+
+      // does not convert the array to set members!
+      const b = Set.toSet([1, 2])
+      assert.equal(b.size, 1)
+      assert.deepEqual(b.any(), [1, 2])
+
+      const c = Set.toSet(Set.from(1, 2))
+      assert.equal(c.size, 2)
+      assert.deepEqual(c.any(), 1)
+    })
+  })
+  describe(Set.prototype.any.name, function () {
+    it('returns an arbitrary element of the set', function () {
+      const a = new Set([1, 2])
+      assert.equal(a.any(), 1)
+    })
+  })
   describe('binary operation args', function () {
     const a = new Set([1, 2])
     const binaryOpNames = ['union', 'intersect']
@@ -583,6 +605,17 @@ describe('Operations (instances)', function () {
 })
 
 describe('Operations (static)', function () {
+  describe(Set.copy.name, function () {
+    it('clones a set', function () {
+      assert.throws(function () {
+        Set.copy([])
+      })
+      const a = Set.from(1, 2, 3, { a: 1 }, ['foo'])
+      const b = Set.copy(a)
+      assert.notEqual(a, b)
+      assert.deepEqual(b.toArray(), [1, 2, 3, { a: 1 }, ['foo']])
+    })
+  })
   describe(Set.union.name, function () {
     // use with https://en.wikipedia.org/wiki/Union_(set_theory)
     const createUnion = setA => arr => Set.union(setA, new Set(arr)).toArray().sort()
@@ -1228,6 +1261,28 @@ describe('Operations (static)', function () {
       assert.throws(function () {
         Set.cartesian(set(2), 1)
       }, /Expected \[set\] to be instanceof \[Set\]/)
+    })
+  })
+  describe(Set.mergeRules.name, function () {
+    it('Merges two rules functions with a locigal OR', function () {
+      const merged = Set.mergeRules(() => true, () => false)
+      assert.equal(merged(), true)
+
+      const throws = Set.mergeRules(() => false, () => false)
+      assert.throws(function () {
+        throws()
+      })
+    })
+  })
+  describe(Set.mergeRulesStrict.name, function () {
+    it('Merges two rules functions with a logical AND', function () {
+      const merged = Set.mergeRulesStrict(() => true, () => true)
+      assert.equal(merged(), true)
+
+      const throws = Set.mergeRulesStrict(() => true, () => false)
+      assert.throws(function () {
+        throws()
+      })
     })
   })
 })

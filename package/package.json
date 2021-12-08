@@ -19,17 +19,17 @@
     "report": "nyc report --reporter=text-lcov | coveralls"
   },
   "devDependencies": {
-    "@babel/cli": "^7.11.6",
-    "@babel/core": "^7.11.6",
-    "@babel/preset-env": "^7.11.5",
-    "@babel/register": "^7.11.5",
+    "@babel/cli": "^7.16.0",
+    "@babel/core": "^7.16.0",
+    "@babel/preset-env": "^7.16.4",
+    "@babel/register": "^7.16.0",
     "@mareoraft/docdash": "^1.1.1",
     "babel-minify": "^0.5.1",
-    "babel-plugin-istanbul": "^6.0.0",
-    "chai": "^4.2.0",
-    "jsdoc": "^3.6.5",
+    "babel-plugin-istanbul": "^6.1.1",
+    "chai": "^4.3.4",
+    "jsdoc": "^3.6.7",
     "jsdoc-to-markdown": "^6.0.1",
-    "mocha": "^8.1.3",
+    "mocha": "^8.4.0",
     "nyc": "^15.1.0",
     "standard": "^14.3.4"
   },
@@ -87,5 +87,7 @@
     "url": "https://github.com/jankapunkt/js-set-extension/issues"
   },
   "homepage": "https://github.com/jankapunkt/js-set-extension#readme",
-  "dependencies": {}
+  "dependencies": {
+    "snazzy": "^9.0.0"
+  }
 }

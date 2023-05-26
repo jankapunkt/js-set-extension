@@ -32,6 +32,6 @@ jobs:
         restore-keys: |
           ${{ runner.os }}-node-${{ matrix.node }}
     - run: npm ci
-    - run: run lint
-    - run: test:coverage
+    - run: npm run lint
+    - run: npm run test:coverage
 

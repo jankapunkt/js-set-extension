@@ -25,9 +25,8 @@
 
 /* global describe it */
 
-import './index'
-
-const assert = require('chai').assert
+import './index.js'
+import { assert } from 'chai'
 
 function areEqual (set1, set2) {
   assert.isTrue(set1.equal(set2))
@@ -448,7 +447,7 @@ describe('Relations', function () {
           foo: {
             bar: undefined
           },
-          date: date
+          date
         },
         keys: [1, 2, { b: 2, a: 1 }]
       }
@@ -460,7 +459,7 @@ describe('Relations', function () {
             bar: undefined
           },
           value: NaN,
-          date: date,
+          date,
           parent: this.nested
         },
         some: 'notnoested'

@@ -1,0 +1,117 @@
+{
+  "name": "set-extensions",
+  "version": "1.6.0",
+  "description": "Extending the Set class in order to support mathematical set properties and operations.",
+  "type": "module",
+  "main": "dist/index.cjs.js",
+  "browser": "dist/index.iife.js",
+  "exports": "./dist/index.js",
+  "scripts": {
+    "lint": "standard ./src | snazzy",
+    "lint:fix": "standard ./src --fix | snazzy",
+    "test": "NODE_ENV=test ./node_modules/.bin/mocha src/*.tests.js",
+    "test:coverage": "NODE_ENV=test c8 --include=src/index.js --reporter=html --reporter=text ./node_modules/.bin/mocha 'src/*.tests.js'",
+    "test:watch": "npm test -- --watch",
+    "docs": "jsdoc -t node_modules/@mareoraft/docdash --readme ../README.md ./lib/*.js -d ../docs && jsdoc2md ./lib/index.js > ../api.md",
+    "build:min": "minify ./dist/index.js --out-file ./dist/index.min.js --mangle.keepFnName --mangle.keepClassName --",
+    "build:full": "npm run docs && npm run build && npm run build-min",
+    "copy": "cp ../README.md ./README.md && cp ../LICENSE ./LICENSE",
+    "build": "rollup --config rollup.dist.config.js",
+    "report": "nyc report --reporter=text-lcov | coveralls"
+  },
+  "devDependencies": {
+    "@babel/cli": "^7.21.5",
+    "@babel/core": "^7.21.8",
+    "@babel/preset-env": "^7.21.5",
+    "@babel/register": "^7.21.0",
+    "@mareoraft/docdash": "^1.1.1",
+    "@rollup/plugin-babel": "^6.0.3",
+    "@rollup/plugin-commonjs": "^25.0.0",
+    "babel-plugin-istanbul": "^6.1.1",
+    "c8": "^7.13.0",
+    "chai": "^4.3.7",
+    "jsdoc": "^4.0.2",
+    "mocha": "^10.2.0",
+    "rollup": "^3.23.0",
+    "rollup-plugin-terser": "^7.0.2",
+    "snazzy": "^9.0.0",
+    "standard": "^17.0.0"
+  },
+  "babel": {
+    "presets": [
+      [
+        "@babel/preset-env",
+        {
+          "modules": false
+        }
+      ]
+    ],
+    "env": {
+      "test": {
+        "plugins": [
+          [
+            "babel-plugin-istanbul"
+          ]
+        ]
+      }
+    }
+  },
+  "nyc": {
+    "include": [
+      "**/index.js"
+    ],
+    "exclude": [
+      "lib/**/*.tests.js"
+    ],
+    "require": [
+      "@babel/register"
+    ],
+    "sourceMap": false,
+    "instrument": false,
+    "all": true
+  },
+  "targets": "> 0.25%, not dead",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/jankapunkt/js-set-extension.git"
+  },
+  "keywords": [
+    "set",
+    "set theory",
+    "math",
+    "superset",
+    "subset",
+    "proper superset",
+    "proper subset",
+    "union",
+    "intersection",
+    "complement",
+    "symmetric difference",
+    "powerset",
+    "difference"
+  ],
+  "author": "Jan Küster <info@jankuester.com>",
+  "contributors": [
+    "MareoRaft",
+    "Eriice"
+  ],
+  "funding": {
+    "type": "PayPal",
+    "url": "https://paypal.me/kuesterjan"
+  },
+  "engines": {
+    "node": ">= 14.x"
+  },
+  "files": [
+    "dist",
+    "API.md",
+    "README.md",
+    "LICENSE"
+  ],
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/jankapunkt/js-set-extension/issues"
+  },
+  "homepage": "https://github.com/jankapunkt/js-set-extension#readme",
+  "dependencies": {}
+}

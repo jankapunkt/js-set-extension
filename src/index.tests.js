@@ -25,9 +25,8 @@
 
 /* global describe it */
 
-import './index'
-
-const assert = require('chai').assert
+import './index.js'
+import { assert } from 'chai'
 
 function areEqual (set1, set2) {
   assert.isTrue(set1.equal(set2))
@@ -89,9 +88,8 @@ describe('Relations', function () {
       assert.isTrue(set([{ 1: [{ foo: 'bar' }] }]).has([{ 1: [{ foo: 'bar' }] }]))
       assert.isTrue(set('foo').has('foo'))
       assert.isTrue(set(NaN).has(NaN))
-      assert.isTrue(set(isInt).has(function isInt (n) {
-        return Number.isInteger(n)
-      }))
+      assert.isTrue(set(isInt).has(isInt))
+      assert.isTrue(set(isInt).has(n => Number.isInteger(n)))
     })
 
     it('returns false if a set has not a given element', function () {
@@ -103,7 +101,9 @@ describe('Relations', function () {
       assert.isFalse(set('foo').has('foo '))
       assert.isFalse(set([undefined]).has(null))
       assert.isFalse(set([null]).has(undefined))
-      assert.isFalse(set(isInt).has(n => Number.isInteger(n)))
+      assert.isFalse(set(isInt).has(function isInt (n) {
+        return Number.isInteger(n)
+      }))
     })
 
     it('works recursively for nested sets', function () {
@@ -113,10 +113,10 @@ describe('Relations', function () {
       assert.isTrue(set(set([1, 2, 3]), set([4, 5, 6])).has(set([1, 2, 3])))
       assert.isFalse(set(set([1, 2, 3]), set([4, 5, 6])).has(set([1, 2, 3, 4])))
 
-      assert.isTrue(set(set(isInt)).has(set(function isInt (n) {
+      assert.isTrue(set(set(isInt)).has(set(n => Number.isInteger(n))))
+      assert.isFalse(set(set(isInt)).has(set(function isInt (n) {
         return Number.isInteger(n)
       })))
-      assert.isFalse(set(set(isInt)).has(set(n => Number.isInteger(n))))
 
       const s1 = set(3)
       const s2 = set(3)
@@ -448,7 +448,7 @@ describe('Relations', function () {
           foo: {
             bar: undefined
           },
-          date: date
+          date
         },
         keys: [1, 2, { b: 2, a: 1 }]
       }
@@ -460,7 +460,7 @@ describe('Relations', function () {
             bar: undefined
           },
           value: NaN,
-          date: date,
+          date,
           parent: this.nested
         },
         some: 'notnoested'

@@ -31,9 +31,20 @@ Set's prototype Methods are in contrast designed to work as a binary operation o
 Some algorithms may grow exponentially with a raising number of sets to be processes. 
 Please, see the documentation notes on the respective methods. 
 
+### Extending `Set`
+
+This package builds upon the `Set` implementation, instead of providing an own.
+Some suggest it's bad design to extend core implementations.
+
+However, the core functionality of `Set` is stable and proven and this
+package tries to be minimally invasive on the `Set` implementation.
+
+Please, leave an issue, in case this extension breaks your setup by
+whatever unexpected or undefined behaviour.
+
 ### Future Implementations
 
-Currently this package only supports finite sets. 
+Currently, this package only supports finite sets. 
 A future implementation could include generators to support infinite sets and function-based operations with infinite sets. Ideas.concepts and contributions are very welcomed.
 
 ## Installation and Usage
@@ -59,7 +70,7 @@ Set.__isExtended__ // true if this package is installed
 
 ## API Documentation
 
-There is a [markdown version](./api.md) and a [html version](https://jankapunkt.github.io/js-set-extension/) of the API documentation.
+There is a [markdown version](./API.md) and a [html version](https://jankapunkt.github.io/js-set-extension/) of the API documentation.
 If you think this documentation can be improved, please leave a pull request or open an issue.
 
 ## Run the tests

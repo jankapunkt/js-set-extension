@@ -1,6 +1,6 @@
 {
   "name": "set-extensions",
-  "version": "1.5.0",
+  "version": "1.6.0",
   "description": "Extending the Set class in order to support mathematical set properties and operations.",
   "type": "module",
   "main": "dist/index.cjs.js",

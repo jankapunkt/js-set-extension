@@ -31,7 +31,7 @@ jobs:
         key: ${{ runner.os }}-node-${{ matrix.node }}-${{ hashFiles('**/package-lock.json') }}
         restore-keys: |
           ${{ runner.os }}-node-${{ matrix.node }}
-    - run: cd package && npm ci
-    - run: cd package && npm run lint
-    - run: cd package && npm run test:coverage
+    - run: npm ci
+    - run: run lint
+    - run: test:coverage
 

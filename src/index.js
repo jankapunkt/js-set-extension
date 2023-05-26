@@ -1,7 +1,7 @@
 // //////////////////////////////////////////////////////////////////////////////// //
 // MIT License
 //
-// Copyright (c) 2018 Jan Küster
+// Copyright (c) 2018 - today Jan Küster
 //
 // Permission is hereby granted, free of charge, to any person obtaining a copy
 // of this software and associated documentation files (the "Software"), to deal
@@ -154,11 +154,12 @@ scope.Set.prototype.add =
  * @private
  */
 function resolve (obj, circ = new originals.constructor([obj])) {
-  if (typeof obj === 'undefined' ||
-    typeof obj === 'string' ||
-    typeof obj === 'number' ||
-    typeof obj === 'boolean' ||
-    obj === null) {
+  const type = typeof obj
+
+  if (
+    ['undefined', 'string', 'number', 'boolean'].includes(type) ||
+    obj === null
+  ) {
     return obj
   }
 
@@ -167,15 +168,18 @@ function resolve (obj, circ = new originals.constructor([obj])) {
     obj = Array.from(obj)
   }
 
-  if (typeof obj === 'function') {
+  if (type === 'function') {
     const fctObj = { fctStr: String(obj).replace(/\s+/g, '') } // function body to string
     // resolve all function properties / attached references
-    fctObj.refs = Object.getOwnPropertyNames(obj).map(key => originals.has.call(circ, obj[key]) ? 'circular' : resolve(obj[key], circ))
+    fctObj.refs = Object
+      .getOwnPropertyNames(obj)
+      .filter(prop => prop !== 'name')
+      .map(key => originals.has.call(circ, obj[key]) ? 'circular' : resolve(obj[key], circ))
     return fctObj
   }
 
   const isArray = Array.isArray(obj)
-  if (typeof obj !== 'object' && !isArray) {
+  if (type !== 'object' && !isArray) {
     return obj
   }
 
@@ -224,12 +228,14 @@ function resolve (obj, circ = new originals.constructor([obj])) {
  */
 scope.Set.prototype.has = function has (value) {
   const valType = typeof value
+
   if (valType === 'string' || valType === 'number' || valType === 'boolean') {
     return originals.has.call(this, value)
   }
 
   const iterator = this.values()
   let element
+
   while ((element = iterator.next().value) !== undefined) {
     const elType = typeof element
 
@@ -258,9 +264,11 @@ scope.Set.prototype.has = function has (value) {
     //   version of both and compare their strings.
     // - functions are string-ed and their properties are resolved
     //   like objects
-    if ((elType === 'function' && valType === 'function') ||
+    if (
+      (elType === 'function' && valType === 'function') ||
       (!setCompare && elType === 'object' && valType === 'object') ||
-      (Array.isArray(element) && Array.isArray(value))) {
+      (Array.isArray(element) && Array.isArray(value))
+    ) {
       const sortedElmnt = resolve(element)
       const sortedValue = resolve(value)
 

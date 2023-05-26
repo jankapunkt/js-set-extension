@@ -88,9 +88,8 @@ describe('Relations', function () {
       assert.isTrue(set([{ 1: [{ foo: 'bar' }] }]).has([{ 1: [{ foo: 'bar' }] }]))
       assert.isTrue(set('foo').has('foo'))
       assert.isTrue(set(NaN).has(NaN))
-      assert.isTrue(set(isInt).has(function isInt (n) {
-        return Number.isInteger(n)
-      }))
+      assert.isTrue(set(isInt).has(isInt))
+      assert.isTrue(set(isInt).has(n => Number.isInteger(n)))
     })
 
     it('returns false if a set has not a given element', function () {
@@ -102,7 +101,9 @@ describe('Relations', function () {
       assert.isFalse(set('foo').has('foo '))
       assert.isFalse(set([undefined]).has(null))
       assert.isFalse(set([null]).has(undefined))
-      assert.isFalse(set(isInt).has(n => Number.isInteger(n)))
+      assert.isFalse(set(isInt).has(function isInt (n) {
+        return Number.isInteger(n)
+      }))
     })
 
     it('works recursively for nested sets', function () {
@@ -112,10 +113,10 @@ describe('Relations', function () {
       assert.isTrue(set(set([1, 2, 3]), set([4, 5, 6])).has(set([1, 2, 3])))
       assert.isFalse(set(set([1, 2, 3]), set([4, 5, 6])).has(set([1, 2, 3, 4])))
 
-      assert.isTrue(set(set(isInt)).has(set(function isInt (n) {
+      assert.isTrue(set(set(isInt)).has(set(n => Number.isInteger(n))))
+      assert.isFalse(set(set(isInt)).has(set(function isInt (n) {
         return Number.isInteger(n)
       })))
-      assert.isFalse(set(set(isInt)).has(set(n => Number.isInteger(n))))
 
       const s1 = set(3)
       const s2 = set(3)
